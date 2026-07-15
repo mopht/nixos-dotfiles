@@ -146,7 +146,6 @@ rmpc
 ## 📝 Notes
 
 - Neovim configuration is maintained as a separate repository and linked via Home Manager
-- Windows games migrated from other systems require fresh Proton prefix (delete `~/.steam/steam/steamapps/compatdata/<AppID>/`)
 - Intel Arc A750 performs better with OpenGL than Vulkan on Linux due to Mesa driver limitations (known issue)
 
 ## 🙏 Credits
