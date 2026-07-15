@@ -6,6 +6,9 @@
     lazygit
     fastfetch
 
+    loupe
+    swayimg
+
     nautilus
     superfile
     yazi
