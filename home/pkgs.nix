@@ -13,6 +13,7 @@
     superfile
     yazi
 
+    umu-launcher
     localsend
 
     vim neovim
