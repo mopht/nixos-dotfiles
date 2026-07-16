@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    hmcl
     onlyoffice-desktopeditors
     clash-verge-rev
     btop
