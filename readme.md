@@ -13,6 +13,7 @@ My personal NixOS configuration, featuring Caelestia shell on Hyprland with a fo
 - **Font**: Maple Mono NF / Maple Mono NF CN
 - **Icons**: Papirus
 - **Cursor**: Bibata Modern Classic
+- **Update**: nh
 
 ## 🗂️ Structure
 
