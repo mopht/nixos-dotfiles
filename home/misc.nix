@@ -13,6 +13,7 @@
       theme = "catppuccin-frappe";
       default_sort_type = 0;
       transparent_background = true;
+      ignore_missing_fields = true;
     };
   };
 
