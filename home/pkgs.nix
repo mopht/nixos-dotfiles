@@ -16,8 +16,7 @@
     umu-launcher
     localsend
 
-    vim neovim
-    neovide
+    neovim neovide
     tree-sitter
 
     haskellPackages.ghc
@@ -28,7 +27,7 @@
     maple-mono.NF-CN
     maple-mono.NF
 
-    awww
+    awww cava
     direnv
     eza zoxide
 
