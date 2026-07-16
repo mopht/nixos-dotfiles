@@ -36,6 +36,7 @@
     direnv
     eza zoxide
 
+    python3
     bash fish
     carapace
     xz unzip gh
