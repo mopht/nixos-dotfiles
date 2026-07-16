@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ ./hosts/desktop/hardware.nix
+    [ ./hosts/desktop/hardware-configuration.nix.nix
       ./hosts/desktop/configuration.nix
       ./modules/desktop.nix
       ./modules/network.nix
