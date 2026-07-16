@@ -7,7 +7,7 @@
     settings = {
         bar.tray.compact = true;
         bar.tray.recolour = true;
-        launcher.enabelDangerousActions = true;
+        launcher.enableDangerousActions = true;
         paths.wallpaperDir = "~/Pictures/Wallpapers";
     };
   };
