@@ -13,6 +13,7 @@
     superfile
     yazi
 
+    spotify
     umu-launcher
     localsend
 
