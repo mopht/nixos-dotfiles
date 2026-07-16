@@ -22,6 +22,11 @@
     neovide
     tree-sitter
 
+    haskellPackages.ghc
+    haskellPackages.cabal-install
+    haskellPackages.cabal2nix
+    haskellPackages.haskell-language-server
+
     maple-mono.NF-CN
     maple-mono.NF
 
