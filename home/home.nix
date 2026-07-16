@@ -9,6 +9,7 @@
     ./display.nix
     ./fish.nix
     ./misc.nix
+    ./file_manager.nix
   ];
 
   home.username = "mopht";
