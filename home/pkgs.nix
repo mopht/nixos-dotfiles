@@ -36,7 +36,6 @@
     direnv
     eza zoxide
 
-    python3
     bash fish
     carapace
     xz unzip gh
@@ -52,5 +51,14 @@
 
     mpdris2-rs
     rmpc
+    ffmpeg
+    mutagen
+
+    (python3.withPackages (ps: with ps; [ pillow
+      pyzmq rawpy
+      pillow-heif
+      pillow vips
+      # pillow-webp
+    ]))
   ];
 }
