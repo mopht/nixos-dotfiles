@@ -42,6 +42,7 @@
     cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
+    llvmPackages.libcxxClang
 
     blueman
     ddcutil
