@@ -84,7 +84,7 @@ sudo nixos-rebuild switch --flake github:你的用户名/nixos-config#desktop
 nix flake update
 
 # Rebuild
-sudo nixos-rebuild switch
+nh os switch
 ```
 
 ## 🎨 Wallpaper & Color Scheme
@@ -134,7 +134,7 @@ rmpc
 | Media | mpd, mpc, mpdris2-rs, cava |
 | Proxy | clash-verge |
 | Gaming | steam, gamescope, proton-ge |
-| Utils | eza, fastfetch |
+| Utils | eza, fastfetch, nh |
 
 <!-- ## 🖥️ Hardware -->
 <!---->
