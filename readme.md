@@ -80,11 +80,11 @@ sudo nixos-rebuild switch --flake github:你的用户名/nixos-config#desktop
 ## 🔄 Updating
 
 ```bash
-# Update all flake inputs
-nix flake update
-
 # Rebuild
 nh os switch
+
+# Update all flake inputs $ Rebuild
+nh os switch --update
 ```
 
 ## 🎨 Wallpaper & Color Scheme
