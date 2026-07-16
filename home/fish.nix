@@ -18,15 +18,17 @@
 
     settings = {
       confirm_os_window_close = 0;
-      background_opacity = "0.45";
+      background_opacity = 0.45;
       enable_audio_bell = false;
       font_family = "Maple Mono NF CN";
-      font_size = "17.0";
+      font_size = 17.0;
       shell = "fish";
       window_margin_width = 21.75;
       cursor_shape = "beam";
       cursor_trail = 1;
       cursor_trail_start_threshold = 0;
+
+      "modify_font cell_height" = "+7px";
     };
   };
 
