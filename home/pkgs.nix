@@ -40,6 +40,8 @@
     carapace
     xz unzip gh
     cargo
+    llvmPackages.clang-tools
+    llvmPackages.libcxx
 
     blueman
     ddcutil
