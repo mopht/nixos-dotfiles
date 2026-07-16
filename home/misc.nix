@@ -3,6 +3,7 @@
 {
   services.mpdris2-rs.enable = true;
 
+  programs.lazygit.enable = true;
   programs.superfile = {
     enable = true;
 
