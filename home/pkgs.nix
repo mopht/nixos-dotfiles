@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     onlyoffice-desktopeditors
     clash-verge-rev
-    lazygit
     btop
     fastfetch
 
@@ -12,8 +11,6 @@
     swayimg
 
     nautilus
-    superfile
-    yazi
 
     spotify
     umu-launcher
@@ -32,15 +29,12 @@
     maple-mono.NF
 
     awww
-    kitty
     direnv
     eza zoxide
 
-    nh
-    bash fish
-    carapace
-    xz unzip gh
-    cargo
+    bash carapace
+    xz unzip
+    gh cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
     llvmPackages.libcxxClang
@@ -53,7 +47,6 @@
     swappy
     libcava
 
-    mpdris2-rs
     rmpc
     ffmpeg
     mutagen
@@ -62,7 +55,6 @@
       pyzmq rawpy
       pillow-heif
       pillow vips
-      # pillow-webp
     ]))
   ];
 }
