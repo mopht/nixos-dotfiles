@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     clash-verge-rev
     lazygit
+    btop
     fastfetch
 
     loupe
