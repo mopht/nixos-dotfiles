@@ -36,6 +36,7 @@
     direnv
     eza zoxide
 
+    nh
     bash fish
     carapace
     xz unzip gh
