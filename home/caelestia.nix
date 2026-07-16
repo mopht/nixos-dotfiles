@@ -6,7 +6,8 @@
     cli.enable = true;
     settings = {
         bar.tray.compact = true;
-        # bar.tray.recolourIcons = true;
+        bar.tray.recolour = true;
+        launcher.enabelDangerousActions = true;
         paths.wallpaperDir = "~/Pictures/Wallpapers";
     };
   };
