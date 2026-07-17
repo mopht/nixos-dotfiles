@@ -5,7 +5,9 @@
   networking.networkmanager.enable = true;
 
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.settings.General.Exprimental = true;
   hardware.bluetooth.powerOnBoot = true;
+  hardware.xpadneo.enable = true;
 
   programs.clash-verge.serviceMode = true;
   programs.clash-verge.tunMode = true;
