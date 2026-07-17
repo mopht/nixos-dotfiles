@@ -49,7 +49,7 @@
     ffmpeg
     mutagen
 
-    (python3.withPackages (ps: with ps; [ pillow
+    (python3.withPackages (ps: with ps; [
       pyzmq rawpy
       pillow-heif
       pillow vips
