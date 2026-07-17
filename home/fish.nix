@@ -1,19 +1,17 @@
 { config, pkgs, inputs, ... }:
 
 {
-  programs.fzf = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
-  programs.carapace = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
+  programs.fzf.enable = true;
+  programs.carapace.enable = true;
   programs.starship.enable = true;
-
   programs.nushell.enable = true;
+
+  programs.zoxide = {
+    enable = true;
+    options = [ "--cmd cd" ];
+  };
+
+
   programs.kitty = {
     enable = true;
 
@@ -36,14 +34,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # Commands to run in interactive sessions can go here
-      command -v starship &> /dev/null && starship init fish | source
-
-      # Direnv + Zoxide
       command -v direnv &> /dev/null && direnv hook fish | source
-      command -v zoxide &> /dev/null && zoxide init fish --cmd cd | source
-
-      # Better ls
       command -v eza &> /dev/null && alias ls='eza --icons --group-directories-first -1'
 
       cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
