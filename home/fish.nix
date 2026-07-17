@@ -13,6 +13,7 @@
 
   programs.starship.enable = true;
 
+  programs.nushell.enable = true;
   programs.kitty = {
     enable = true;
 
