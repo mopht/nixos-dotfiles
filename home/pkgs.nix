@@ -29,8 +29,6 @@
     maple-mono.NF
 
     awww cava
-    direnv
-    eza zoxide
 
     bash carapace
     xz unzip

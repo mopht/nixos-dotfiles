@@ -5,6 +5,13 @@
   programs.carapace.enable = true;
   programs.starship.enable = true;
   programs.nushell.enable = true;
+  programs.direnv.enable = true;
+
+  programs.eza = {
+    enable = true;
+    icons = "always";
+    extraOptions = [ "--group-directories-first" "-1" ];
+  };
 
   programs.zoxide = {
     enable = true;
@@ -34,11 +41,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      command -v direnv &> /dev/null && direnv hook fish | source
-      command -v eza &> /dev/null && alias ls='eza --icons --group-directories-first -1'
-
       cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
-
       set -g fish_greeting ""
     '';
   };
