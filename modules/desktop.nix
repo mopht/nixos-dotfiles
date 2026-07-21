@@ -2,6 +2,12 @@
 
 {
   programs.hyprland.enable = true;
+
+  services.sunshine = {
+    enable = true;
+    openFirewall = true;
+  };
+
   services.greetd = {
     enable = true;
 

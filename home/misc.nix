@@ -2,10 +2,6 @@
 
 {
   services.mpdris2-rs.enable = true;
-  services.sunshine = {
-    enable = true;
-    openFirewall = true;
-  };
 
   programs.lazygit.enable = true;
 
