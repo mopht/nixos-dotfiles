@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     hmcl
+    wechat
     onlyoffice-desktopeditors
     clash-verge-rev
     btop
