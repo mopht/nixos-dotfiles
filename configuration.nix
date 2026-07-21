@@ -17,7 +17,7 @@
 
   users.users.mopht = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "i2c" "bluetooth" ];
+    extraGroups = [ "wheel" "networkmanager" "i2c" "uinput" ];
   };
 }
 
