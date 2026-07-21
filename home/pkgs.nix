@@ -27,7 +27,7 @@
     haskellPackages.haskell-language-server
 
     corefonts
-    vistafonts
+    vista-fonts
     noto-fonts-cjk
     source-han-sans
 
