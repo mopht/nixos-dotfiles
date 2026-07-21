@@ -26,6 +26,11 @@
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
 
+    corefonts
+    vistafonts
+    noto-fonts-cjk
+    source-han-sans
+
     maple-mono.NF-CN
     maple-mono.NF
 
