@@ -28,7 +28,6 @@
 
     corefonts
     vista-fonts
-    noto-fonts-cjk
     source-han-sans
 
     maple-mono.NF-CN
