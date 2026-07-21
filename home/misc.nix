@@ -4,6 +4,13 @@
   services.mpdris2-rs.enable = true;
 
   programs.lazygit.enable = true;
+  programs.clangd = {
+    enable = true;
+    arguments = [
+      "-std=c++26"
+      "-stdlib=libc++"
+    ];
+  };
 
   programs.zen-browser = {
     enable = true;
