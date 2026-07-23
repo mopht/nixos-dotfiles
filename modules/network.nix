@@ -13,6 +13,17 @@
   programs.clash-verge.tunMode = true;
   programs.clash-verge.enable = true;
 
+  services.printing = {
+    enable = true;
+    drivers = [ ];
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
   networking.firewall = {
     enable = true;
 
