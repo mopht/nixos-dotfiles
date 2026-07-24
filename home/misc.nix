@@ -8,12 +8,10 @@
   programs.mpv = {
     enable = true;
     # Optional: customize the package and add bundled scripts
-    package = (pkgs.mpv-unwrapped.wrapper {
-      scripts = with pkgs.mpvScripts; [
-        uosc
-        thumbfast
-      ];
-    });
+    scripts = with pkgs.mpvScripts; [
+      uosc
+      thumbfast
+    ];
 
     config = {
       profile = "high-quality";
