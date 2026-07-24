@@ -3,6 +3,7 @@
 {
   programs.hyprland.enable = true;
 
+  services.geoclue2.enable = true;
   services.sunshine = {
     enable = true;
     openFirewall = true;
