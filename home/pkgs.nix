@@ -36,7 +36,7 @@
     awww cava
 
     bash carapace
-    xz unzip
+    xz unzip jq
     gh cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
