@@ -8,8 +8,13 @@
       bar.tray.compact = true;
       bar.tray.recolour = true;
       services.useTwelveHourClock = false;
+      services.useFahrenheit = false;
+      services.weatherLocation = "shanwei";
       launcher.enableDangerousActions = true;
       paths.wallpaperDir = "~/Pictures/Wallpapers";
+      # appearance.transparency.enabled = true;
+      # appearance.transparency.base = 1.0;
+      # appearance.transparency.layers = 0.4;
     };
   };
 
