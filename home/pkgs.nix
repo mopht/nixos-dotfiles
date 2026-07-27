@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     hmcl
     wechat
+    go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
     btop
@@ -26,9 +27,11 @@
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
 
-    corefonts
-    vista-fonts
+    # corefonts
+    # vista-fonts
     source-han-sans
+    noto-fonts
+    noto-fonts-cjk-sans
 
     maple-mono.NF-CN
     maple-mono.NF
