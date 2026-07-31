@@ -1,6 +1,7 @@
 { config, pkgs, inputs, ... }:
 
 {
+  fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     hmcl
     wechat
@@ -27,8 +28,6 @@
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
 
-    # corefonts
-    # vista-fonts
     source-han-sans
     noto-fonts
     noto-fonts-cjk-sans
