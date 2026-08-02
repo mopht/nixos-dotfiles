@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ ... }:
 
 {
   services.power-profiles-daemon.enable = true;
@@ -19,16 +19,16 @@
       music_directory = "/home/mopht/Music/file";
 
       playlist_directory = "/home/mopht/Music/playlists";
-      db_file            = "/home/mopht/Music/mpd.db";
-      state_file         = "/home/mopht/Music/mpdstate";
+      db_file = "/home/mopht/Music/mpd.db";
+      state_file = "/home/mopht/Music/mpdstate";
 
       audio_output = [{
-        type             = "pipewire";
-        name             = "Home Manager MPD";
+        type = "pipewire";
+        name = "Home Manager MPD";
       }];
     };
   };
   systemd.services.mpd.environment = {
-      XDG_RUNTIME_DIR = "/run/user/1000";
+    XDG_RUNTIME_DIR = "/run/user/1000";
   };
 }

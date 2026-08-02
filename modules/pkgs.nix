@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -9,7 +9,10 @@
     material-symbols
     aubio
     pipewire
-    git wget
-    gcc gdb cmake
+    git
+    wget
+    gcc
+    gdb
+    cmake
   ];
 }

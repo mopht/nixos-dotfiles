@@ -1,10 +1,11 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   services.mpdris2-rs.enable = true;
 
   programs.lazygit.enable = true;
 
+  programs.rmpc.enable = true;
   programs.mpv = {
     enable = true;
     # Optional: customize the package and add bundled scripts
@@ -24,6 +25,8 @@
     CompileFlags:
       Add: [-std=c++26, -stdlib=libc++]
   '';
+
+  programs.btop.enable = true;
 
   programs.zen-browser = {
     enable = true;

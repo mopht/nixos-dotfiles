@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 
 {
   imports =
-    [ ./hosts/desktop/hardware-configuration.nix
+    [
+      ./hosts/desktop/hardware-configuration.nix
       ./hosts/desktop/configuration.nix
       ./modules/desktop.nix
       ./modules/network.nix

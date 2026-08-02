@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   fonts.fontconfig.enable = true;
@@ -8,19 +8,17 @@
     go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
-    btop
     fastfetch
 
     loupe
-    swayimg
-
     nautilus
 
     spotify
     umu-launcher
     localsend
 
-    neovim neovide
+    neovim
+    neovide
     tree-sitter
 
     haskellPackages.ghc
@@ -35,11 +33,11 @@
     maple-mono.NF-CN
     maple-mono.NF
 
-    awww cava
-
-    bash carapace
-    xz unzip
-    gh cargo
+    carapace
+    xz
+    unzip
+    gh
+    cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
     llvmPackages.libcxxClang
@@ -52,14 +50,15 @@
     swappy
     libcava
 
-    rmpc
     ffmpeg
     mutagen
 
     (python3.withPackages (ps: with ps; [
-      pyzmq rawpy
+      pyzmq
+      rawpy
       pillow-heif
-      pillow vips
+      pillow
+      vips
     ]))
   ];
 }
