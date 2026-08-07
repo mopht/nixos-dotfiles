@@ -37,7 +37,6 @@
     xz
     unzip
     gh
-    nc
     cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
