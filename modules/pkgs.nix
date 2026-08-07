@@ -7,6 +7,7 @@
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
     material-symbols
+    glaze
     aubio
     pipewire
     git
