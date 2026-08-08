@@ -25,6 +25,7 @@
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
+    koka
 
     source-han-sans
     noto-fonts
