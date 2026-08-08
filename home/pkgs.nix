@@ -25,6 +25,7 @@
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
+    tree-sitter-grammars.tree-sitter-koka
     koka
 
     source-han-sans
