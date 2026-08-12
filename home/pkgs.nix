@@ -35,7 +35,6 @@
     maple-mono.NF-CN
     maple-mono.NF
 
-    ventoy
     carapace
     xz
     unzip
