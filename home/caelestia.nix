@@ -13,8 +13,8 @@
       launcher.enableDangerousActions = true;
       paths.wallpaperDir = "~/Pictures/Wallpapers";
       # appearance.transparency.enabled = true;
-      # appearance.transparency.base = 1.0;
-      # appearance.transparency.layers = 0.4;
+      # appearance.transparency.base = 0.45;
+      # appearance.transparency.layers = 0.8;
     };
   };
 

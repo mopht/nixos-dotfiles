@@ -2,6 +2,10 @@
 
 {
   services.mpdris2-rs.enable = true;
+  services.kdeconnect = {
+    enable = true;
+    indicator = true;
+  };
 
   programs.lazygit.enable = true;
 

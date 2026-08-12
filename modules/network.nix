@@ -24,10 +24,13 @@
     openFirewall = true;
   };
 
-  networking.firewall = {
+  networking.firewall = rec {
     enable = true;
 
     allowedTCPPorts = [ 53317 ];
-    allowedUDPPorts = [ 53317 ];
+    allowedUDPPorts = allowedTCPPorts;
+
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = allowedTCPPortRanges;
   };
 }
