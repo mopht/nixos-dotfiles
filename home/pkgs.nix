@@ -11,6 +11,7 @@
     fastfetch
 
     loupe
+    upscayl
     nautilus
 
     spotify
