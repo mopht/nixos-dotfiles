@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
 {
+  services.usbmuxd.enable = true;
   services.mpdris2-rs.enable = true;
   services.kdeconnect = {
     enable = true;
