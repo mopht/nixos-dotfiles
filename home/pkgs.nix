@@ -10,6 +10,7 @@
     clash-verge-rev
     fastfetch
 
+    iloader
     loupe
     upscayl
     nautilus
