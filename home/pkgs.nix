@@ -29,6 +29,7 @@
     haskellPackages.haskell-language-server
     tree-sitter-grammars.tree-sitter-koka
     koka
+    idris2
 
     source-han-sans
     noto-fonts
