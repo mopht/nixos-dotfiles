@@ -30,6 +30,7 @@
     tree-sitter-grammars.tree-sitter-koka
     koka
     idris2
+    idris2Packages.idris2Lsp
 
     source-han-sans
     noto-fonts
