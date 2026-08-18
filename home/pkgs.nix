@@ -29,6 +29,7 @@
     haskellPackages.haskell-language-server
     tree-sitter-grammars.tree-sitter-koka
     koka
+    swi-prolog
     idris2
     idris2Packages.idris2Lsp
 
