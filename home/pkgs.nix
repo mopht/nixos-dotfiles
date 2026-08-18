@@ -3,7 +3,7 @@
 {
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    oh-dsh
+    opencode
     hmcl
     wechat
     qq
