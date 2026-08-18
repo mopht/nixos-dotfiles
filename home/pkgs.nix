@@ -1,9 +1,9 @@
-{ pkgs, llm-agents, ... }:
+{ pkgs, ... }:
 
 {
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    llm-agents.packages.${pkgs.system}.dsh
+    oh-dsh
     hmcl
     wechat
     qq
