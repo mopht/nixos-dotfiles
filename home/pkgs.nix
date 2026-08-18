@@ -33,6 +33,7 @@
     idris2
     idris2Packages.idris2Lsp
     purescript
+    spago-legacy
 
     bun
 
