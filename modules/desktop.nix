@@ -9,6 +9,11 @@
     openFirewall = true;
   };
 
+  environment.variables = {
+    XCURSOR_THEME = "Bibata-Modern-Classic";
+    XCURSOR_SIZE = "24";
+  };
+
   services.greetd = {
     enable = true;
 

@@ -12,6 +12,7 @@
     fastfetch
 
     iloader
+    bibata-cursors
     loupe
     upscayl
     nautilus
