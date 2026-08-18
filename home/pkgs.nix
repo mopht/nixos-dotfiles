@@ -3,6 +3,7 @@
 {
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    llm-agents.packages.${pkgs.system}.dsh
     hmcl
     wechat
     qq
