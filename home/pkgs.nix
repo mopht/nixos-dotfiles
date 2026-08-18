@@ -32,6 +32,9 @@
     swi-prolog
     idris2
     idris2Packages.idris2Lsp
+    purescript
+
+    bun
 
     source-han-sans
     noto-fonts
