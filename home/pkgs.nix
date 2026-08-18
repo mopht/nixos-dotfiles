@@ -36,6 +36,7 @@
     spago-legacy
 
     bun
+    nodejs
 
     source-han-sans
     noto-fonts
