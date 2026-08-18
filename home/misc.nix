@@ -43,4 +43,29 @@
     clean.extraArgs = "--keep-since 4d --keep 3";
     flake = "/etc/nixos";
   };
+
+  programs.firejail = {
+    enable = true;
+    wrappedBinaries = {
+      qq = {
+        executable = "${pkgs.qq}/bin/qq";
+        extraArgs = [
+          "--noprofile"
+          "--private"
+          "--noroot"
+          "--nonewprivs"
+        ];
+      };
+
+      wechat = {
+        executable = "${pkgs.wechat}/bin/wechat";
+        extraArgs = [
+          "--noprofile"
+          "--private"
+          "--noroot"
+          "--nonewprivs"
+        ];
+      };
+    };
+  };
 }

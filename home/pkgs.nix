@@ -5,6 +5,7 @@
   home.packages = with pkgs; [
     hmcl
     wechat
+    qq
     go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
@@ -28,6 +29,7 @@
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
     tree-sitter-grammars.tree-sitter-koka
+    nixd
     koka
     swi-prolog
     idris2
