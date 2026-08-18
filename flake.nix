@@ -21,7 +21,7 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
+  outputs = inputs@{ nixpkgs, llm-agents, home-manager, ... }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, llm-agents, ... }:
 
 {
   fonts.fontconfig.enable = true;
