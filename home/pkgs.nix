@@ -39,6 +39,7 @@
 
     maple-mono.NF-CN
     maple-mono.NF
+    monaspace
 
     carapace
     xz
