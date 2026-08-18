@@ -36,6 +36,7 @@
     spago-legacy
 
     bun
+    esbuild
     nodejs
 
     source-han-sans
