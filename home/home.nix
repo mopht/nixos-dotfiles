@@ -7,7 +7,7 @@
     ./pkgs.nix
     ./caelestia.nix
     ./display.nix
-    ./fish.nix
+    ./shell.nix
     ./misc.nix
     ./file_manager.nix
   ];
