@@ -14,7 +14,13 @@
 
   programs.nushell = {
     enable = true;
+    settings = {
+      show_banner = false;
+      completions.external.enable = true;
+      completions.external.max_results = 100;
+    };
     extraConfig = ''
+      open --raw ~/.local/state/caelestia/sequences.txt | print -n
       let commands_completed_by_fish = [nu git niri tailscale]
 
       let fish_completer = {|spans|
@@ -32,9 +38,7 @@
       }
 
       $env.config.completions.algorithm = "substring"
-      $env.config.completions.external.enable = true
       $env.config.completions.external.completer = $fish_completer
-      open ~/.local/state/caelestia/sequences.txt
     '';
   };
 
