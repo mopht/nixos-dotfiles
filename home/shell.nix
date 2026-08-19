@@ -2,6 +2,7 @@
 
 {
   programs.fzf.enable = true;
+  programs.fish.enable = true;
   programs.carapace.enable = true;
   programs.starship.enable = true;
   programs.direnv.enable = true;
@@ -15,9 +16,7 @@
   programs.nushell = {
     enable = true;
     settings = {
-      show_banner = false;
-      completions.external.enable = true;
-      completions.external.max_results = 100;
+      show_banner = false; completions.external.enable = true; completions.external.max_results = 100;
     };
     extraConfig = ''
       open --raw ~/.local/state/caelestia/sequences.txt | print -n
