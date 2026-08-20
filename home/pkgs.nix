@@ -43,7 +43,7 @@
     esbuild
     nodejs
 
-    nerd-fonts.caskaydia-cove
+    cascadia-code
     source-han-sans
     noto-fonts
     noto-fonts-cjk-sans
