@@ -46,6 +46,7 @@
     source-han-sans
     noto-fonts
     noto-fonts-cjk-sans
+    dejavu_fonts
 
     maple-mono.NF-CN
     maple-mono.NF
