@@ -21,6 +21,12 @@
       completions.external.max_results = 100;
       completions.algorithm = "substring";
     };
+
+    shellAliases = {
+      ll = "ls -l";
+      la = "ls -a";
+    };
+
     extraConfig = ''
       open --raw ~/.local/state/caelestia/sequences.txt | print -n
       let commands_completed_by_fish = [nu git niri tailscale]
