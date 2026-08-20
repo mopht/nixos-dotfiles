@@ -16,7 +16,10 @@
   programs.nushell = {
     enable = true;
     settings = {
-      show_banner = false; completions.external.enable = true; completions.external.max_results = 100;
+      show_banner = false;
+      completions.external.enable = true;
+      completions.external.max_results = 100;
+      completions.algorithm = "substring";
     };
     extraConfig = ''
       open --raw ~/.local/state/caelestia/sequences.txt | print -n
@@ -36,7 +39,6 @@
           }
       }
 
-      $env.config.completions.algorithm = "substring"
       $env.config.completions.external.completer = $fish_completer
     '';
   };
