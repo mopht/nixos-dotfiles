@@ -54,6 +54,7 @@
     xz
     unzip
     gh
+    bat
     cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
