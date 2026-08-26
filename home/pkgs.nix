@@ -31,6 +31,7 @@
     haskellPackages.cabal2nix
     haskellPackages.haskell-language-server
     tree-sitter-grammars.tree-sitter-koka
+    rust-analyzer
     nixd
     koka
     swi-prolog
