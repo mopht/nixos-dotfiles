@@ -59,6 +59,7 @@
     gh
     bat
     cargo
+    rustc
     llvmPackages.clang-tools
     llvmPackages.libcxx
     llvmPackages.libcxxStdenv
