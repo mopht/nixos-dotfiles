@@ -61,6 +61,7 @@
     cargo
     llvmPackages.clang-tools
     llvmPackages.libcxx
+    llvmPackages.libcxxStdenv
     llvmPackages.libcxxClang
 
     blueman
