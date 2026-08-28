@@ -2,7 +2,6 @@
 
 {
   programs.nix-ld.enable = true;
-  services.flatpak.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [

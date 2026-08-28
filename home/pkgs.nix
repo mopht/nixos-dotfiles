@@ -4,10 +4,7 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    # opencode
     hmcl
-    wechat
-    # qq
     go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
@@ -19,7 +16,6 @@
     upscayl
     nautilus
 
-    spotify
     umu-launcher
     localsend
 
@@ -87,8 +83,11 @@
     ]))
   ];
 
+  services.flatpak.enable = true;
   services.flatpak.packages = [
     "com.qq.QQ"
+    "com.tencent.WeChat"
+    "com.spotify.Client"
   ];
   # xdg.desktopEntries.qq = {
   #   name = "QQ";
