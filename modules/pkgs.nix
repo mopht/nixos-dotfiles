@@ -2,6 +2,7 @@
 
 {
   programs.nix-ld.enable = true;
+  services.flatpak.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
@@ -23,6 +24,7 @@
     wrappedBinaries = {
       qq = {
         executable = "${pkgs.qq}/bin/qq";
+        profile = "${pkgs.firejail}/etc/firejail/qq.profile";
         extraArgs = [
           "--noprofile"
           "--private"
@@ -33,6 +35,7 @@
 
       wechat = {
         executable = "${pkgs.wechat}/bin/wechat";
+        profile = "${pkgs.firejail}/etc/firejail/wechat.profile";
         extraArgs = [
           "--noprofile"
           "--private"

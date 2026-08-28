@@ -1,12 +1,13 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
+  imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     # opencode
     hmcl
     wechat
-    qq
+    # qq
     go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
@@ -85,4 +86,14 @@
       vips
     ]))
   ];
+
+  services.flatpak.packages = [
+    "com.qq.QQ"
+  ];
+  # xdg.desktopEntries.qq = {
+  #   name = "QQ";
+  #   exec = "firejail qq %u";
+  #   terminal = false;
+  #   categories = [ "Network" "WebBrowser" ];
+  # };
 }

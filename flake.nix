@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     moonbit-overlay.url = "github:moonbit-community/moonbit-overlay";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,13 +22,14 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, moonbit-overlay, ... }: {
+  outputs = inputs@{ nixpkgs, home-manager, moonbit-overlay, nix-flatpak, ... }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
 
+        nix-flatpak.nixosModules.nix-flatpak
         {
           nixpkgs.overlays = [ moonbit-overlay.overlays.default ];
         }

@@ -111,16 +111,31 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1787834240,
-        "narHash": "sha256-4y1K3ZdxUZU3c0CpxjTg6URX339LirZU0Gx8U+M7/74=",
+        "lastModified": 1787926110,
+        "narHash": "sha256-hjsWd9wy0npVd425jc2asjJ2It8GYFIjNfhl1RomL5o=",
         "owner": "moonbit-community",
         "repo": "moonbit-overlay",
-        "rev": "0beb09421c18d540acf54f65101e818154b0a274",
+        "rev": "b37410dd4c10fd4b03c10ea48ac9f5bdebd3b817",
         "type": "github"
       },
       "original": {
         "owner": "moonbit-community",
         "repo": "moonbit-overlay",
+        "type": "github"
+      }
+    },
+    "nix-flatpak": {
+      "locked": {
+        "lastModified": 1783368811,
+        "narHash": "sha256-0H8jDwR4Kegb3heaTrH1ftbgKfZVDT8JE+46uXxDy/Q=",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "20d42f0ee98c9fe9f85e8d1de474f1409ed10d05",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
         "type": "github"
       }
     },
@@ -182,6 +197,7 @@
         "caelestia-shell": "caelestia-shell",
         "home-manager": "home-manager",
         "moonbit-overlay": "moonbit-overlay",
+        "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
         "zen-browser": "zen-browser"
       }
@@ -215,11 +231,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787854095,
-        "narHash": "sha256-mnz44qu/aLje0/FOIvH/nNBjKtjIo/oi/32mxGayi9Q=",
+        "lastModified": 1787925155,
+        "narHash": "sha256-HKhib9i4qXbhojqQhcrQcFYD+CSBsktiqlYCrbnS+Zg=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
-        "rev": "99cb519f07578ee8e0e6cdb0cae06d9343a60fe8",
+        "rev": "d4e4e651bdedf1931c9cd6a58f3d5ddbdc6f5e30",
         "type": "github"
       },
       "original": {
