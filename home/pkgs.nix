@@ -4,6 +4,8 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    xdg-desktop-portal-hyprland
+    xdg-desktop-portal-gtk
     hmcl
     go-musicfox
     onlyoffice-desktopeditors
@@ -83,12 +85,19 @@
     ]))
   ];
 
-  services.flatpak.enable = true;
   services.flatpak.packages = [
     "com.qq.QQ"
     "com.tencent.WeChat"
     "com.spotify.Client"
   ];
+
+  services.flatpak.overrides.settings = {
+    global = {
+      Environment = {
+        GTK_THEME = "Adwaita:dark";
+      };
+    };
+  };
   # xdg.desktopEntries.qq = {
   #   name = "QQ";
   #   exec = "firejail qq %u";
