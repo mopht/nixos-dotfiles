@@ -26,8 +26,23 @@
   };
 
   home.file.".config/clangd/config.yaml".text = ''
+    # Global settings for all files
     CompileFlags:
-      Add: [-std=c++26, -stdlib=libc++]
+      Add: [-Wall, -Wextra]
+
+    ---
+    # Settings strictly for C++ files
+    If:
+      PathMatch: [.*\.cpp, .*\.hpp, .*\.cc]
+    CompileFlags:
+      Add: [-std=c++26, -stdlib=libc++, -xc++]
+
+    ---
+    # Settings strictly for C files
+    If:
+      PathMatch: .*\.c
+    CompileFlags:
+      Add: [-std=c17, -xc]
   '';
 
   programs.btop.enable = true;
