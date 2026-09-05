@@ -19,30 +19,30 @@
     cmake
   ];
 
-  programs.firejail = {
-    enable = true;
-    wrappedBinaries = {
-      qq = {
-        executable = "${pkgs.qq}/bin/qq";
-        profile = "${pkgs.firejail}/etc/firejail/qq.profile";
-        extraArgs = [
-          "--noprofile"
-          "--private"
-          "--noroot"
-          "--nonewprivs"
-        ];
-      };
-
-      wechat = {
-        executable = "${pkgs.wechat}/bin/wechat";
-        profile = "${pkgs.firejail}/etc/firejail/wechat.profile";
-        extraArgs = [
-          "--noprofile"
-          "--private"
-          "--noroot"
-          "--nonewprivs"
-        ];
-      };
-    };
-  };
+  # programs.firejail = {
+  #   enable = true;
+  #   wrappedBinaries = {
+  #     qq = {
+  #       executable = "${pkgs.qq}/bin/qq";
+  #       profile = "${pkgs.firejail}/etc/firejail/qq.profile";
+  #       extraArgs = [
+  #         "--noprofile"
+  #         "--private"
+  #         "--noroot"
+  #         "--nonewprivs"
+  #       ];
+  #     };
+  #
+  #     wechat = {
+  #       executable = "${pkgs.wechat}/bin/wechat";
+  #       profile = "${pkgs.firejail}/etc/firejail/wechat.profile";
+  #       extraArgs = [
+  #         "--noprofile"
+  #         "--private"
+  #         "--noroot"
+  #         "--nonewprivs"
+  #       ];
+  #     };
+  #   };
+  # };
 }
