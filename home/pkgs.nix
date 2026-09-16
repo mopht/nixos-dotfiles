@@ -12,6 +12,8 @@
     clash-verge-rev
     fastfetch
 
+    typora
+    glow
     iloader
     bibata-cursors
     loupe
@@ -31,6 +33,10 @@
     haskellPackages.haskell-language-server
     tree-sitter-grammars.tree-sitter-koka
     rust-analyzer
+    mitscheme
+    akkuPackages.scheme-langserver
+    guile-lsp-server
+    guile
     nixd
     koka
     swi-prolog
@@ -65,6 +71,7 @@
     llvmPackages.libcxxStdenv
     llvmPackages.libcxxClang
 
+    exfatprogs
     blueman
     ddcutil
     brightnessctl
@@ -77,6 +84,7 @@
     mutagen
 
     (python3.withPackages (ps: with ps; [
+      python-pptx
       pyzmq
       rawpy
       pillow-heif
