@@ -44,7 +44,7 @@
     idris2Packages.idris2Lsp
     purescript
     spago-legacy
-    moonbit-bin.moonbit.latest
+    # moonbit-bin.latest
 
     bun
     esbuild
