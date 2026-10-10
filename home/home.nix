@@ -10,6 +10,7 @@
     ./shell.nix
     ./misc.nix
     ./file_manager.nix
+    ./editor.nix
   ];
 
   home.username = "mopht";
