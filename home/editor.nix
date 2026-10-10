@@ -4,7 +4,7 @@
   programs.helix = {
     enable = true;
     settings = {
-      theme = "catppuccin_mocha";
+      theme = "mtheme";
       editor = {
         line-number = "relative";
         cursor-shape.insert = "bar";
@@ -16,8 +16,10 @@
 
     themes = {
       mtheme = {
-        "inherits" = "everforest";
+        "inherits" = "everforest_dark";
         "ui.background" = { };
+        "ui.statusline" = "foreground_color";
+        "ui.statusline.inactive" = "dim_color";
       };
     };
   };
