@@ -23,6 +23,7 @@
     umu-launcher
     localsend
 
+    helix
     neovim
     neovide
     tree-sitter

@@ -1,6 +1,16 @@
 { pkgs, ... }:
 
 {
+  # wayland.windowManager.hyprland = {
+  #   enable = true;
+  #   systemd.enable = true;
+  #   systemd.variables = [ "--all" ];
+  # };
+
+  dconf = {
+    enable = true;
+    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  };
   qt.enable = true;
   gtk = {
     enable = true;
