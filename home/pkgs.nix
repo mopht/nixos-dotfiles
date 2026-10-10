@@ -43,6 +43,7 @@
     swi-prolog
     idris2
     idris2Packages.idris2Lsp
+    typescript-language-server
     purescript
     spago-legacy
     # moonbit-bin.latest
