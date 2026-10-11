@@ -10,6 +10,8 @@
       theme = "mtheme";
 
       editor = {
+        auto-save.focus-lost = true;
+        # bufferline = "multiple";
         line-number = "relative";
         color-modes = true;
         cursor-shape.insert = "bar";
@@ -24,6 +26,9 @@
           left = [ "mode" "spinner" "version-control" "file-name" "file-modification-indicator" ];
           # center = [ ];
           right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
+          mode.normal = "NORMAL";
+          mode.insert = "INSERT";
+          mode.select = "SELECT";
         };
 
         lsp = {
