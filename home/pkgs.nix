@@ -62,6 +62,7 @@
     maple-mono.NF
 
     carapace
+    # hyperfine
     ripgrep
     xz
     unzip
