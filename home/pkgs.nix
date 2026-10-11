@@ -24,7 +24,6 @@
     localsend
 
     # helix
-    micro
     neovim
     neovide
     tree-sitter
