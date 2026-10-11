@@ -25,6 +25,11 @@
           right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
         };
 
+        lsp = {
+          display-messages = true;
+          # display-inlay-hints = true;
+        };
+
         file-picker.hidden = false;
       };
 
