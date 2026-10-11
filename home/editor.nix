@@ -13,6 +13,7 @@
         line-number = "relative";
         color-modes = true;
         cursor-shape.insert = "bar";
+        cursor-shape.normal = "block";
 
         indent-guides = {
           render = true;
