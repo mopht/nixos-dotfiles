@@ -20,14 +20,14 @@
         };
 
         statusline = {
-          left = [ "mode" "spinner" "file-name" "file-modification-indicator" ];
-          # center = [ "version-control" ];
+          left = [ "mode" "spinner" "version-control" "file-name" "file-modification-indicator" ];
+          # center = [ ];
           right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
         };
 
         lsp = {
           display-messages = true;
-          # display-inlay-hints = true;
+          display-inlay-hints = false;
         };
 
         file-picker.hidden = false;
