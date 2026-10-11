@@ -54,7 +54,6 @@
     options = [ "--cmd cd" ];
   };
 
-
   programs.kitty = {
     enable = true;
 

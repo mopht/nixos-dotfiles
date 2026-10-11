@@ -12,13 +12,12 @@
       obs-vaapi
     ];
   };
+
   services.mpdris2-rs.enable = true;
   services.kdeconnect = {
     enable = true;
     indicator = true;
   };
-
-  programs.lazygit.enable = true;
 
   programs.rmpc.enable = true;
   programs.mpv = {
@@ -69,5 +68,4 @@
     clean.extraArgs = "--keep-since 4d --keep 3";
     flake = "/etc/nixos";
   };
-
 }
