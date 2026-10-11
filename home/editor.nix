@@ -44,7 +44,7 @@
       mtheme = {
         "inherits" = "everforest_dark";
         "ui.background" = { };
-        "ui.window" = { bg = "bg0"; };
+        "ui.window" = { bg = "foreground_color"; };
         "ui.statusline" = "foreground_color";
         "ui.statusline.inactive" = "dim_color";
       };
