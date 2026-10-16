@@ -62,5 +62,16 @@
         "ui.statusline.inactive" = "dim_color";
       };
     };
+    languages = {
+      language = [
+      {
+        name = "haskell";
+        indent = {
+          tab-width = 4;
+          unit = "    ";
+        };
+      }
+      ];
+    };
   };
 }
