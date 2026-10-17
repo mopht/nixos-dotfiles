@@ -66,6 +66,7 @@
     # hyperfine
     ripgrep
     xz
+    fd
     unzip
     gh
     bat
