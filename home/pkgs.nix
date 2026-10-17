@@ -13,7 +13,6 @@
     fastfetch
 
     typora
-    glow
     iloader
     bibata-cursors
     loupe
@@ -23,7 +22,6 @@
     umu-launcher
     localsend
 
-    # helix
     neovim
     neovide
     tree-sitter
@@ -40,7 +38,7 @@
     guile
     nixd
     koka
-    swi-prolog
+    # swi-prolog
     idris2
     idris2Packages.idris2Lsp
     typescript-language-server
@@ -57,7 +55,7 @@
     source-han-sans
     noto-fonts
     noto-fonts-cjk-sans
-    dejavu_fonts
+    # dejavu_fonts
 
     maple-mono.NF-CN
     maple-mono.NF
@@ -113,10 +111,4 @@
       };
     };
   };
-  # xdg.desktopEntries.qq = {
-  #   name = "QQ";
-  #   exec = "firejail qq %u";
-  #   terminal = false;
-  #   categories = [ "Network" "WebBrowser" ];
-  # };
 }
