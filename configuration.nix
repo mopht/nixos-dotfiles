@@ -21,4 +21,3 @@
     extraGroups = [ "wheel" "networkmanager" "i2c" "uinput" ];
   };
 }
-
