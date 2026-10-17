@@ -46,6 +46,7 @@
     typescript-language-server
     purescript
     spago-legacy
+    lua-language-server
     # moonbit-bin.latest
 
     bun
