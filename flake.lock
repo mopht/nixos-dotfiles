@@ -47,42 +47,6 @@
         "type": "github"
       }
     },
-    "dsh": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1786621126,
-        "narHash": "sha256-ZPGCNoPXVjP76Tm/tFPDX2X95cd83M4iHLmVP5dR+Ps=",
-        "owner": "deepseek-ai",
-        "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "deepseek-ai",
-        "repo": "deepseek-harness",
-        "rev": "47f943859bef60e4160492346772ded9b24f765a",
-        "type": "github"
-      }
-    },
-    "dsh-nix": {
-      "inputs": {
-        "dsh": "dsh",
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1786765095,
-        "narHash": "sha256-RmXoxPMi30noeZHDcLNduLhf3iCElPVZKirs3OjT4Qs=",
-        "owner": "Samuka007",
-        "repo": "dsh-nix",
-        "rev": "090ed51b27e65af7c0aadf64dcd7b208030aa3a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Samuka007",
-        "repo": "dsh-nix",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -148,7 +112,7 @@
     },
     "moonbit-overlay": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -182,22 +146,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1786599213,
-        "narHash": "sha256-yNJd40f11EzXBjSByCB7IPpeFFAdeoSKKM67dGkfFoU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "0e251e24a4f24e036a084b6b4b2d2491af4167f4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1791487292,
         "narHash": "sha256-tqM7xDEsaeK1p6VvRygeZ9LkQRpUUkbRT02BHv6hnTM=",
         "owner": "NixOS",
@@ -212,7 +160,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1792094642,
         "narHash": "sha256-zp8ToDMnqZcu4o4IH9pdwXFXGp7yLm/M0dEnNWnyd7I=",
@@ -252,11 +200,10 @@
     "root": {
       "inputs": {
         "caelestia-shell": "caelestia-shell",
-        "dsh-nix": "dsh-nix",
         "home-manager": "home-manager",
         "moonbit-overlay": "moonbit-overlay",
         "nix-flatpak": "nix-flatpak",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "zen-browser": "zen-browser"
       }
     },

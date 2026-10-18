@@ -64,13 +64,13 @@
     };
     languages = {
       language = [
-      {
-        name = "haskell";
-        indent = {
-          tab-width = 4;
-          unit = "    ";
-        };
-      }
+        {
+          name = "haskell";
+          indent = {
+            tab-width = 4;
+            unit = "    ";
+          };
+        }
       ];
     };
   };
