@@ -61,6 +61,11 @@
     maple-mono.NF-CN
     maple-mono.NF
 
+    trash-cli
+    pavucontrol
+    hyprpicker
+    ydotool
+    cliphist
     carapace
     # hyperfine
     ripgrep
