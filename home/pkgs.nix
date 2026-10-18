@@ -4,6 +4,7 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    # dsh
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk
     hmcl

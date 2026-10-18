@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     moonbit-overlay.url = "github:moonbit-community/moonbit-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/";
+    dsh-nix.url = "github:Samuka007/dsh-nix";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -31,7 +32,11 @@
 
         nix-flatpak.nixosModules.nix-flatpak
         {
-          nixpkgs.overlays = [ moonbit-overlay.overlays.default ];
+          nixpkgs.overlays =
+          [
+            moonbit-overlay.overlays.default
+            inputs.dsh-nix.overlays.default
+          ];
         }
         home-manager.nixosModules.home-manager
         {
