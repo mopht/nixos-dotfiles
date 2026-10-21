@@ -43,7 +43,7 @@
     idris2
     idris2Packages.idris2Lsp
     typescript-language-server
-    purescript
+    # purescript
     spago-legacy
     lua-language-server
     # moonbit-bin.latest
