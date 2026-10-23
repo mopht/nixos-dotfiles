@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  programs.fzf.enable = true;
+  # programs.fzf.enable = true;
   programs.fish.enable = true;
   programs.carapace.enable = true;
   programs.starship.enable = true;
@@ -14,6 +14,7 @@
   };
 
   programs.nushell = {
+    loadSessionVariables = true;
     enable = true;
     settings = {
       show_banner = false;

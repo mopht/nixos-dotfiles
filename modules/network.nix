@@ -21,7 +21,7 @@
   };
 
   services.avahi = {
-    enable = true;
+    # "disable-publishing" = false;
     nssmdns4 = true;
     openFirewall = true;
   };

@@ -1,7 +1,8 @@
-{ ... }:
+{ pkgs, inputs, ... }:
 
 {
   programs.caelestia = {
+    package = inputs.caelestia-shell.packages.${pkgs.system}.default;
     enable = true;
     cli.enable = true;
     settings = {
