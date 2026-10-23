@@ -4,7 +4,7 @@
   programs.caelestia = {
     package = inputs.caelestia-shell.packages.${pkgs.system}.default;
     enable = true;
-    cli.enable = true;
+    cli.enable = false;
     settings = {
       bar.tray.compact = true;
       bar.tray.recolour = true;
