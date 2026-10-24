@@ -103,6 +103,9 @@
     ]))
   ];
 
+  home.sessionVariables.NIX_LDFLAGS =
+    "-L${pkgs.llvmPackages.libcxx}/lib";
+
   services.flatpak.packages = [
     "com.github.tchx84.Flatseal"
     "com.qq.QQ"
