@@ -46,7 +46,7 @@
     # purescript
     spago-legacy
     lua-language-server
-    # moonbit-bin.latest
+    moonbit-bin.latest
 
     bun
     esbuild
