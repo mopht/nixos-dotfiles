@@ -7,6 +7,11 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/";
     # dsh-nix.url = "github:Samuka007/dsh-nix";
 
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs"; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

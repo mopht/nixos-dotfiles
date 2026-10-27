@@ -13,8 +13,9 @@
     clash-verge-rev
     fastfetch
 
+    antigravity-cli
     typora
-    iloader
+    # iloader
     bibata-cursors
     loupe
     upscayl

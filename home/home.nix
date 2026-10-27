@@ -5,7 +5,7 @@
     inputs.caelestia-shell.homeManagerModules.default
     inputs.zen-browser.homeModules.beta
     ./pkgs.nix
-    ./caelestia.nix
+    ./desktop.nix
     ./display.nix
     ./shell.nix
     ./misc.nix
