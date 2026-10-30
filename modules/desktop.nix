@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
 {
+  environment.sessionVariables.QS_ICON_THEME = "Papirus-Dark";
   programs.hyprland.enable = true;
   programs.dconf.enable = true;
 

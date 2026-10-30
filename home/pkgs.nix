@@ -8,6 +8,7 @@
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk
     hmcl
+    telegram-desktop
     go-musicfox
     onlyoffice-desktopeditors
     clash-verge-rev
