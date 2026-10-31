@@ -33,6 +33,7 @@
       let commands_completed_by_fish = [nu git niri tailscale]
 
       let fish_completer = {|spans|
+          let spans = $place.command
           fish --command $"complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'"
           | from tsv --flexible --noheaders --no-infer
           | rename value description
