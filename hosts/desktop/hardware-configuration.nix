@@ -18,14 +18,14 @@
     {
       device = "/dev/disk/by-uuid/bdaa131f-07d1-419c-b593-4783d11e0b43";
       fsType = "btrfs";
-      options = [ "subvol=@" "compress=zstd" ];
+      options = [ "subvol=@" "compress=zstd" "noatime" "discard=async" ];
     };
 
   fileSystems."/home" =
     {
       device = "/dev/disk/by-uuid/bdaa131f-07d1-419c-b593-4783d11e0b43";
       fsType = "btrfs";
-      options = [ "subvol=@home" "compress=zstd" ];
+      options = [ "subvol=@home" "compress=zstd" "noatime" "discard=async" ];
     };
 
   fileSystems."/boot" =
@@ -39,14 +39,14 @@
     {
       device = "/dev/disk/by-uuid/e4e3d91e-3d73-407d-9561-f3d2b578ebc8";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      options = [ "compress=zstd" "noatime" "discard=async" ];
     };
 
   fileSystems."/home/mopht/Music" =
     {
       device = "/dev/disk/by-uuid/80ff9653-538b-4cd0-ad8e-e638bb883ad0";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      options = [ "compress=zstd" "noatime" "discard=async" ];
     };
 
   swapDevices = [ ];
