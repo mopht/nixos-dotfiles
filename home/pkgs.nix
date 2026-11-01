@@ -63,6 +63,7 @@
     maple-mono.NF-CN
     maple-mono.NF
 
+    btrfs-assistant
     trash-cli
     pavucontrol
     hyprpicker
