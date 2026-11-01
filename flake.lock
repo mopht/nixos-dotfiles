@@ -116,11 +116,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1793434175,
-        "narHash": "sha256-woeeZ23rbo2NBw/hcZ6v+Rt5xNppKU21jfeGYEF7UX8=",
+        "lastModified": 1793523322,
+        "narHash": "sha256-PghtHWNKOKYWdxa0SBaps/2VTE/GaNmUl5QF/Ss/xWQ=",
         "owner": "moonbit-community",
         "repo": "moonbit-overlay",
-        "rev": "a0aeeb3a1d3524de62817ba1c6e8d10a228099ea",
+        "rev": "b5505700ad4f300a641b2ae0f35ea2dd166c2810",
         "type": "github"
       },
       "original": {

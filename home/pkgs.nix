@@ -8,6 +8,7 @@
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk
     hmcl
+    prismlauncher
     telegram-desktop
     go-musicfox
     onlyoffice-desktopeditors
