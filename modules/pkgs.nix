@@ -7,7 +7,6 @@
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     libsForQt5.qtstyleplugin-kvantum
-    btrfs-assistant
     papirus-icon-theme
     material-symbols
     glaze
