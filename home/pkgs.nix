@@ -4,10 +4,12 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.qt6ct
     # dsh
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk
-    hmcl
+    # hmcl
     prismlauncher
     telegram-desktop
     go-musicfox

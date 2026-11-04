@@ -11,7 +11,11 @@
     enable = true;
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
-  qt.enable = true;
+
+  qt = {
+    enable = true;
+  };
+
   gtk = {
     enable = true;
 
