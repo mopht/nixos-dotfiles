@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   programs.obs-studio = {
@@ -33,6 +33,7 @@
     ];
 
     config = {
+      ytdl-raw-options = "cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path}";
       script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
       target-colorspace-hint = "no";
       autocreate-playlist = "filter";
@@ -101,6 +102,9 @@
   programs.zen-browser = {
     enable = true;
     setAsDefaultBrowser = true;
+    profiles.default = {
+      isDefault = true;
+    };
   };
 
   programs.nh = {
