@@ -22,16 +22,42 @@
   programs.rmpc.enable = true;
   programs.mpv = {
     enable = true;
-    # Optional: customize the package and add bundled scripts
     scripts = with pkgs.mpvScripts; [
       uosc
+      quality-menu
       thumbfast
+      evafast
+
+      mpv-playlistmanager
+      mpris
     ];
 
     config = {
+      target-colorspace-hint = "no";
+      autocreate-playlist = "filter";
+
       profile = "high-quality";
-      hwdec = "auto-safe";
-      cache-default = 4000000;
+      hwdec = "vaapi";
+      vo = "gpu";
+      gpu-context = "wayland";
+      video-sync = "display-resample";
+      interpolation = "yes";
+
+      cache = "yes";
+      demuxer-max-bytes = "4000M";
+      osc = "no";
+      border = "no";
+    };
+
+    bindings = {
+      UP   = "add volume 5";
+      DOWN = "add volume -5";
+    };
+
+    scriptOpts.uosc = {
+      timeline_style = "bar";
+      progress = "always";
+      progress_size = 2;
     };
   };
 
