@@ -56,8 +56,11 @@ in
       video-sync = "display-resample";
       interpolation = "yes";
 
+
+      prefetch-playlist = "yes";
       cache = "yes";
-      demuxer-max-bytes = "4000M";
+      demuxer-max-bytes = "1000M";
+      demuxer-back-bytes = "300M";
       osc = "no";
       border = "no";
     };
@@ -125,6 +128,7 @@ in
   programs.zen-browser = {
     enable = true;
     setAsDefaultBrowser = true;
+    nativeMessagingHosts = [ pkgs.ff2mpv ];
     profiles.default = {
       isDefault = true;
     };
