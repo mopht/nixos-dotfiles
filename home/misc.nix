@@ -48,7 +48,7 @@ in
       vid = "auto";
       hls-bitrate = "max";
       ytdl-raw-options =
-        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,fps,vcodec:av01:hevc:h264"'';
+        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},extractor-args="youtube:player_client=tv,default",format-sort="res,fps,vcodec:av01:vp9:hevc:h264,tbr"'';
       script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
       target-colorspace-hint = "no";
       autocreate-playlist = "filter";
@@ -77,8 +77,8 @@ in
       t = "cycle border";
       UP = "add volume 5";
       DOWN = "add volume -5";
-      WHEEL_UP = "add volume 5";
-      WHEEL_DOWN = "add volume -5";
+      WHEEL_UP = "add volume 2";
+      WHEEL_DOWN = "add volume -2";
       d = "cycle sub-visibility";
       c = "cycle sub";
       "[" = "playlist-prev";
