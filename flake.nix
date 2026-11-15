@@ -5,9 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     moonbit-overlay.url = "github:moonbit-community/moonbit-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/";
-    # dsh-nix.url = "github:Samuka007/dsh-nix";
 
-    MPV-Play-BiliBili-Comments = {
+    biliBili-comments = {
       url = "github:itKelis/MPV-Play-BiliBili-Comments";
       flake = false;
     };

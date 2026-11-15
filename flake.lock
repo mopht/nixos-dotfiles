@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "MPV-Play-BiliBili-Comments": {
+    "biliBili-comments": {
       "flake": false,
       "locked": {
         "lastModified": 1765366899,
@@ -215,7 +215,7 @@
     },
     "root": {
       "inputs": {
-        "MPV-Play-BiliBili-Comments": "MPV-Play-BiliBili-Comments",
+        "biliBili-comments": "biliBili-comments",
         "caelestia-shell": "caelestia-shell",
         "home-manager": "home-manager",
         "moonbit-overlay": "moonbit-overlay",

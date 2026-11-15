@@ -1,10 +1,10 @@
 {  inputs, pkgs, config, ... }:
 
 let
-  MPV-Play-BiliBili-Comments = pkgs.mpvScripts.buildLua {
+  bilibili-comments = pkgs.mpvScripts.buildLua {
     pname = "MPV-Play-BiliBili-Comments";
     version = "git";
-    src = inputs.MPV-Play-BiliBili-Comments;
+    src = inputs.biliBili-comments;
     scriptPath = "scripts/bilibiliAssert/.";
     passthru.scriptName = "bilibili_comments";
   };
@@ -40,7 +40,7 @@ in
 
       mpv-playlistmanager
       mpris
-      MPV-Play-BiliBili-Comments
+      bilibili-comments
     ];
 
     config = {
