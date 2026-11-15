@@ -16,6 +16,7 @@
     onlyoffice-desktopeditors
     clash-verge-rev
     fastfetch
+    yt-dlp
 
     antigravity-cli
     typora

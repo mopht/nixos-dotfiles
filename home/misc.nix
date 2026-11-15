@@ -33,6 +33,7 @@
     ];
 
     config = {
+      script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
       target-colorspace-hint = "no";
       autocreate-playlist = "filter";
 
@@ -50,9 +51,23 @@
     };
 
     bindings = {
-      UP   = "add volume 5";
-      DOWN = "add volume -5";
-    };
+    f = "cycle fullscreen";
+    ESC = "set fullscreen no";
+    w = "cycle window-maximized";
+    t = "cycle border";
+    UP = "add volume 5";
+    DOWN = "add volume -5";
+    WHEEL_UP = "add volume 5";
+    WHEEL_DOWN = "add volume -5";
+    d = "cycle sub-visibility";
+    c = "cycle sub";
+    "[" = "playlist-prev";
+    "]" = "playlist-next";
+    ">" = "add speed 0.25";
+    "<" = "add speed -0.25";
+    z = "set speed 1.0";
+    s = "screenshot";
+  };
 
     scriptOpts.uosc = {
       timeline_style = "bar";
