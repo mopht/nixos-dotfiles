@@ -1,6 +1,16 @@
-{ pkgs, config, ... }:
+{  inputs, pkgs, config, ... }:
 
+let
+  MPV-Play-BiliBili-Comments = pkgs.mpvScripts.buildLua {
+    pname = "MPV-Play-BiliBili-Comments";
+    version = "git";
+    src = inputs.MPV-Play-BiliBili-Comments;
+    scriptPath = "scripts/bilibiliAssert/.";
+    passthru.scriptName = "bilibili_comments";
+  };
+in
 {
+
   programs.obs-studio = {
     enable = true;
     # Optional Nvidia hardware acceleration
@@ -30,6 +40,7 @@
 
       mpv-playlistmanager
       mpris
+      MPV-Play-BiliBili-Comments
     ];
 
     config = {
@@ -52,28 +63,40 @@
     };
 
     bindings = {
-    f = "cycle fullscreen";
-    ESC = "set fullscreen no";
-    w = "cycle window-maximized";
-    t = "cycle border";
-    UP = "add volume 5";
-    DOWN = "add volume -5";
-    WHEEL_UP = "add volume 5";
-    WHEEL_DOWN = "add volume -5";
-    d = "cycle sub-visibility";
-    c = "cycle sub";
-    "[" = "playlist-prev";
-    "]" = "playlist-next";
-    ">" = "add speed 0.25";
-    "<" = "add speed -0.25";
-    z = "set speed 1.0";
-    s = "screenshot";
-  };
+      MBTN_LEFT = "cycle pause";
+      MBTN_LEFT_DBL = "cycle fullscreen";
+      f = "cycle fullscreen";
+      ESC = "set fullscreen no";
+      w = "cycle window-maximized";
+      t = "cycle border";
+      UP = "add volume 5";
+      DOWN = "add volume -5";
+      WHEEL_UP = "add volume 5";
+      WHEEL_DOWN = "add volume -5";
+      d = "cycle sub-visibility";
+      c = "cycle sub";
+      "[" = "playlist-prev";
+      "]" = "playlist-next";
+      ">" = "add speed 0.25";
+      "<" = "add speed -0.25";
+      z = "set speed 1.0";
+      s = "screenshot";
+    };
 
     scriptOpts.uosc = {
       timeline_style = "bar";
       progress = "always";
       progress_size = 2;
+    };
+
+    scriptOpts.bilibili_comments = {
+      mincount = 1;
+      fontname = "sans-serif";
+      fontsize = "29";
+      opacity = "1";
+      percent = "0";
+      duration_marquee = "10";
+      duration_still = "8";
     };
   };
 
