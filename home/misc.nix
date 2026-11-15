@@ -44,23 +44,26 @@ in
     ];
 
     config = {
-      ytdl-raw-options = "cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path}";
+      ytdl-format = "bestvideo+bestaudio/best";
+      vid = "auto";
+      hls-bitrate = "max";
+      ytdl-raw-options =
+        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,fps,vcodec:av01:hevc:h264"'';
       script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
       target-colorspace-hint = "no";
       autocreate-playlist = "filter";
 
       profile = "high-quality";
       hwdec = "vaapi";
-      vo = "gpu";
+      vo = "gpu-next";
       gpu-context = "wayland";
       video-sync = "display-resample";
       interpolation = "yes";
 
-
       prefetch-playlist = "yes";
       cache = "yes";
       demuxer-max-bytes = "1000M";
-      demuxer-back-bytes = "300M";
+      demuxer-max-back-bytes = "300M";
       osc = "no";
       border = "no";
     };
@@ -101,7 +104,10 @@ in
       duration_marquee = "10";
       duration_still = "8";
     };
+
+    scriptOpts.quality-menu.fetch_formats = true;
   };
+
 
   home.file.".config/clangd/config.yaml".text = ''
     # Global settings for all files
