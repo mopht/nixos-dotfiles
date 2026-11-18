@@ -1,13 +1,21 @@
-{  inputs, pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
 
-let
-  bilibili-comments = pkgs.mpvScripts.buildLua {
-    pname = "MPV-Play-BiliBili-Comments";
-    version = "git";
-    src = inputs.biliBili-comments;
-    scriptPath = "scripts/bilibiliAssert/.";
-    passthru.scriptName = "bilibili_comments";
-  };
+    let
+  a4k = "${pkgs.anime4k}";
+
+  # 专为 720p -> 1080p 设计的单次超分链（720p x2 = 1440p，由 MPV 自动缩至 1080p，不再二次超分到 5K）
+  # 档位 A：清晰片源（推荐，兼顾线条锐化与高刷流畅度）
+  anime4k-720p-a = lib.concatStringsSep ":" [
+    "${a4k}/Anime4K_Clamp_Highlights.glsl"
+    "${a4k}/Anime4K_Restore_CNN_M.glsl"
+    "${a4k}/Anime4K_Upscale_CNN_x2_L.glsl"
+  ];
+
+  # 档位 B：高糊/低码率旧番（带去噪点，不强行锐化瑕疵）
+  anime4k-720p-b = lib.concatStringsSep ":" [
+    "${a4k}/Anime4K_Clamp_Highlights.glsl"
+    "${a4k}/Anime4K_Upscale_Denoise_CNN_x2_L.glsl"
+  ];
 in
 {
 
@@ -33,6 +41,7 @@ in
   programs.mpv = {
     enable = true;
     scripts = with pkgs.mpvScripts; [
+      memo
       uosc
       quality-menu
       thumbfast
@@ -40,7 +49,9 @@ in
 
       mpv-playlistmanager
       mpris
-      bilibili-comments
+      uosc-danmaku
+
+      smartskip
     ];
 
     config = {
@@ -48,24 +59,27 @@ in
       vid = "auto";
       hls-bitrate = "max";
       ytdl-raw-options =
-        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},extractor-args="youtube:player_client=tv,default",format-sort="res,fps,vcodec:av01:vp9:hevc:h264,tbr"'';
+        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,fps,vcodec:av01:vp9:hevc:h264,tbr"'';
       script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-      target-colorspace-hint = "no";
+      target-colorspace-hint = false;
       autocreate-playlist = "filter";
+      save-position-on-quit = true;
 
       profile = "high-quality";
       hwdec = "vaapi";
       vo = "gpu-next";
-      gpu-context = "wayland";
+      gpu-context = "waylandvk";
       video-sync = "display-resample";
-      interpolation = "yes";
+      gpu-api = "vulkan";
+      interpolation = true;
 
-      prefetch-playlist = "yes";
-      cache = "yes";
+      prefetch-playlist = true;
+      cache = true;
       demuxer-max-bytes = "1000M";
       demuxer-max-back-bytes = "300M";
-      osc = "no";
-      border = "no";
+      osc = false;
+      osd-bar = false;
+      border = false;
     };
 
     bindings = {
@@ -87,22 +101,40 @@ in
       "<" = "add speed -0.25";
       z = "set speed 1.0";
       s = "screenshot";
+
+      "Ctrl+1" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (Standard)"'';
+      "Ctrl+2" = ''no-osd change-list glsl-shaders set "${anime4k-720p-b}"; show-text "Anime4K: 720p->1080p (Denoise)"'';
+      "Ctrl+0" = ''no-osd change-list glsl-shaders clr ""; show-text "GLSL Shaders: Cleared"'';
+    };
+
+    scriptOpts.playlistmanager = {
+      resolve_url_titles = true;
+      resolve_title_timeout = 15;
     };
 
     scriptOpts.uosc = {
       timeline_style = "bar";
       progress = "always";
       progress_size = 2;
+      refine = "text";
     };
 
-    scriptOpts.bilibili_comments = {
-      mincount = 1;
+    scriptOpts.uosc_danmaku = {
+      auto_load = true;
+      autoload_for_url = true;
+
+      opacity = 1;
+      vf_fps = true;
+      fps = "164.99899";
+
+      merge_tolerance = 1;
+      scrolltime = 15;
+      fixtime = 8;
       fontname = "sans-serif";
-      fontsize = "29";
-      opacity = "1";
-      percent = "0";
-      duration_marquee = "10";
-      duration_still = "8";
+      fontsize = 30;
+      bold = false;
+      displayarea = 1;
+      outline = 1;
     };
 
     scriptOpts.quality-menu.fetch_formats = true;

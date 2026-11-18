@@ -6,6 +6,8 @@
   home.packages = with pkgs; [
     kdePackages.qtstyleplugin-kvantum
     kdePackages.qt6ct
+    qbittorrent
+    anime4k
     # dsh
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk

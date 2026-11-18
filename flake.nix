@@ -6,11 +6,6 @@
     moonbit-overlay.url = "github:moonbit-community/moonbit-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/";
 
-    biliBili-comments = {
-      url = "github:itKelis/MPV-Play-BiliBili-Comments";
-      flake = false;
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

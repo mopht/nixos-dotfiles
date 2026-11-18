@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "biliBili-comments": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1765366899,
-        "narHash": "sha256-gUHjQU7fZYih5wkRFeTToJQ3yJo43eEe0RxsI76VMm8=",
-        "owner": "itKelis",
-        "repo": "MPV-Play-BiliBili-Comments",
-        "rev": "77291aad6d882491d9773f201052b1ef9bae69d4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "itKelis",
-        "repo": "MPV-Play-BiliBili-Comments",
-        "type": "github"
-      }
-    },
     "caelestia-cli": {
       "inputs": {
         "caelestia-shell": [
@@ -215,7 +199,6 @@
     },
     "root": {
       "inputs": {
-        "biliBili-comments": "biliBili-comments",
         "caelestia-shell": "caelestia-shell",
         "home-manager": "home-manager",
         "moonbit-overlay": "moonbit-overlay",
