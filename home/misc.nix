@@ -1,23 +1,27 @@
 { pkgs, lib, config, ... }:
 
-    let
+let
   a4k = "${pkgs.anime4k}";
 
-  # 专为 720p -> 1080p 设计的单次超分链（720p x2 = 1440p，由 MPV 自动缩至 1080p，不再二次超分到 5K）
-  # 档位 A：清晰片源（推荐，兼顾线条锐化与高刷流畅度）
   anime4k-720p-a = lib.concatStringsSep ":" [
     "${a4k}/Anime4K_Clamp_Highlights.glsl"
     "${a4k}/Anime4K_Restore_CNN_M.glsl"
     "${a4k}/Anime4K_Upscale_CNN_x2_L.glsl"
   ];
+  anime4k-720p-sharp = lib.concatStringsSep ":" [
+    "${a4k}/Anime4K_Clamp_Highlights.glsl"
+    "${a4k}/Anime4K_Restore_CNN_M.glsl"
+    "${a4k}/Anime4K_Thin_HQ.glsl"
+    "${a4k}/Anime4K_Darken_HQ.glsl"
+    "${a4k}/Anime4K_Upscale_CNN_x2_L.glsl"
+  ];
 
-  # 档位 B：高糊/低码率旧番（带去噪点，不强行锐化瑕疵）
-  anime4k-720p-b = lib.concatStringsSep ":" [
+  anime4k-720p-denoise = lib.concatStringsSep ":" [
     "${a4k}/Anime4K_Clamp_Highlights.glsl"
     "${a4k}/Anime4K_Upscale_Denoise_CNN_x2_L.glsl"
   ];
 in
-{
+  {
 
   programs.obs-studio = {
     enable = true;
@@ -51,6 +55,7 @@ in
       mpris
       uosc-danmaku
 
+      reload
       smartskip
     ];
 
@@ -69,9 +74,12 @@ in
       hwdec = "vaapi";
       vo = "gpu-next";
       gpu-context = "waylandvk";
+      tscale = "oversample";
       video-sync = "display-resample";
       gpu-api = "vulkan";
       interpolation = true;
+
+      # blend-subtitles = "video";
 
       prefetch-playlist = true;
       cache = true;
@@ -102,8 +110,9 @@ in
       z = "set speed 1.0";
       s = "screenshot";
 
-      "Ctrl+1" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (Standard)"'';
-      "Ctrl+2" = ''no-osd change-list glsl-shaders set "${anime4k-720p-b}"; show-text "Anime4K: 720p->1080p (Denoise)"'';
+      "Ctrl+1" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (VL Balanced)"'';
+      "Ctrl+2" = ''no-osd change-list glsl-shaders set "${anime4k-720p-sharp}"; show-text "Anime4K: 720p->1080p (VL Ultra Sharp)"'';
+      "Ctrl+3" = ''no-osd change-list glsl-shaders set "${anime4k-720p-denoise}"; show-text "Anime4K: 720p->1080p (VL Denoise)"'';
       "Ctrl+0" = ''no-osd change-list glsl-shaders clr ""; show-text "GLSL Shaders: Cleared"'';
     };
 
