@@ -3,7 +3,7 @@
 {
   services.usbmuxd.enable = true;
 
-  networking.hostName = "desktop";
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
   programs.clash-verge.serviceMode = true;

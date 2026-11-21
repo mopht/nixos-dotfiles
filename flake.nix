@@ -28,7 +28,7 @@
 
   outputs = inputs@{ nixpkgs, home-manager, moonbit-overlay, nix-flatpak, ... }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
-    nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
         ./hosts/desktop
