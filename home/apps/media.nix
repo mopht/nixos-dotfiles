@@ -22,12 +22,12 @@ let
 
   anime4k-720p-a-VL = lib.concatStringsSep ":" [
     "${a4k}/Anime4K_Clamp_Highlights.glsl"
-    "${a4k}/Anime4K_Restore_CNN_VL.glsl"
+    "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Upscale_CNN_x2_VL.glsl"
   ];
   anime4k-720p-sharp-VL = lib.concatStringsSep ":" [
     "${a4k}/Anime4K_Clamp_Highlights.glsl"
-    "${a4k}/Anime4K_Restore_CNN_VL.glsl"
+    "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Thin_HQ.glsl"
     "${a4k}/Anime4K_Darken_HQ.glsl"
     "${a4k}/Anime4K_Upscale_CNN_x2_VL.glsl"
@@ -74,7 +74,6 @@ in
       ytdl-format = "bestvideo+bestaudio/best";
       ytdl-raw-options =
         ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,fps,vcodec:av01:vp9:hevc:h264,tbr"'';
-      # script-opts = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
       target-colorspace-hint = false;
       autocreate-playlist = "filter";
       save-position-on-quit = true;
