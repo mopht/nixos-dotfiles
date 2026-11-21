@@ -88,8 +88,6 @@ in
       gpu-api = "vulkan";
       interpolation = true;
 
-      blend-subtitles = false;
-
       prefetch-playlist = true;
       demuxer-max-bytes = "1000M";
       demuxer-max-back-bytes = "300M";
