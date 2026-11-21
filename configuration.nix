@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports =
@@ -15,6 +15,11 @@
 
   system.stateVersion = "26.11";
   time.timeZone = "Asia/Shanghai";
+
+  documentation.nixos.enable = false;
+  documentation.man.cache.enable = false;
+
+  nix.package = pkgs.lix;
 
   users.users.mopht = {
     isNormalUser = true;
