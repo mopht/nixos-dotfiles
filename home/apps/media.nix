@@ -102,10 +102,11 @@ in
       MBTN_LEFT = "cycle pause";
       w = "cycle window-maximized";
       t = "cycle border";
-      UP = "add volume 5";
-      DOWN = "add volume -5";
-      WHEEL_UP = "add volume 2";
-      WHEEL_DOWN = "add volume -2";
+      UP = "no-osd add volume 5; script-message-to uosc flash-elements volume";
+      DOWN = "no-osd add volume -5; script-message-to uosc flash-elements volume";
+      WHEEL_UP = "no-osd add volume 2; script-message-to uosc flash-elements volume";
+      WHEEL_DOWN = "no-osd add volume -2; script-message-to uosc flash-elements volume";
+      m = "no-osd cycle mute; script-message-to uosc flash-elements volume";
       d = "cycle sub-visibility";
       c = "cycle sub";
       "[" = "playlist-prev";
@@ -151,7 +152,7 @@ in
       displayarea = 1;
       outline = 1;
 
-      blacklist_path= "/etc/nixos/home/apps/filter.txt";
+      blacklist_path = "/etc/nixos/home/apps/filter.txt";
     };
 
     scriptOpts.quality-menu.fetch_formats = true;
