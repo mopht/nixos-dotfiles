@@ -1,12 +1,6 @@
 { pkgs, ... }:
 
 {
-  # wayland.windowManager.hyprland = {
-  #   enable = true;
-  #   systemd.enable = true;
-  #   systemd.variables = [ "--all" ];
-  # };
-
   dconf = {
     enable = true;
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
@@ -18,12 +12,10 @@
 
   gtk = {
     enable = true;
-
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };

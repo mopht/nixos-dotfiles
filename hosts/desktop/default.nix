@@ -1,13 +1,23 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./hardware.nix
+    ../../system/core.nix
+    ../../system/pkgs.nix
+    ../../system/network.nix
+    ../../system/desktop
+    ../../system/hardware/audio.nix
+    ../../system/hardware/bluetooth.nix
+    ../../system/hardware/gaming.nix
+  ];
+
   zramSwap = {
     enable = true;
     memoryPercent = 25;
     algorithm = "zstd";
   };
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
@@ -20,6 +30,6 @@
 
   console = {
     font = "Lat2-Terminus16";
-    useXkbConfig = true; # use xkb.options in tty.
+    useXkbConfig = true;
   };
 }

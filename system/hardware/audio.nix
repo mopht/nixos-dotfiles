@@ -16,7 +16,6 @@
     user = "mopht";
     settings = {
       music_directory = "/home/mopht/Music/file";
-
       playlist_directory = "/home/mopht/Music/playlists";
       db_file = "/home/mopht/Music/mpd.db";
       state_file = "/home/mopht/Music/mpdstate";
@@ -27,6 +26,7 @@
       }];
     };
   };
+
   systemd.services.mpd.environment = {
     XDG_RUNTIME_DIR = "/run/user/1000";
   };

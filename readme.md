@@ -19,26 +19,37 @@ My personal NixOS configuration, featuring Caelestia shell on Hyprland with a fo
 
 ```
 nixos-config/
-├── flake.nix                  # Flake entry point
-├── flake.lock                 # Locked dependencies
+├── flake.nix                      # Flake entry point (nixosConfigurations.desktop)
+├── flake.lock                     # Locked dependencies
 ├── hosts/
 │   └── desktop/
-│       ├── configuration.nix  # System configuration
-│       └── hardware.nix       # Hardware configuration
-├── modules/                   # System-level modules
-│   ├── pkgs.nix               # System packages
-│   ├── desktop.nix            # Hyprland, display
-│   ├── network.nix            # mihomo, NetworkManager
-│   ├── audio.nix              # PipeWire, MPD
-│   ├── gaming.nix             # Steam, gamescope
-│   └── fcitx5.nix             # Just fcitx5
-└── home/                      # Home Manager modules
-    ├── home.nix               # HM entry point
-    ├── pkgs.nix               # User packages
-    ├── fish.nix               # Fish shell
-    ├── display.nix            # Qt/Gtk Theme
-    ├── caelestia.nix          # Caelestia shell
-    └── misc.nix               # Others (links to submodule)
+│       ├── default.nix            # Desktop host entry point
+│       └── hardware.nix           # Hardware configuration (nixos-generate-config)
+├── system/                        # NixOS system-level modules
+│   ├── core.nix                   # Nix settings, timezone, stateVersion, user
+│   ├── network.nix                # NetworkManager, Clash-verge, firewall, printing
+│   ├── pkgs.nix                   # System packages, nix-ld, flatpak
+│   ├── desktop/
+│   │   ├── default.nix            # Hyprland, Portal, Greetd, UWSM, Sunshine
+│   │   └── fcitx5.nix             # fcitx5 + Rime input method
+│   └── hardware/
+│       ├── audio.nix              # PipeWire, MPD
+│       ├── bluetooth.nix          # Bluetooth, xpadneo
+│       └── gaming.nix             # Steam, Gamescope, graphics drivers
+└── home/                          # Home Manager user configuration
+    ├── default.nix                # HM entry point
+    ├── pkgs.nix                   # User packages, fonts, Flatpak
+    ├── misc.nix                   # KDE Connect, btop, nh, clangd
+    ├── apps/
+    │   ├── browser.nix            # Zen Browser
+    │   ├── editor.nix             # Helix, Lazygit
+    │   ├── file-manager.nix       # Superfile
+    │   └── media.nix              # MPV + Anime4K, OBS, RMPC, mpdris2-rs
+    ├── desktop/
+    │   ├── caelestia.nix          # Caelestia shell, Gammastep
+    │   └── theme.nix              # GTK, Qt, cursor, DConf
+    └── shell/
+        └── default.nix            # Nushell, Fish, Kitty, Starship, Zoxide, Eza
 ```
 
 ## ✨ Features
@@ -63,19 +74,17 @@ nixos-config/
 
 ```bash
 # Clone the repository
-git clone https://github.com/mopht/nixos-config ~/nixos-config
-cd ~/nixos-config
+git clone https://github.com/mopht/nixos-config /etc/nixos
 
 # Deploy system/home-manager configuration
-sudo nixos-rebuild switch
-
+nh os switch
 ```
 
 ### On a new machine
 
 ```bash
 # Clone and apply in one step
-sudo nixos-rebuild switch --flake github:你的用户名/nixos-config#desktop
+sudo nixos-rebuild switch --flake github:mopht/nixos-config#desktop
 ```
 
 ## 🔄 Updating

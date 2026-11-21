@@ -11,7 +11,6 @@
 
       editor = {
         auto-save.focus-lost = true;
-        # bufferline = "multiple";
         line-number = "relative";
         color-modes = true;
         cursor-shape.insert = "bar";
@@ -24,7 +23,6 @@
 
         statusline = {
           left = [ "mode" "spinner" "version-control" "file-name" "file-modification-indicator" ];
-          # center = [ ];
           right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
           mode.normal = "NORMAL";
           mode.insert = "INSERT";
@@ -62,6 +60,7 @@
         "ui.statusline.inactive" = "dim_color";
       };
     };
+
     languages = {
       language = [
         {

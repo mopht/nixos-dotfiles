@@ -1,5 +1,5 @@
 {
-  description = "flake";
+  description = "mopht's NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -27,11 +27,11 @@
   };
 
   outputs = inputs@{ nixpkgs, home-manager, moonbit-overlay, nix-flatpak, ... }: {
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+    nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
-        ./configuration.nix
+        ./hosts/desktop
 
         nix-flatpak.nixosModules.nix-flatpak
         {
@@ -43,7 +43,7 @@
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit inputs; };
 
-          home-manager.users.mopht = import ./home/home.nix;
+          home-manager.users.mopht = import ./home/default.nix;
         }
       ];
     };

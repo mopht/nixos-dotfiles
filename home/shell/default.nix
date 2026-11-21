@@ -1,7 +1,6 @@
 { ... }:
 
 {
-  # programs.fzf.enable = true;
   programs.fish.enable = true;
   programs.carapace.enable = true;
   programs.starship.enable = true;
@@ -74,12 +73,4 @@
       "modify_font cell_height" = "+7px";
     };
   };
-
-  # programs.fish = {
-  #   enable = true;
-  #   interactiveShellInit = ''
-  #     cat ~/.local/state/caelestia/sequences.txt 2> /dev/null
-  #     set -g fish_greeting ""
-  #   '';
-  # };
 }

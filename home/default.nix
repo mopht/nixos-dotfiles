@@ -5,12 +5,14 @@
     inputs.caelestia-shell.homeManagerModules.default
     inputs.zen-browser.homeModules.beta
     ./pkgs.nix
-    ./desktop.nix
-    ./display.nix
-    ./shell.nix
+    ./desktop/caelestia.nix
+    ./desktop/theme.nix
+    ./shell
+    ./apps/editor.nix
+    ./apps/media.nix
+    ./apps/browser.nix
+    ./apps/file-manager.nix
     ./misc.nix
-    ./file_manager.nix
-    ./editor.nix
   ];
 
   home.username = "mopht";

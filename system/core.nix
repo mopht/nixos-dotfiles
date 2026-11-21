@@ -1,18 +1,6 @@
 { pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hosts/desktop/hardware-configuration.nix
-      ./hosts/desktop/configuration.nix
-      ./modules/desktop.nix
-      ./modules/network.nix
-      ./modules/audio.nix
-      ./modules/fcitx5.nix
-      ./modules/pkgs.nix
-      ./modules/gaming.nix
-    ];
-
   system.stateVersion = "26.11";
   time.timeZone = "Asia/Shanghai";
 
@@ -20,6 +8,8 @@
   documentation.man.cache.enable = false;
 
   nix.package = pkgs.lix;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
 
   users.users.mopht = {
     isNormalUser = true;

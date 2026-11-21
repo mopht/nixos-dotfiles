@@ -3,13 +3,8 @@
 {
   services.usbmuxd.enable = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.settings.General.Exprimental = true;
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.xpadneo.enable = true;
 
   programs.clash-verge.serviceMode = true;
   programs.clash-verge.tunMode = true;
@@ -21,7 +16,6 @@
   };
 
   services.avahi = {
-    # "disable-publishing" = false;
     nssmdns4 = true;
     openFirewall = true;
   };
