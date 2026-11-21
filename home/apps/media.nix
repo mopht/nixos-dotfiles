@@ -110,8 +110,6 @@ in
       c = "cycle sub";
       "[" = "playlist-prev";
       "]" = "playlist-next";
-      ">" = "add speed 0.25";
-      "<" = "add speed -0.25";
       z = "set speed 1.0";
 
       "Ctrl+1" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (L Balanced)"'';
@@ -136,8 +134,11 @@ in
     };
 
     scriptOpts.uosc_danmaku = {
+      api_server = "https://danmaku-api.152468.xyz";
       auto_load = true;
       autoload_for_url = true;
+      load_more_danmaku = true;
+
 
       opacity = 1;
       vf_fps = true;
@@ -151,6 +152,8 @@ in
       bold = false;
       displayarea = 1;
       outline = 1;
+
+      blacklist_path= "/etc/nixos/home/apps/filter.txt";
     };
 
     scriptOpts.quality-menu.fetch_formats = true;
