@@ -25,8 +25,7 @@ let
     "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Upscale_CNN_x2_VL.glsl"
   ];
-  anime4k-720p-sharp-VL = lib.concatStringsSep ":" [
-    "${a4k}/Anime4K_Clamp_Highlights.glsl"
+  anime4k-720p-sharp-VL = lib.concatStringsSep ":" [ "${a4k}/Anime4K_Clamp_Highlights.glsl"
     "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Thin_HQ.glsl"
     "${a4k}/Anime4K_Darken_HQ.glsl"
@@ -77,7 +76,7 @@ in
       target-colorspace-hint = false;
       autocreate-playlist = "filter";
       save-position-on-quit = true;
-
+      force-window = "immediate";
 
       profile = "high-quality";
       hwdec = "vaapi";
@@ -152,6 +151,8 @@ in
 
       blacklist_path = "/etc/nixos/home/apps/filter.txt";
     };
+
+    scriptOpts.ytdl_hook.all_formats = false;
 
     scriptOpts.quality-menu.fetch_formats = true;
   };
