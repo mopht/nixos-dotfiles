@@ -137,8 +137,6 @@ in
       api_server = "https://danmaku-api.152468.xyz";
       auto_load = true;
       autoload_for_url = true;
-      load_more_danmaku = true;
-
 
       opacity = 1;
       vf_fps = true;
