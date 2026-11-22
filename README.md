@@ -122,6 +122,7 @@
 - **Steam** — 启用 Remote Play，集成 Gamescope session
 - **Proton GE** — 额外兼容层
 - **Gamescope** — 支持 `capSysNice`
+- **GameMode** — `gamemoderun` 游戏优化，配合 Steam 手柄/VR 的 udev 规则
 - **umu-launcher** — 非 Steam 游戏启动器
 - **PrismLauncher** — Minecraft 启动器
 
@@ -145,7 +146,9 @@
   - 快捷键：`h`/`l` 上一张/下一张 (Gallery 内 `h/j/k/l` 选择)、`Space` 下一张、`r`/`R` 旋转、`i` 元信息 HUD
   - `trash-cli` 联动（按 `Delete` 安全移入系统回收站）
 - **Loupe** — GNOME 现代看图工具
+- **EasyEffects** — 麦克风降噪 / 耳机 EQ (PipeWire)
 - **OBS Studio** — 录屏/直播 (VA-API + wlrobs)
+- **Nautilus** — 配合 file-roller (压缩包) 与 ffmpegthumbnailer (视频缩略图)
 - **Spotify** — 通过 Flatpak 安装
 
 ## 🌐 浏览器 (Zen Browser)
@@ -202,17 +205,19 @@
 ## 🎨 外观与体验
 
 - **Shell**: Caelestia (基于 Quickshell 的 Hyprland 桌面 Shell)
-- **GTK 主题**: Adwaita (caelestia 生成 `gtk.css` + dconf `prefer-dark`)
+- **GTK 主题**: adw-gtk3-dark (caelestia 生成 `gtk.css` + dconf `prefer-dark`)
 - **Qt 主题**: qtengine + Darkly（caelestia 生成配色）
 - **图标**: Papirus-Dark
 - **光标**: Bibata-Modern-Classic (24px)
-- **剪贴板**: cliphist 历史 (文本/图片)，wl-clipboard 提供 `wl-copy`/`wl-paste`
+- **剪贴板**: cliphist 历史 (文本/图片)、wl-clip-persist 常驻、wl-clipboard 提供 `wl-copy`/`wl-paste`
 - **字体**:
   - 等宽代码: Maple Mono NF CN (终端斜体 + 7px行高微调) / Cascadia Code
   - 正文字体: Source Han Sans (思源黑体) / Noto Sans CJK
   - 彩色表情: Noto Color Emoji (彻底解决终端与网页 Emoji 豆腐块)
 - **终端风格**: Kitty (0.45 半透明、枫叶单宽字体、光标动效、NuShell 专属补全)
 - **夜间护眼**: Gammastep (GeoClue2 定位，日间 6500K / 夜间 3500K 自动平滑过渡)
+- **默认程序**: `xdg.mimeApps` 声明 (浏览器/图片/视频/压缩包/磁力/目录)
+- **字体回退**: `fontconfig.defaultFonts` 固定中文/等宽/emoji 顺序
 
 ## 🚀 使用方法
 
@@ -262,8 +267,34 @@ nix fmt
 
 使用 [sops-nix](https://github.com/Mic92/sops-nix) 管理敏感数据，密文存放在 `secrets/secrets.yaml`（Age 加密）。
 
-> 目前该文件里只有 `example_key`，还没有声明任何 `sops.secrets`，所以 `/run/secrets/` 不会生成；
+> 目前只声明了 `mopht-password` 一个 secret，用于 `users.users.mopht.hashedPasswordFile`；
 > Age 私钥在仓库外的 `~/.config/sops/age/keys.txt`，换机时需要单独恢复。
+
+## 🔁 给其他人用 / 二次开发
+
+这套配置是围绕作者这台机器写的，直接拿到别的机器上 `nh os switch` 会失败或不合预期。要改的地方：
+
+1. **硬件**：`hosts/desktop/hardware.nix` 里的分区 UUID 只属于这台机器，用
+   `nixos-generate-config --show-hardware-config` 重新生成后替换；GPU 和快照配置在
+   `hosts/desktop/gpu.nix`、`hosts/desktop/storage.nix`，按实际硬件调整。
+2. **用户名**：`mopht` 是硬编码的，至少改：
+   `flake.nix` 的 `home-manager.users.mopht`、`home/default.nix` 的 `home.username`/`homeDirectory`、
+   `system/core.nix` 的 `users.users.mopht`、`system/sops.nix` 的 age key 路径、
+   `system/hardware/audio.nix` 的 MPD 路径、`hosts/desktop/storage.nix` 的 `ALLOW_USERS`。
+3. **密钥 (sops)**：`secrets/secrets.yaml` 是用作者的 age 公钥加密的，别人解不开，`nh os switch`
+   会卡在 `sops-install-secrets`。二选一：
+   - **删掉** `system/sops.nix` 里的 `sops.secrets.mopht-password` 和 `hashedPasswordFile`，
+     首次登录后自己 `passwd`；
+   - 或把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys secrets/secrets.yaml`
+     （注意这样对方能解开你的**所有** secret）。
+   即使能解密，首次创建用户时用的也是作者的密码 hash；之后 `passwd` 改成自己的即可
+   （NixOS 默认 `mutableUsers = true`，重建不会把密码改回去）。
+4. **Hyprland 配置**不在本仓库：需要 `git clone https://github.com/mopht/hyprland-dotfiles.git ~/.config/hypr`，
+   否则桌面没有键位；`~/.config/caelestia` 由 Home Manager 生成。
+5. **个人项**：`home/misc.nix` 的 `xdg.mimeApps` 引用了作者的第三方应用（`Rayburst.desktop` 等），
+   没有对应程序时关联会失效；`system/network.nix` 的防火墙端口、`home/apps/*` 的软件列表按需删减。
+
+改完后 `nh os switch`；首次登录如果没有密码，先 `passwd`。
 
 ## 📦 Flatpak 应用
 
