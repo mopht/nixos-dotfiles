@@ -74,7 +74,7 @@ nixos-config/
 
 ```bash
 # Clone the repository
-git clone https://github.com/mopht/nixos-config /etc/nixos
+git clone https://github.com/mopht/nixos-dotfiles /etc/nixos
 
 # Deploy system/home-manager configuration
 nh os switch
@@ -84,7 +84,7 @@ nh os switch
 
 ```bash
 # Clone and apply in one step
-sudo nixos-rebuild switch --flake github:mopht/nixos-config#desktop
+sudo nixos-rebuild switch --flake github:mopht/nixos-dotfiles#nixos
 ```
 
 ## 🔄 Updating

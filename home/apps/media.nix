@@ -40,7 +40,6 @@ in
 {
   programs.obs-studio = {
     enable = true;
-    package = (pkgs.obs-studio.override { cudaSupport = true; });
     plugins = with pkgs.obs-studio-plugins; [
       wlrobs
       obs-backgroundremoval
@@ -72,7 +71,7 @@ in
     config = {
       ytdl-format = "bestvideo+bestaudio/best";
       ytdl-raw-options =
-        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,fps,vcodec:av01:vp9:hevc:h264,tbr"'';
+        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,vcodec:av01:vp9:hevc:h264,tbr"'';
       target-colorspace-hint = false;
       autocreate-playlist = "filter";
       save-position-on-quit = true;
