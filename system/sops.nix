@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   sops = {
@@ -6,11 +6,10 @@
     defaultSopsFormat = "yaml";
     age.keyFile = "/home/mopht/.config/sops/age/keys.txt";
 
-    # Secrets definition example:
-    # secrets."example-secret" = {
-    #   owner = "mopht";
-    # };
+    secrets.mopht-passwd.neededForUsers = true;
   };
+
+  users.users.mopht.hashedPasswordFile = config.sops.secrets.mopht-passwd.path;
 
   environment.systemPackages = with pkgs; [
     sops
