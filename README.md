@@ -232,9 +232,6 @@ cd /etc/nixos
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-> 新机器首次安装时注意：配置里没有声明用户密码 (`hashedPassword`)，
-> 需要在安装环境里先给用户设好（`passwd mopht`），否则首次登录后 `sudo` 不可用。
-
 ### 日常更新
 
 本配置集成了 [nh](https://github.com/viperML/nh) 进行便捷管理：
@@ -281,8 +278,8 @@ nix fmt
    `flake.nix` 的 `home-manager.users.mopht`、`home/default.nix` 的 `home.username`/`homeDirectory`、
    `system/core.nix` 的 `users.users.mopht`、`system/sops.nix` 的 age key 路径、
    `system/hardware/audio.nix` 的 MPD 路径、`hosts/desktop/storage.nix` 的 `ALLOW_USERS`。
-3. **密钥 (sops)**：`secrets/secrets.yaml` 是用作者的 age 公钥加密的，别人解不开，`nh os switch`
-   会卡在 `sops-install-secrets`。二选一：
+3. **密钥 (sops)**：`secrets/secrets.yaml` 是用作者的 age 公钥加密的，`nh os switch`
+   会卡在 `sops-install-secrets` ：
    - **删掉** `system/sops.nix` 里的 `sops.secrets.mopht-password` 和 `hashedPasswordFile`，
      首次登录后自己 `passwd`；
    - 或把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys secrets/secrets.yaml`
@@ -291,10 +288,10 @@ nix fmt
    （NixOS 默认 `mutableUsers = true`，重建不会把密码改回去）。
 4. **Hyprland 配置**不在本仓库：需要 `git clone https://github.com/mopht/hyprland-dotfiles.git ~/.config/hypr`，
    否则桌面没有键位；`~/.config/caelestia` 由 Home Manager 生成。
-5. **个人项**：`home/misc.nix` 的 `xdg.mimeApps` 引用了作者的第三方应用（`Rayburst.desktop` 等），
+5. **个人项**：`home/misc.nix` 的 `xdg.mimeApps` 引用了第三方应用（`Rayburst.desktop` 等），
    没有对应程序时关联会失效；`system/network.nix` 的防火墙端口、`home/apps/*` 的软件列表按需删减。
 
-改完后 `nh os switch`；首次登录如果没有密码，先 `passwd`。
+改完后 `nh os switch`
 
 ## 📦 Flatpak 应用
 
