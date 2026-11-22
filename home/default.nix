@@ -6,6 +6,7 @@
     inputs.zen-browser.homeModules.beta
     ./pkgs.nix
     ./desktop/caelestia.nix
+    ./desktop/fcitx5.nix
     ./desktop/theme.nix
     ./shell
     ./apps/editor.nix
