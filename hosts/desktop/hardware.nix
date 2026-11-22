@@ -62,7 +62,8 @@
     device = "/dev/disk/by-uuid/e4e3d91e-3d73-407d-9561-f3d2b578ebc8";
     fsType = "btrfs";
     options = [
-      "compress=zstd"
+      # 游戏数据压缩收益低，用最低档减少 CPU 开销
+      "compress=zstd:1"
       "noatime"
       "discard=async"
     ];

@@ -10,8 +10,6 @@
     darkly
     qbittorrent
     anime4k
-    # dsh
-    # hmcl
     prismlauncher
     telegram-desktop
     go-musicfox
@@ -21,7 +19,6 @@
 
     antigravity-cli
     typora
-    # iloader
     loupe
     swayimg
     upscayl

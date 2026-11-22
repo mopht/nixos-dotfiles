@@ -8,7 +8,8 @@
   documentation.man.cache.enable = false;
 
   nix.package = pkgs.lix;
-  nix.settings.auto-optimise-store = true;
+  # 去重交给定时任务，构建时不再逐包做硬链接优化
+  nix.optimise.automatic = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -22,6 +23,12 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 14d";
+  };
+
+  # 日志持久化，重启后仍能查上次启动的 journal
+  services.journald.settings.Journal = {
+    Storage = "persistent";
+    SystemMaxUse = "1G";
   };
 
   users.users.mopht = {

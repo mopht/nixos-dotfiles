@@ -9,6 +9,8 @@
     fileSystems = [
       "/"
       "/home"
+      "/home/mopht/Game"
+      "/home/mopht/Music"
     ];
   };
 
