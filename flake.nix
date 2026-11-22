@@ -33,6 +33,7 @@
 
   outputs =
     inputs@{
+      self,
       nixpkgs,
       home-manager,
       moonbit-overlay,
@@ -42,6 +43,15 @@
     }:
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+
+      # `nix flake check` 会把系统和 Home Manager 配置实际构建一遍，
+      # 在 nh os switch 之前就能发现评估/构建错误。
+      checks.x86_64-linux = {
+        nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
+        home-manager =
+          self.nixosConfigurations.nixos.config.home-manager.users.mopht.home.activationPackage;
+      };
+
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
