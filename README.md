@@ -43,33 +43,41 @@
 ## 📁 项目结构
 
 ```
-nixos/
-├── flake.nix                           # Flake 入口，定义 inputs 和 outputs
+.
+├── flake.nix                              # Flake 入口，定义 inputs 和 outputs
 ├── flake.lock
-├── configuration.nix                   # 系统配置入口，导入所有模块
 │
 ├── hosts/
 │   └── desktop/
-│       ├── configuration.nix           # 主机特定配置 (内核、启动、zram)
-│       └── hardware-configuration.nix  # 硬件配置 (分区、GPU、快照)
+│       ├── default.nix                    # 主机入口 (内核、启动、zram、i2c)
+│       └── hardware.nix                   # 硬件配置 (分区、GPU、Snapper 快照)
 │
-├── modules/                            # 系统级模块
-│   ├── desktop.nix                     # Hyprland + greetd + XDG Portal + Sunshine
-│   ├── network.nix                     # 网络、蓝牙、打印、防火墙
-│   ├── audio.nix                       # PipeWire + MPD
-│   ├── fcitx5.nix                      # 输入法 (Fcitx5 + Rime 雾凇拼音)
-│   ├── pkgs.nix                        # 系统级软件包 + Flatpak + nix-ld
-│   └── gaming.nix                      # Steam + Gamescope + Proton GE
+├── system/                                # 系统级模块
+│   ├── core.nix                           # 核心设置 (时区、Lix、用户)
+│   ├── pkgs.nix                           # 系统软件包 + Flatpak + nix-ld
+│   ├── network.nix                        # 网络、防火墙、打印、代理
+│   ├── desktop/
+│   │   ├── default.nix                    # Hyprland + greetd + XDG Portal + Sunshine
+│   │   └── fcitx5.nix                     # 输入法 (Fcitx5 + Rime 雾凇拼音)
+│   └── hardware/
+│       ├── audio.nix                      # PipeWire + MPD
+│       ├── bluetooth.nix                  # 蓝牙 + xpadneo
+│       └── gaming.nix                     # Steam + Gamescope + Proton GE
 │
-└── home/                               # Home Manager 用户配置
-    ├── home.nix                        # Home Manager 入口
-    ├── pkgs.nix                        # 用户软件包 + Flatpak 应用 + 字体
-    ├── desktop.nix                     # Caelestia Shell + Gammastep
-    ├── display.nix                     # GTK/Qt 主题、光标、暗色模式
-    ├── shell.nix                       # Nushell + Kitty + Zoxide + Eza
-    ├── misc.nix                        # mpv + OBS + Zen Browser + KDE Connect + nh
-    ├── file_manager.nix                # Superfile 文件管理器
-    └── editor.nix                      # Helix + Lazygit
+└── home/                                  # Home Manager 用户配置
+    ├── default.nix                        # Home Manager 入口
+    ├── pkgs.nix                           # 用户软件包 + Flatpak + 字体
+    ├── misc.nix                           # KDE Connect + btop + nh + clangd
+    ├── desktop/
+    │   ├── caelestia.nix                  # Caelestia Shell + Gammastep
+    │   └── theme.nix                      # GTK/Qt 主题、光标、暗色模式
+    ├── shell/
+    │   └── default.nix                    # Nushell + Kitty + Zoxide + Eza + Starship
+    └── apps/
+        ├── browser.nix                    # Zen Browser (ff2mpv)
+        ├── editor.nix                     # Helix + Lazygit
+        ├── file-manager.nix               # Superfile
+        └── media.nix                      # mpv (Anime4K) + OBS + rmpc
 ```
 
 ## 🔧 Flake Inputs
@@ -89,18 +97,23 @@ nixos/
 - **Proton GE** — 额外兼容层
 - **Gamescope** — 支持 `capSysNice`
 - **umu-launcher** — 非 Steam 游戏启动器
+- **PrismLauncher** — Minecraft 启动器
 
 ## 🎵 多媒体
 
 - **PipeWire** — 音频服务 (PulseAudio + ALSA 兼容)
 - **MPD** — 音乐守护进程，PipeWire 输出
 - **rmpc** — MPD TUI 客户端
+- **go-musicfox** — 网易云音乐 TUI
 - **mpv** — 视频播放器
   - Vulkan + Wayland + VA-API 硬解
-  - Anime4K 着色器 (720p→1080p 多种模式: `Ctrl+1/2/3`)
+  - Anime4K 着色器 (L / VL 两档，各含 Balanced / Sharp / Denoise 模式)
+    - `Ctrl+1/2/3` — L 档 (720p→1080p)
+    - `Ctrl+5/6/7` — VL 档 (720p→1080p)
+    - `Ctrl+0` — 清除着色器
   - 弹幕支持 (uosc-danmaku)
-  - yt-dlp 集成
-- **OBS Studio** — 录屏/直播 (CUDA + VA-API)
+  - yt-dlp 集成 (Zen Browser cookies)
+- **OBS Studio** — 录屏/直播 (VA-API + wlrobs)
 - **Spotify** — 通过 Flatpak 安装
 
 ## 💻 开发环境
@@ -117,14 +130,14 @@ nixos/
 | MoonBit | moonbit-bin (via overlay) |
 | Koka | koka, tree-sitter-koka |
 | Idris 2 | idris2, idris2Lsp |
-| Scheme | MIT/GNU Scheme, Guile, scheme-langserver |
+| Scheme | MIT/GNU Scheme, Guile, scheme-langserver, guile-lsp-server |
 | Lua | lua-language-server |
-| PureScript | spago-legacy |
+| Python | python3 (pillow, rawpy, vips, pyzmq, python-pptx…) |
 
 ### 开发工具
 
 - **Neovim / Neovide** — 主力编辑器 (配合 tree-sitter)
-- **Helix** — 轻量编辑器 (Everforest Dark 主题, 相对行号)
+- **Helix** — 轻量编辑器 (Everforest Dark 透明主题, 相对行号)
 - **Lazygit** — Git TUI
 - **gh** — GitHub CLI
 - **direnv** — 自动加载项目环境
@@ -134,7 +147,7 @@ nixos/
 ## 🌐 网络 & 连接
 
 - **NetworkManager** — 网络管理
-- **Clash Verge Rev** — 代理 (TUN 模式)
+- **Clash Verge Rev** — 代理 (TUN 模式 + Service 模式)
 - **蓝牙** — 启用 (Blueman, xpadneo 手柄支持)
 - **KDE Connect** — 手机联动 (端口 1714-1764)
 - **LocalSend** — 局域网传输 (端口 53317)
@@ -159,7 +172,7 @@ nixos/
 
 ```bash
 # 克隆配置
-git clone <repo-url> /etc/nixos
+git clone https://github.com/mopht/nixos-dotfiles.git /etc/nixos
 cd /etc/nixos
 
 # 构建并切换
