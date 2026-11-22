@@ -177,6 +177,13 @@ in
     swayimg.overlay = false
     swayimg.exif_orientation = true
 
+    -- Image list
+    swayimg.imagelist.order = "numeric"
+    swayimg.imagelist.reverse = false
+    swayimg.imagelist.recursive = false
+    swayimg.imagelist.adjacent = true
+    swayimg.imagelist.fsmon = true
+
     -- Text overlay (press 'i' or 't' to toggle)
     swayimg.text.visible = false
     swayimg.text.font = "Maple Mono NF CN"
@@ -280,12 +287,14 @@ in
     swayimg.gallery.window_color = 0xdd181825
     swayimg.gallery.hover = true
     swayimg.gallery.cache = 150
+    swayimg.gallery.preload = true
     swayimg.gallery.embedded_thumb = true
 
     swayimg.gallery.on_key("q", function() swayimg.exit() end)
     swayimg.gallery.on_key("Escape", function() swayimg.exit() end)
     swayimg.gallery.on_key("Return", function() swayimg.mode = "viewer" end)
     swayimg.gallery.on_key("space", function() swayimg.mode = "viewer" end)
+    swayimg.gallery.on_mouse("MouseLeft", function() swayimg.mode = "viewer" end)
     swayimg.gallery.on_key("f", function() swayimg.fullscreen = not swayimg.fullscreen end)
     swayimg.gallery.on_key("h", function() swayimg.gallery.select("left") end)
     swayimg.gallery.on_key("j", function() swayimg.gallery.select("down") end)
