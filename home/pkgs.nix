@@ -23,6 +23,8 @@
     nautilus
     ffmpegthumbnailer
     file-roller
+    sioyek
+    mission-center
 
     umu-launcher
     localsend
@@ -43,11 +45,9 @@
     guile
     nixd
     koka
-    # swi-prolog
     idris2
     idris2Packages.idris2Lsp
     typescript-language-server
-    # purescript
     spago-legacy
     lua-language-server
     moonbit-bin.latest
@@ -61,7 +61,6 @@
     noto-fonts
     noto-fonts-color-emoji
     noto-fonts-cjk-sans
-    # dejavu_fonts
 
     maple-mono.NF-CN
     maple-mono.NF
@@ -71,11 +70,11 @@
     hyprpicker
     ydotool
     wl-clipboard
-    # hyperfine
     ripgrep
     xz
     fd
     unzip
+    unar
     gh
     bat
     cargo
