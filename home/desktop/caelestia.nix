@@ -7,8 +7,9 @@
     settings = {
       bar.tray.compact = true;
       bar.tray.recolour = true;
-      services.useTwelveHourClock = false;
-      services.useFahrenheit = false;
+      services.clockFormat = "TwentyFourHour";
+      services.weatherUnits = "Celsius";
+      services.sensorUnits = "Celsius";
       services.weatherLocation = "shanwei";
       launcher.enableDangerousActions = true;
       paths.wallpaperDir = "~/Pictures/Wallpapers";
