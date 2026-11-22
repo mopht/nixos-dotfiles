@@ -1,165 +1,203 @@
 # ❄️ NixOS Configuration
 
-My personal NixOS configuration, featuring Caelestia shell on Hyprland with a focus on aesthetics, performance, and reproducibility.
+我的 NixOS 桌面配置，基于 Nix Flakes 和 Home Manager 进行声明式系统管理。
 
-## 📸 Overview
+## 📋 系统概览
 
-- **OS**: NixOS (unstable)
-- **WM**: Hyprland
-- **Shell**: Caelestia
-- **Terminal**: Kitty
-- **Editor**: Neovim / Neovide
-- **Browser**: Zen Browser
-- **Font**: Maple Mono NF / Maple Mono NF CN
-- **Icons**: Papirus
-- **Cursor**: Bibata Modern Classic
-- **Update**: nh
+| 项目 | 配置 |
+|------|------|
+| **OS** | NixOS Unstable (26.11) |
+| **包管理器** | Lix (Nix fork) |
+| **桌面环境** | Hyprland (Wayland) |
+| **Shell** | Nushell + Fish (补全) + Starship |
+| **终端** | Kitty |
+| **编辑器** | Helix / Neovim / Neovide |
+| **浏览器** | Zen Browser |
+| **输入法** | Fcitx5 + Rime (雾凇拼音) |
+| **文件管理器** | Nautilus / Superfile (TUI) |
+| **媒体播放器** | mpv (Anime4K) / MPD + rmpc |
+| **登录管理器** | greetd + UWSM |
+| **代理** | Clash Verge Rev |
+| **主题** | Caelestia Shell / Papirus-Dark / Bibata 光标 |
 
-## 🗂️ Structure
+## 🖥️ 硬件
+
+- **CPU**: Intel (支持 KVM 虚拟化)
+- **GPU**: Intel Arc (xe 驱动, `56a1`)
+- **内核**: Linux Zen
+- **文件系统**: Btrfs (zstd 压缩, noatime, 异步 discard)
+- **启动**: systemd-boot (UEFI)
+- **交换**: zram (25%, zstd)
+- **快照**: Snapper (hourly, 自动清理)
+
+### 分区布局
+
+| 挂载点 | 文件系统 | 说明 |
+|--------|---------|------|
+| `/` | Btrfs `@` | 系统根目录 |
+| `/home` | Btrfs `@home` | 用户目录 (Snapper 快照) |
+| `/boot` | VFAT | EFI 启动分区 |
+| `~/Game` | Btrfs | 游戏存储 |
+| `~/Music` | Btrfs | 音乐存储 |
+
+## 📁 项目结构
 
 ```
-nixos-config/
-├── flake.nix                      # Flake entry point (nixosConfigurations.desktop)
-├── flake.lock                     # Locked dependencies
+nixos/
+├── flake.nix                           # Flake 入口，定义 inputs 和 outputs
+├── flake.lock
+├── configuration.nix                   # 系统配置入口，导入所有模块
+│
 ├── hosts/
 │   └── desktop/
-│       ├── default.nix            # Desktop host entry point
-│       └── hardware.nix           # Hardware configuration (nixos-generate-config)
-├── system/                        # NixOS system-level modules
-│   ├── core.nix                   # Nix settings, timezone, stateVersion, user
-│   ├── network.nix                # NetworkManager, Clash-verge, firewall, printing
-│   ├── pkgs.nix                   # System packages, nix-ld, flatpak
-│   ├── desktop/
-│   │   ├── default.nix            # Hyprland, Portal, Greetd, UWSM, Sunshine
-│   │   └── fcitx5.nix             # fcitx5 + Rime input method
-│   └── hardware/
-│       ├── audio.nix              # PipeWire, MPD
-│       ├── bluetooth.nix          # Bluetooth, xpadneo
-│       └── gaming.nix             # Steam, Gamescope, graphics drivers
-└── home/                          # Home Manager user configuration
-    ├── default.nix                # HM entry point
-    ├── pkgs.nix                   # User packages, fonts, Flatpak
-    ├── misc.nix                   # KDE Connect, btop, nh, clangd
-    ├── apps/
-    │   ├── browser.nix            # Zen Browser
-    │   ├── editor.nix             # Helix, Lazygit
-    │   ├── file-manager.nix       # Superfile
-    │   └── media.nix              # MPV + Anime4K, OBS, RMPC, mpdris2-rs
-    ├── desktop/
-    │   ├── caelestia.nix          # Caelestia shell, Gammastep
-    │   └── theme.nix              # GTK, Qt, cursor, DConf
-    └── shell/
-        └── default.nix            # Nushell, Fish, Kitty, Starship, Zoxide, Eza
+│       ├── configuration.nix           # 主机特定配置 (内核、启动、zram)
+│       └── hardware-configuration.nix  # 硬件配置 (分区、GPU、快照)
+│
+├── modules/                            # 系统级模块
+│   ├── desktop.nix                     # Hyprland + greetd + XDG Portal + Sunshine
+│   ├── network.nix                     # 网络、蓝牙、打印、防火墙
+│   ├── audio.nix                       # PipeWire + MPD
+│   ├── fcitx5.nix                      # 输入法 (Fcitx5 + Rime 雾凇拼音)
+│   ├── pkgs.nix                        # 系统级软件包 + Flatpak + nix-ld
+│   └── gaming.nix                      # Steam + Gamescope + Proton GE
+│
+└── home/                               # Home Manager 用户配置
+    ├── home.nix                        # Home Manager 入口
+    ├── pkgs.nix                        # 用户软件包 + Flatpak 应用 + 字体
+    ├── desktop.nix                     # Caelestia Shell + Gammastep
+    ├── display.nix                     # GTK/Qt 主题、光标、暗色模式
+    ├── shell.nix                       # Nushell + Kitty + Zoxide + Eza
+    ├── misc.nix                        # mpv + OBS + Zen Browser + KDE Connect + nh
+    ├── file_manager.nix                # Superfile 文件管理器
+    └── editor.nix                      # Helix + Lazygit
 ```
 
-## ✨ Features
+## 🔧 Flake Inputs
 
-- **Caelestia shell** — fluid animations, wallpaper-based color extraction, Material You color system
-- **Hyprland** — scrolling layout, spring physics animations, Lua configuration
-- **Clash-Verge-Rev** — transparent proxy
-- **MPD + MPRIS** — music playback with mpdris2-rs bridge for media controls
-- **fcitx5 + Rime** — Chinese input with 雾凇拼音
-- **Steam + Gamescope** — gaming with FSR upscaling support
-- **Btrfs** — zstd compression, subvolume layout
+| Input | 说明 |
+|-------|------|
+| [nixpkgs](https://github.com/NixOS/nixpkgs) (unstable) | 核心软件包源 |
+| [home-manager](https://github.com/nix-community/home-manager) | 声明式用户环境管理 |
+| [nix-flatpak](https://github.com/gmodena/nix-flatpak) | 声明式 Flatpak 管理 |
+| [moonbit-overlay](https://github.com/moonbit-community/moonbit-overlay) | MoonBit 语言工具链 |
+| [caelestia-shell](https://github.com/caelestia-dots/shell) | Hyprland 桌面 Shell 组件 |
+| [zen-browser](https://github.com/0xc000022070/zen-browser-flake) | Zen Browser (Firefox fork) |
 
-## 🚀 Installation
+## 🎮 游戏
 
-### Prerequisites
+- **Steam** — 启用 Remote Play，集成 Gamescope session
+- **Proton GE** — 额外兼容层
+- **Gamescope** — 支持 `capSysNice`
+- **umu-launcher** — 非 Steam 游戏启动器
 
-- NixOS installed with Flakes enabled
-- Home manager
-- Git
+## 🎵 多媒体
 
-### Deploy
+- **PipeWire** — 音频服务 (PulseAudio + ALSA 兼容)
+- **MPD** — 音乐守护进程，PipeWire 输出
+- **rmpc** — MPD TUI 客户端
+- **mpv** — 视频播放器
+  - Vulkan + Wayland + VA-API 硬解
+  - Anime4K 着色器 (720p→1080p 多种模式: `Ctrl+1/2/3`)
+  - 弹幕支持 (uosc-danmaku)
+  - yt-dlp 集成
+- **OBS Studio** — 录屏/直播 (CUDA + VA-API)
+- **Spotify** — 通过 Flatpak 安装
+
+## 💻 开发环境
+
+### 语言 & 工具链
+
+| 语言 | 工具 |
+|------|------|
+| Rust | rustc, cargo, rust-analyzer |
+| Haskell | GHC, cabal, HLS, cabal2nix |
+| C/C++ | GCC, Clang tools, libc++, CMake, GDB |
+| JavaScript/TypeScript | Node.js, Bun, esbuild, TS LSP |
+| Nix | nixd, nixpkgs-fmt |
+| MoonBit | moonbit-bin (via overlay) |
+| Koka | koka, tree-sitter-koka |
+| Idris 2 | idris2, idris2Lsp |
+| Scheme | MIT/GNU Scheme, Guile, scheme-langserver |
+| Lua | lua-language-server |
+| PureScript | spago-legacy |
+
+### 开发工具
+
+- **Neovim / Neovide** — 主力编辑器 (配合 tree-sitter)
+- **Helix** — 轻量编辑器 (Everforest Dark 主题, 相对行号)
+- **Lazygit** — Git TUI
+- **gh** — GitHub CLI
+- **direnv** — 自动加载项目环境
+- **clangd** — C/C++ LSP (C17 / C++26 / libc++)
+- **Typora** — Markdown 编辑器
+
+## 🌐 网络 & 连接
+
+- **NetworkManager** — 网络管理
+- **Clash Verge Rev** — 代理 (TUN 模式)
+- **蓝牙** — 启用 (Blueman, xpadneo 手柄支持)
+- **KDE Connect** — 手机联动 (端口 1714-1764)
+- **LocalSend** — 局域网传输 (端口 53317)
+- **Sunshine** — 远程串流
+- **usbmuxd** — iOS 设备连接
+- **打印** — CUPS + Avahi (mDNS)
+
+## 🎨 外观
+
+- **Shell**: Caelestia (Hyprland AGS Shell)
+- **GTK 主题**: Adwaita Dark
+- **Qt 主题**: Kvantum + qt6ct
+- **图标**: Papirus-Dark
+- **光标**: Bibata-Modern-Classic (24px)
+- **字体**: Maple Mono NF CN (终端) / Source Han Sans / Noto CJK / Cascadia Code
+- **终端透明度**: 0.45
+- **色温**: Gammastep (日间 6500K / 夜间 3500K, GeoClue2 自动)
+
+## 🚀 使用方法
+
+### 首次部署
 
 ```bash
-# Clone the repository
-git clone https://github.com/mopht/nixos-dotfiles /etc/nixos
+# 克隆配置
+git clone <repo-url> /etc/nixos
+cd /etc/nixos
 
-# Deploy system/home-manager configuration
+# 构建并切换
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+### 日常更新
+
+本配置集成了 [nh](https://github.com/viperML/nh) 进行便捷管理：
+
+```bash
+# 更新 flake inputs
+nix flake update
+
+# 构建并切换 (通过 nh)
 nh os switch
+
+# 自动清理旧 generation (保留 4 天内 / 最近 3 个)
+# nh clean 已配置自动运行
 ```
 
-### On a new machine
+### 格式化配置文件
 
 ```bash
-# Clone and apply in one step
-sudo nixos-rebuild switch --flake github:mopht/nixos-dotfiles#nixos
+nix fmt
 ```
 
-## 🔄 Updating
+## 📦 Flatpak 应用
 
-```bash
-# Rebuild
-nh os switch
+通过 `nix-flatpak` 声明式管理：
 
-# Update all flake inputs $ Rebuild
-nh os switch --update
-```
+- **Flatseal** — Flatpak 权限管理
+- **QQ** — 即时通讯
+- **WeChat** — 微信
+- **Spotify** — 音乐流媒体
 
-## 🎨 Wallpaper & Color Scheme
+> 所有 Flatpak 应用强制使用 `Adwaita:dark` GTK 主题。
 
-Caelestia uses its own color generator (not matugen). To set wallpaper and apply dynamic colors:
+## 📝 License
 
-```bash
-# Set wallpaper and extract colors
-caelestia wallpaper -f ~/Pictures/Wallpapers/wallpaper.jpg
-
-# Switch to dynamic color scheme
-caelestia scheme set -n dynamic
-```
-
-Custom user configuration goes in `./home/caelestia.nix`.
-
-## 🎮 Gaming
-
-Steam is configured with:
-- Proton GE for better game compatibility
-- Gamescope for FSR upscaling and scheduling priority
-- 32-bit library support
-
-To use FSR upscaling, add to Steam launch options:
-
-```
-gamescope -W 2560 -H 1600 -r 120 --fsr-upscaling -- %command%
-```
-
-## 🎵 Music
-
-MPD is configured as a system service with PipeWire output.
-MPRIS bridge via mpdris2-rs allows media key control and Caelestia media widget integration.
-
-```bash
-rmpc
-```
-
-## 📦 Key Packages
-
-| Category | Packages |
-|----------|---------|
-| Shell | fish, carapace, zoxide, fzf |
-| Editor | neovim, neovide, tree-sitter |
-| Terminal | kitty |
-| Files | yazi, nautilus, superfile |
-| Media | mpd, mpc, mpdris2-rs, cava |
-| Proxy | clash-verge |
-| Gaming | steam, gamescope, proton-ge |
-| Utils | eza, fastfetch, nh |
-
-<!-- ## 🖥️ Hardware -->
-<!---->
-<!-- - **CPU**: Intel Core i3-12100F -->
-<!-- - **GPU**: Intel Arc A750 -->
-<!-- - **RAM**: 16GB DDR4 -->
-<!-- - **Storage**: 476GB (system) + 160GB (games) + 60GB (music) -->
-
-## 📝 Notes
-
-- Neovim configuration is maintained as a separate repository and linked via Home Manager
-- Intel Arc A750 performs better with OpenGL than Vulkan on Linux due to Mesa driver limitations (known issue)
-
-## 🙏 Credits
-
-- [Caelestia](https://github.com/caelestia-dots/shell) — shell and color system
-- [end-4](https://github.com/end-4/dots-hyprland) — Hyprland configuration inspiration
-- [Quickshell](https://quickshell.org) — shell framework
+个人配置，仅供参考。
