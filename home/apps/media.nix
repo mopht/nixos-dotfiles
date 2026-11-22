@@ -257,16 +257,15 @@ in
 
     -- Mouse zoom & pan
     swayimg.viewer.on_scroll(function(kmods, horizontal, vertical)
-      if kmods == "Ctrl" or not horizontal then
-        if vertical and vertical ~= 0 then
-          local mouse = swayimg.get_mouse_pos()
-          local factor = vertical < 0 and 1.15 or (1 / 1.15)
-          swayimg.viewer.set_abs_scale(swayimg.viewer.scale * factor, mouse.x, mouse.y)
-        end
-      else
+      if vertical and vertical ~= 0 then
+        local mouse = swayimg.get_mouse_pos()
+        local scale = swayimg.viewer.scale
+        -- vertical < 0 is scroll up (zoom in), vertical > 0 is scroll down (zoom out)
+        local factor = vertical < 0 and 1.15 or (1 / 1.15)
+        swayimg.viewer.set_abs_scale(scale * factor, mouse.x, mouse.y)
+      elseif horizontal and horizontal ~= 0 then
         local pos = swayimg.viewer.get_position()
-        swayimg.viewer.set_abs_position(pos.x + math.floor(horizontal * 40),
-                                        pos.y + math.floor(vertical * 40))
+        swayimg.viewer.set_abs_position(pos.x + math.floor(horizontal * 40), pos.y)
       end
     end)
 
