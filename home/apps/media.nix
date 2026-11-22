@@ -294,7 +294,6 @@ in
     swayimg.gallery.on_key("Escape", function() swayimg.exit() end)
     swayimg.gallery.on_key("Return", function() swayimg.mode = "viewer" end)
     swayimg.gallery.on_key("space", function() swayimg.mode = "viewer" end)
-    swayimg.gallery.on_mouse("MouseLeft", function() swayimg.mode = "viewer" end)
     swayimg.gallery.on_key("f", function() swayimg.fullscreen = not swayimg.fullscreen end)
     swayimg.gallery.on_key("h", function() swayimg.gallery.select("left") end)
     swayimg.gallery.on_key("j", function() swayimg.gallery.select("down") end)
