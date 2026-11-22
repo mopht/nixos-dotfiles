@@ -27,19 +27,20 @@
 - **GPU**: Intel Arc A750 (xe 驱动, `56a1`, VA-API 硬解，含 32 位)
 - **内核**: Linux Zen
 - **文件系统**: Btrfs (zstd 压缩, noatime, 异步 discard)
-- **启动**: systemd-boot (UEFI, timeout 3s, 最多保留 10 个启动项)
-- **交换**: zram (25%, zstd)
+- **启动**: systemd-boot (UEFI, timeout 3s, 最多保留 10 个启动项, 禁止编辑内核参数)
+- **交换**: zram (25%, zstd, `vm.swappiness=180`)
 - **快照与自愈**:
   - Snapper (仅 `/home`，hourly，按 5h/7d/2w/2m 保留)
-  - Btrfs autoScrub (每月，覆盖 `/` 和 `/home`；`~/Game`、`~/Music` 的独立 btrfs 暂未纳入)
+  - Btrfs autoScrub (每月，覆盖 `/`、`/home`、`~/Game`、`~/Music`)
 - **系统保护 & 维护**:
   - systemd-oomd 内存压力保护（防重型编译卡死）
-  - nix 存储自动硬链接去重 (`auto-optimise-store`)
-  - fwupd 固件更新支持
+  - nix 存储去重改为定时任务 (`nix.optimise.automatic`)
+  - fwupd 固件更新支持 + smartd 磁盘健康监控
   - udisks2 & gvfs 外部存储自动挂载
   - Polkit 认证代理 (hyprpolkitagent) 与 GNOME Keyring 凭据环 (greetd 自动解锁)
   - 剪贴板历史：cliphist (文本 + 图片) + wl-clipboard
   - Nix 旧代自动 GC：系统侧每周清理 14 天前 (`nix.gc`)，用户侧 `nh clean` 保留 4 天/3 个
+  - journald 日志持久化 (上限 1G)，重启后仍可查上次启动的日志
 
 ### 分区布局
 
@@ -237,7 +238,10 @@ sudo nixos-rebuild switch --flake .#nixos
 # 更新 flake inputs
 nix flake update
 
-# 构建并切换 (通过 nh)
+# 大更新（内核/nixpkgs）建议先 boot，重启验证后再 switch：
+#   nh os boot   # 只设为下次启动，不切换
+#   nh os switch # 构建并立即切换
+#   nh os rollback
 nh os switch
 
 # 自动清理：用户侧 nh clean (保留 4 天内 / 最近 3 个)
