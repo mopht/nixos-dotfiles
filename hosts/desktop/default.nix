@@ -21,7 +21,9 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 1;
+  boot.loader.timeout = 3;
+  # 限制 ESP 中保留的启动项数量，避免几百 MB 的 /boot 被历史 generation 占满
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelModules = [
     "i2c-dev"
