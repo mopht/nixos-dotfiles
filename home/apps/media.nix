@@ -159,7 +159,7 @@ in
       displayarea = 1;
       outline = 1;
 
-      blacklist_path = "/etc/nixos/home/apps/filter.txt";
+      blacklist_path = "${./filter.txt}";
     };
 
     scriptOpts.ytdl_hook.all_formats = false;
