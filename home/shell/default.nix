@@ -40,7 +40,9 @@
     };
 
     extraConfig = ''
-      open --raw ~/.local/state/caelestia/sequences.txt | print -n
+      if ($"($env.HOME)/.local/state/caelestia/sequences.txt" | path exists) {
+        open --raw ~/.local/state/caelestia/sequences.txt | print -n
+      }
       let commands_completed_by_fish = [nu git niri tailscale]
 
       let fish_completer = {|place|
