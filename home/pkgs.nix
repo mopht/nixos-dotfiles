@@ -4,8 +4,6 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    # Qt 平台主题：caelestia 把配色写进 ~/.config/qtengine，
-    # hypr 侧设置 QT_QPA_PLATFORMTHEME=qtengine；样式用它模板里的 Darkly
     qtengine
     darkly
     qbittorrent
@@ -23,6 +21,8 @@
     swayimg
     upscayl
     nautilus
+    ffmpegthumbnailer
+    file-roller
 
     umu-launcher
     localsend
@@ -121,6 +121,8 @@
     global = {
       Environment = {
         GTK_THEME = "Adwaita:dark";
+        XCURSOR_THEME = "Bibata-Modern-Classic";
+        XCURSOR_SIZE = "24";
       };
     };
   };

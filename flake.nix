@@ -44,8 +44,6 @@
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
 
-      # `nix flake check` 会把系统和 Home Manager 配置实际构建一遍，
-      # 在 nh os switch 之前就能发现评估/构建错误。
       checks.x86_64-linux = {
         nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
         home-manager =
@@ -66,6 +64,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-bak";
             home-manager.extraSpecialArgs = { inherit inputs; };
 
             home-manager.users.mopht = import ./home/default.nix;

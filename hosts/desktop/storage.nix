@@ -1,5 +1,3 @@
-# 快照与数据校验。这些不是 nixos-generate-config 的产物，
-# 单独放这里，重新生成 hardware.nix 时不会丢。
 { ... }:
 
 {

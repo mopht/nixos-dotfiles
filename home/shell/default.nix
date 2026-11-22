@@ -5,9 +5,6 @@
   programs.carapace.enable = true;
   programs.starship.enable = true;
 
-  # starship 配置保持原始 TOML（programs.starship 只负责 shell 集成和
-  # STARSHIP_CONFIG，不生成配置文件），只读链接到 ~/.config/starship.toml。
-  # 想改成 Nix attrset 时可以换成 programs.starship.settings。
   xdg.configFile."starship.toml" = {
     source = ./starship.toml;
     force = true;
