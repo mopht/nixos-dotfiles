@@ -62,7 +62,9 @@
 ├── hosts/
 │   └── desktop/
 │       ├── default.nix                    # 主机入口 (内核、启动、zram、i2c)
-│       └── hardware.nix                   # 硬件配置 (分区、GPU、Snapper 快照)
+│       ├── gpu.nix                        # Intel Arc A750 (xe 驱动、VA-API、32 位硬解)
+│       ├── hardware.nix                   # nixos-generate-config 生成的分区/微码
+│       └── storage.nix                    # Snapper 快照 + btrfs autoScrub
 │
 ├── system/                                # 系统级模块
 │   ├── core.nix                           # 核心设置 (时区、Lix、用户)
@@ -191,7 +193,7 @@
 
 - **Shell**: Caelestia (Hyprland AGS Shell)
 - **GTK 主题**: Adwaita Dark
-- **Qt 主题**: Kvantum + qt6ct
+- **Qt 主题**: qtengine + Darkly（caelestia 生成配色）
 - **图标**: Papirus-Dark
 - **光标**: Bibata-Modern-Classic (24px)
 - **字体**:
