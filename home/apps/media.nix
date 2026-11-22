@@ -166,4 +166,142 @@ in
 
     scriptOpts.quality-menu.fetch_formats = true;
   };
+
+  xdg.configFile."swayimg/init.lua".text = ''
+    -- Swayimg Configuration for Wayland / Hyprland
+
+    -- General
+    swayimg.mode = "viewer"
+    swayimg.antialiasing = true
+    swayimg.decoration = false
+    swayimg.overlay = false
+    swayimg.exif_orientation = true
+
+    -- Text overlay (press 'i' or 't' to toggle)
+    swayimg.text.visible = false
+    swayimg.text.font = "Maple Mono NF CN"
+    swayimg.text.size = 18
+    swayimg.text.padding = 12
+    swayimg.text.color = 0xffe0e0e0
+    swayimg.text.background = 0x88181825
+    swayimg.text.shadow = 0x00000000
+    swayimg.text.timeout = 4
+
+    -- Viewer mode
+    swayimg.viewer.default_scale = "optimal"
+    swayimg.viewer.default_position = "center"
+    swayimg.viewer.drag_button = "MouseLeft"
+    swayimg.viewer.autopos = "center"
+    swayimg.viewer.loop = true
+    swayimg.viewer.preload = 2
+    swayimg.viewer.history = 2
+    swayimg.viewer.set_window_background("auto")
+
+    swayimg.viewer.text = {
+      topleft = {
+        "File: {name}",
+        "Size: {sizehr} ({frame.width}x{frame.height})",
+        "Format: {format}",
+      },
+      topright = {
+        "{list.index} / {list.total}",
+      },
+      bottomleft = {
+        "Scale: {scale}",
+      },
+    }
+
+    -- Keybindings: Viewer mode
+    swayimg.viewer.on_key("q", function() swayimg.exit() end)
+    swayimg.viewer.on_key("Escape", function() swayimg.exit() end)
+
+    -- Navigation
+    swayimg.viewer.on_key("Right", function() swayimg.viewer.open("next") end)
+    swayimg.viewer.on_key("Left", function() swayimg.viewer.open("prev") end)
+    swayimg.viewer.on_key("l", function() swayimg.viewer.open("next") end)
+    swayimg.viewer.on_key("h", function() swayimg.viewer.open("prev") end)
+    swayimg.viewer.on_key("space", function() swayimg.viewer.open("next") end)
+    swayimg.viewer.on_key("BackSpace", function() swayimg.viewer.open("prev") end)
+
+    -- Zoom & Scale
+    swayimg.viewer.on_key("equal", function()
+      swayimg.viewer.scale = swayimg.viewer.scale * 1.15
+    end)
+    swayimg.viewer.on_key("minus", function()
+      swayimg.viewer.scale = swayimg.viewer.scale / 1.15
+    end)
+    swayimg.viewer.on_key("0", function() swayimg.viewer.reset() end)
+
+    -- Mode switches & features
+    swayimg.viewer.on_key("f", function() swayimg.fullscreen = not swayimg.fullscreen end)
+    swayimg.viewer.on_key("g", function() swayimg.mode = "gallery" end)
+    swayimg.viewer.on_key("Return", function() swayimg.mode = "gallery" end)
+    swayimg.viewer.on_key("i", function() swayimg.text.visible = not swayimg.text.visible end)
+    swayimg.viewer.on_key("t", function() swayimg.text.visible = not swayimg.text.visible end)
+    swayimg.viewer.on_key("s", function() swayimg.mode = "slideshow" end)
+
+    -- Rotate & Flip
+    swayimg.viewer.on_key("r", function() swayimg.viewer.rotate(90) end)
+    swayimg.viewer.on_key("R", function() swayimg.viewer.rotate(270) end)
+    swayimg.viewer.on_key("m", function() swayimg.viewer.flip_horizontal() end)
+    swayimg.viewer.on_key("M", function() swayimg.viewer.flip_vertical() end)
+
+    -- Move to trash
+    swayimg.viewer.on_key("Delete", function()
+      local img = swayimg.viewer.get_image()
+      if img then
+        os.execute(string.format("trash-put %q 2>/dev/null", img.path))
+        swayimg.imagelist.remove(img.path)
+      end
+    end)
+
+    -- Mouse zoom & pan
+    swayimg.viewer.on_scroll(function(kmods, horizontal, vertical)
+      if kmods == "Ctrl" or not horizontal then
+        if vertical and vertical ~= 0 then
+          local mouse = swayimg.get_mouse_pos()
+          local factor = vertical < 0 and 1.15 or (1 / 1.15)
+          swayimg.viewer.set_abs_scale(swayimg.viewer.scale * factor, mouse.x, mouse.y)
+        end
+      else
+        local pos = swayimg.viewer.get_position()
+        swayimg.viewer.set_abs_position(pos.x + math.floor(horizontal * 40),
+                                        pos.y + math.floor(vertical * 40))
+      end
+    end)
+
+    -- Gallery mode
+    swayimg.gallery.thumb_size = 200
+    swayimg.gallery.aspect = "fill"
+    swayimg.gallery.padding_size = 6
+    swayimg.gallery.border_size = 3
+    swayimg.gallery.border_color = 0xff89b4fa
+    swayimg.gallery.selected_color = 0x33ffffff
+    swayimg.gallery.unselected_color = 0x11ffffff
+    swayimg.gallery.window_color = 0xdd181825
+    swayimg.gallery.hover = true
+    swayimg.gallery.cache = 150
+    swayimg.gallery.embedded_thumb = true
+
+    swayimg.gallery.on_key("q", function() swayimg.exit() end)
+    swayimg.gallery.on_key("Escape", function() swayimg.exit() end)
+    swayimg.gallery.on_key("Return", function() swayimg.mode = "viewer" end)
+    swayimg.gallery.on_key("space", function() swayimg.mode = "viewer" end)
+    swayimg.gallery.on_key("f", function() swayimg.fullscreen = not swayimg.fullscreen end)
+    swayimg.gallery.on_key("h", function() swayimg.gallery.select("left") end)
+    swayimg.gallery.on_key("j", function() swayimg.gallery.select("down") end)
+    swayimg.gallery.on_key("k", function() swayimg.gallery.select("up") end)
+    swayimg.gallery.on_key("l", function() swayimg.gallery.select("right") end)
+    swayimg.gallery.on_key("Left", function() swayimg.gallery.select("left") end)
+    swayimg.gallery.on_key("Down", function() swayimg.gallery.select("down") end)
+    swayimg.gallery.on_key("Up", function() swayimg.gallery.select("up") end)
+    swayimg.gallery.on_key("Right", function() swayimg.gallery.select("right") end)
+
+    -- Slideshow mode
+    swayimg.slideshow.timeout = 4
+    swayimg.slideshow.default_scale = "fit"
+    swayimg.slideshow.on_key("s", function() swayimg.mode = "viewer" end)
+    swayimg.slideshow.on_key("q", function() swayimg.exit() end)
+    swayimg.slideshow.on_key("Escape", function() swayimg.mode = "viewer" end)
+  '';
 }

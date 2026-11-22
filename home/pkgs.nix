@@ -25,6 +25,7 @@
     # iloader
     bibata-cursors
     loupe
+    swayimg
     upscayl
     nautilus
 
