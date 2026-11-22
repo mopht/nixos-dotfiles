@@ -9,7 +9,10 @@
   programs.eza = {
     enable = true;
     icons = "always";
-    extraOptions = [ "--group-directories-first" "-1" ];
+    extraOptions = [
+      "--group-directories-first"
+      "-1"
+    ];
   };
 
   programs.nushell = {

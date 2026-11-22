@@ -22,8 +22,20 @@
         };
 
         statusline = {
-          left = [ "mode" "spinner" "version-control" "file-name" "file-modification-indicator" ];
-          right = [ "diagnostics" "selections" "position" "file-encoding" "file-type" ];
+          left = [
+            "mode"
+            "spinner"
+            "version-control"
+            "file-name"
+            "file-modification-indicator"
+          ];
+          right = [
+            "diagnostics"
+            "selections"
+            "position"
+            "file-encoding"
+            "file-type"
+          ];
           mode.normal = "NORMAL";
           mode.insert = "INSERT";
           mode.select = "SELECT";
@@ -55,7 +67,9 @@
       mtheme = {
         "inherits" = "everforest_dark";
         "ui.background" = { };
-        "ui.window" = { bg = "foreground_color"; };
+        "ui.window" = {
+          bg = "foreground_color";
+        };
         "ui.statusline" = "foreground_color";
         "ui.statusline.inactive" = "dim_color";
       };

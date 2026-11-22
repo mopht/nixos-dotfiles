@@ -126,7 +126,7 @@
 | Haskell | GHC, cabal, HLS, cabal2nix |
 | C/C++ | GCC, Clang tools, libc++, CMake, GDB |
 | JavaScript/TypeScript | Node.js, Bun, esbuild, TS LSP |
-| Nix | nixd, nixpkgs-fmt |
+| Nix | nixd, nixfmt |
 | MoonBit | moonbit-bin (via overlay) |
 | Koka | koka, tree-sitter-koka |
 | Idris 2 | idris2, idris2Lsp |

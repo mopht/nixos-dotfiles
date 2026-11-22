@@ -101,18 +101,19 @@
     ffmpeg
     mutagen
 
-    (python3.withPackages (ps: with ps; [
-      python-pptx
-      pyzmq
-      rawpy
-      pillow-heif
-      pillow
-      vips
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-pptx
+        pyzmq
+        rawpy
+        pillow-heif
+        pillow
+        vips
+      ]
+    ))
   ];
 
-  home.sessionVariables.NIX_LDFLAGS =
-    "-L${pkgs.llvmPackages.libcxx}/lib";
+  home.sessionVariables.NIX_LDFLAGS = "-L${pkgs.llvmPackages.libcxx}/lib";
 
   services.flatpak.packages = [
     "com.github.tchx84.Flatseal"

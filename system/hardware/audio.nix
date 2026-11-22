@@ -20,10 +20,12 @@
       db_file = "/home/mopht/Music/mpd.db";
       state_file = "/home/mopht/Music/mpdstate";
 
-      audio_output = [{
-        type = "pipewire";
-        name = "Home Manager MPD";
-      }];
+      audio_output = [
+        {
+          type = "pipewire";
+          name = "Home Manager MPD";
+        }
+      ];
     };
   };
 

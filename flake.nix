@@ -26,26 +26,34 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, moonbit-overlay, nix-flatpak, ... }: {
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/desktop
+  outputs =
+    inputs@{
+      nixpkgs,
+      home-manager,
+      moonbit-overlay,
+      nix-flatpak,
+      ...
+    }:
+    {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/desktop
 
-        nix-flatpak.nixosModules.nix-flatpak
-        {
-          nixpkgs.overlays = [ moonbit-overlay.overlays.default ];
-        }
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
+          nix-flatpak.nixosModules.nix-flatpak
+          {
+            nixpkgs.overlays = [ moonbit-overlay.overlays.default ];
+          }
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
 
-          home-manager.users.mopht = import ./home/default.nix;
-        }
-      ];
+            home-manager.users.mopht = import ./home/default.nix;
+          }
+        ];
+      };
     };
-  };
 }

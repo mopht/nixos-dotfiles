@@ -22,7 +22,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelModules = [ "i2c-dev" "i2c-core" ];
+  boot.kernelModules = [
+    "i2c-dev"
+    "i2c-core"
+  ];
 
   services.udev.extraRules = ''
     KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"

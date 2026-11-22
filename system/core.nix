@@ -8,11 +8,19 @@
   documentation.man.cache.enable = false;
 
   nix.package = pkgs.lix;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
 
   users.users.mopht = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "i2c" "uinput" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "i2c"
+      "uinput"
+    ];
   };
 }

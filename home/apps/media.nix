@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   a4k = "${pkgs.anime4k}";
@@ -25,7 +30,8 @@ let
     "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Upscale_CNN_x2_VL.glsl"
   ];
-  anime4k-720p-sharp-VL = lib.concatStringsSep ":" [ "${a4k}/Anime4K_Clamp_Highlights.glsl"
+  anime4k-720p-sharp-VL = lib.concatStringsSep ":" [
+    "${a4k}/Anime4K_Clamp_Highlights.glsl"
     "${a4k}/Anime4K_Restore_CNN_L.glsl"
     "${a4k}/Anime4K_Thin_HQ.glsl"
     "${a4k}/Anime4K_Darken_HQ.glsl"
@@ -70,8 +76,7 @@ in
 
     config = {
       ytdl-format = "bestvideo+bestaudio/best";
-      ytdl-raw-options =
-        ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,vcodec:av01:vp9:hevc:h264,tbr"'';
+      ytdl-raw-options = ''cookies-from-browser=firefox:${config.home.homeDirectory}/.config/zen/${config.programs.zen-browser.profiles.default.path},format-sort="res,vcodec:av01:vp9:hevc:h264,tbr"'';
       target-colorspace-hint = false;
       autocreate-playlist = "filter";
       save-position-on-quit = true;
@@ -109,12 +114,18 @@ in
       "]" = "playlist-next";
       z = "set speed 1.0";
 
-      "Ctrl+1" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (L Balanced)"'';
-      "Ctrl+2" = ''no-osd change-list glsl-shaders set "${anime4k-720p-sharp}"; show-text "Anime4K: 720p->1080p (L Ultra Sharp)"'';
-      "Ctrl+3" = ''no-osd change-list glsl-shaders set "${anime4k-720p-denoise}"; show-text "Anime4K: 720p->1080p (L Denoise)"'';
-      "Ctrl+5" = ''no-osd change-list glsl-shaders set "${anime4k-720p-a-VL}"; show-text "Anime4K: 720p->1080p (VL Balanced)"'';
-      "Ctrl+6" = ''no-osd change-list glsl-shaders set "${anime4k-720p-sharp-VL}"; show-text "Anime4K: 720p->1080p (VL Ultra Sharp)"'';
-      "Ctrl+7" = ''no-osd change-list glsl-shaders set "${anime4k-720p-denoise-VL}"; show-text "Anime4K: 720p->1080p (VL Denoise)"'';
+      "Ctrl+1" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-a}"; show-text "Anime4K: 720p->1080p (L Balanced)"'';
+      "Ctrl+2" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-sharp}"; show-text "Anime4K: 720p->1080p (L Ultra Sharp)"'';
+      "Ctrl+3" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-denoise}"; show-text "Anime4K: 720p->1080p (L Denoise)"'';
+      "Ctrl+5" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-a-VL}"; show-text "Anime4K: 720p->1080p (VL Balanced)"'';
+      "Ctrl+6" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-sharp-VL}"; show-text "Anime4K: 720p->1080p (VL Ultra Sharp)"'';
+      "Ctrl+7" =
+        ''no-osd change-list glsl-shaders set "${anime4k-720p-denoise-VL}"; show-text "Anime4K: 720p->1080p (VL Denoise)"'';
       "Ctrl+0" = ''no-osd change-list glsl-shaders clr ""; show-text "GLSL Shaders: Cleared"'';
     };
 

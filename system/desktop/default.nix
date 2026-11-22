@@ -10,7 +10,10 @@
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     config.hyprland = {
-      default = [ "hyprland" "gtk" ];
+      default = [
+        "hyprland"
+        "gtk"
+      ];
       "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
     };
   };
