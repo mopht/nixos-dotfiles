@@ -76,6 +76,7 @@
     hyprpicker
     ydotool
     cliphist
+    wl-clipboard
     carapace
     # hyperfine
     ripgrep
