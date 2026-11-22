@@ -5,6 +5,10 @@
   programs.hyprland.enable = true;
   programs.hyprland.withUWSM = true;
   programs.dconf.enable = true;
+  security.polkit.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
+  systemd.oomd.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -18,6 +22,7 @@
     };
   };
 
+  services.gnome.gnome-keyring.enable = true;
   services.geoclue2.enable = true;
   services.sunshine = {
     enable = true;

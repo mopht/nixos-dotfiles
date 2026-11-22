@@ -8,6 +8,7 @@
   documentation.man.cache.enable = false;
 
   nix.package = pkgs.lix;
+  nix.settings.auto-optimise-store = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"

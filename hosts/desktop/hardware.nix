@@ -76,6 +76,15 @@
     ];
   };
 
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+    fileSystems = [
+      "/"
+      "/home"
+    ];
+  };
+
   swapDevices = [ ];
 
   services.snapper = {

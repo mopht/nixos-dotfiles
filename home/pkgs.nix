@@ -63,6 +63,7 @@
     cascadia-code
     source-han-sans
     noto-fonts
+    noto-fonts-color-emoji
     noto-fonts-cjk-sans
     # dejavu_fonts
 

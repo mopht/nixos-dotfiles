@@ -3,6 +3,11 @@
 {
   programs.lazygit.enable = true;
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   programs.helix = {
     enable = true;
 
