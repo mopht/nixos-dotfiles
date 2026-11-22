@@ -5,6 +5,7 @@
   time.timeZone = "Asia/Shanghai";
 
   documentation.nixos.enable = false;
+  documentation.doc.enable = false;
   documentation.man.cache.enable = false;
 
   boot.tmp.useTmpfs = true;
