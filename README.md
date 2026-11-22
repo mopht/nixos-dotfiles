@@ -46,6 +46,9 @@
 .
 ├── flake.nix                              # Flake 入口，定义 inputs 和 outputs
 ├── flake.lock
+├── .sops.yaml                             # sops 加密规则与公钥配置
+├── secrets/                               # 加密密钥文件目录
+│   └── secrets.yaml
 │
 ├── hosts/
 │   └── desktop/
@@ -55,6 +58,7 @@
 ├── system/                                # 系统级模块
 │   ├── core.nix                           # 核心设置 (时区、Lix、用户)
 │   ├── pkgs.nix                           # 系统软件包 + Flatpak + nix-ld
+│   ├── sops.nix                           # sops-nix 密钥管理
 │   ├── network.nix                        # 网络、防火墙、打印、代理
 │   ├── desktop/
 │   │   ├── default.nix                    # Hyprland + greetd + XDG Portal + Sunshine
@@ -90,6 +94,7 @@
 | [moonbit-overlay](https://github.com/moonbit-community/moonbit-overlay) | MoonBit 语言工具链 |
 | [caelestia-shell](https://github.com/caelestia-dots/shell) | Hyprland 桌面 Shell 组件 |
 | [zen-browser](https://github.com/0xc000022070/zen-browser-flake) | Zen Browser (Firefox fork) |
+| [sops-nix](https://github.com/Mic92/sops-nix) | 声明式 Secrets 密钥管理 (Age / Sops) |
 
 ## 🎮 游戏
 
@@ -199,6 +204,20 @@ nh os switch
 ```bash
 nix fmt
 ```
+
+## 🔐 密钥管理 (sops-nix)
+
+采用 [sops-nix](https://github.com/Mic92/sops-nix) 进行声明式敏感信息管理，支持通过 Age 私钥 (`~/.config/sops/age/keys.txt`) 或已转换的 SSH ed25519 密钥进行加解密。
+
+```bash
+# 查看已解密内容
+sops -d secrets/secrets.yaml
+
+# 编辑密钥文件（自动加解密）
+sops secrets/secrets.yaml
+```
+
+系统构建激活后，解密后的密钥可在 `/run/secrets/<secret_name>` 路径直接获取。
 
 ## 📦 Flatpak 应用
 

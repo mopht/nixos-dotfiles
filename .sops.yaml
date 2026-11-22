@@ -1,0 +1,9 @@
+keys:
+  - &mopht_age age15c0dsvnq54ek33afsampcnh4qyhnfg4u8lt02rl8t8ejw34fk30qu64ydg
+  - &mopht_ssh age1ff7qh4l6l45qrc28w0ule6v4qquhadg84h9lrrj39n4hk90z4suqs0kv3x
+creation_rules:
+  - path_regex: secrets/.*\.ya?ml$
+    key_groups:
+      - age:
+          - *mopht_age
+          - *mopht_ssh

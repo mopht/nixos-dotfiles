@@ -24,6 +24,11 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -32,6 +37,7 @@
       home-manager,
       moonbit-overlay,
       nix-flatpak,
+      sops-nix,
       ...
     }:
     {
@@ -40,6 +46,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/desktop
+          sops-nix.nixosModules.sops
 
           nix-flatpak.nixosModules.nix-flatpak
           {
