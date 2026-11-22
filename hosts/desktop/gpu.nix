@@ -7,6 +7,7 @@
     extraPackages = with pkgs; [
       intel-media-driver
       intel-vaapi-driver
+      vpl-gpu-rt
     ];
     extraPackages32 = with pkgs.pkgsi686Linux; [
       intel-media-driver

@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   services.power-profiles-daemon.enable = true;
@@ -30,6 +30,6 @@
   };
 
   systemd.services.mpd.environment = {
-    XDG_RUNTIME_DIR = "/run/user/1000";
+    XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.mopht.uid}";
   };
 }
