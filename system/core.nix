@@ -7,6 +7,8 @@
   documentation.nixos.enable = false;
   documentation.man.cache.enable = false;
 
+  boot.tmp.useTmpfs = true;
+
   nix.package = pkgs.lix;
   nix.optimise = {
     automatic = true;
