@@ -207,17 +207,90 @@ nix fmt
 
 ## 🔐 密钥管理 (sops-nix)
 
-采用 [sops-nix](https://github.com/Mic92/sops-nix) 进行声明式敏感信息管理，支持通过 Age 私钥 (`~/.config/sops/age/keys.txt`) 或已转换的 SSH ed25519 密钥进行加解密。
+本配置采用 [sops-nix](https://github.com/Mic92/sops-nix) 进行端到端声明式敏感数据（API 密钥、密码、Tokens 等）管理。密钥以加密形式安全存放在 Git 仓库中，仅在系统激活运行时解密至内存文件系统（RAMFS），不写入磁盘。
+
+### 1. 密钥架构与文件说明
+
+| 文件 | 说明 |
+|------|------|
+| `.sops.yaml` | SOPS 规则配置，定义哪些文件由哪些公钥加密（支持 Age 公钥和 SSH ed25519 公钥） |
+| `~/.config/sops/age/keys.txt` | 本地 Age 私钥文件（权限 `600`），系统构建及 `sops` 命令行解密依赖此私钥 |
+| `~/.ssh/id_ed25519` | 你的 SSH 密钥，其对应转换的公钥也登记在 `.sops.yaml` 中，作为备用解密手段 |
+| `secrets/secrets.yaml` | 加密存储的 YAML 键值对文件，可安全提交到 Git |
+| `system/sops.nix` | NixOS 模块，负责声明系统需要的 secrets 及挂载属性 |
+
+### 2. 常用管理命令
+
+系统已预装 `sops` 与 `age` 工具，可以直接运行：
 
 ```bash
-# 查看已解密内容
+cd /etc/nixos
+
+# 编辑密文（自动打开 $EDITOR 解密编辑，保存并退出后自动加密）
+sops secrets/secrets.yaml
+
+# 在终端快速查看解密后的明文
 sops -d secrets/secrets.yaml
 
-# 编辑密钥文件（自动加解密）
-sops secrets/secrets.yaml
+# 提取某个具体键的值
+sops -d --extract '["example_key"]' secrets/secrets.yaml
+
+# 如果更新了 .sops.yaml 中的公钥规则，重新加密现有文件：
+sops updatekeys secrets/secrets.yaml
 ```
 
-系统构建激活后，解密后的密钥可在 `/run/secrets/<secret_name>` 路径直接获取。
+### 3. 在 NixOS 配置中声明密钥
+
+在 `system/sops.nix`（或具体模块）中声明从 `secrets.yaml` 读取的密钥项：
+
+```nix
+sops = {
+  defaultSopsFile = ../secrets/secrets.yaml;
+  defaultSopsFormat = "yaml";
+  age.keyFile = "/home/mopht/.config/sops/age/keys.txt";
+
+  secrets = {
+    # 示例 1: 普通用户读取的密钥（如 API Token、Git Token）
+    "github_token" = {
+      owner = "mopht";
+      mode = "0400";
+    };
+
+    # 示例 2: 系统服务使用的密钥（如 Clash 订阅、WireGuard 密钥、WIFI 密码）
+    "clash_secret" = {
+      owner = "root";
+      group = "root";
+      mode = "0400";
+      # 可选指定固定路径（默认路径为 /run/secrets/clash_secret）
+      # path = "/etc/clash/secret";
+    };
+  };
+};
+```
+
+### 4. 在服务中引用已解密的密钥
+
+密钥解密后位于 `/run/secrets/<secret_name>`，在 Nix 表达式中直接使用 `config.sops.secrets.<name>.path` 即可：
+
+```nix
+# 在 systemd 服务中作为环境文件引入
+systemd.services.example-service = {
+  serviceConfig = {
+    EnvironmentFile = config.sops.secrets."github_token".path;
+  };
+};
+
+# 或作为文件路径直接传给程序参数
+programs.example = {
+  passwordFile = config.sops.secrets."my_password".path;
+};
+```
+
+### 5. 迁移与新设备恢复
+
+若在全新机器上部署此配置：
+1. **方式 A（推荐）**：将原机器的 `~/.config/sops/age/keys.txt` 复制到新设备的相同路径。
+2. **方式 B（SSH 恢复）**：新机器若持有已授权的 `~/.ssh/id_ed25519`，可通过 `ssh-to-age -private-key -i ~/.ssh/id_ed25519` 导出 Age 私钥填入 `~/.config/sops/age/keys.txt`。
 
 ## 📦 Flatpak 应用
 
