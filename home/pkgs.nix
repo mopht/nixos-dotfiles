@@ -4,26 +4,24 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    kdePackages.qtstyleplugin-kvantum
-    kdePackages.qt6ct
+    # Qt 平台主题：caelestia 把配色写进 ~/.config/qtengine，
+    # hypr 侧设置 QT_QPA_PLATFORMTHEME=qtengine；样式用它模板里的 Darkly
+    qtengine
+    darkly
     qbittorrent
     anime4k
     # dsh
-    xdg-desktop-portal-hyprland
-    xdg-desktop-portal-gtk
     # hmcl
     prismlauncher
     telegram-desktop
     go-musicfox
     onlyoffice-desktopeditors
-    clash-verge-rev
     fastfetch
     yt-dlp
 
     antigravity-cli
     typora
     # iloader
-    bibata-cursors
     loupe
     swayimg
     upscayl
@@ -75,9 +73,7 @@
     pavucontrol
     hyprpicker
     ydotool
-    cliphist
     wl-clipboard
-    carapace
     # hyperfine
     ripgrep
     xz
@@ -96,7 +92,6 @@
     blueman
     ddcutil
     brightnessctl
-    networkmanager
     libqalculate
     swappy
     libcava
