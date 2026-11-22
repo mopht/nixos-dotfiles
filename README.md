@@ -21,15 +21,23 @@
 | **密钥管理** | sops-nix (Age) |
 | **主题** | Caelestia Shell / Papirus-Dark / Bibata 光标 |
 
-## 🖥️ 硬件
+## 🖥️ 硬件 & 系统维护
 
 - **CPU**: Intel (支持 KVM 虚拟化)
-- **GPU**: Intel Arc (xe 驱动, `56a1`)
+- **GPU**: Intel Arc (xe 驱动, `56a1`, VA-API 硬件加速)
 - **内核**: Linux Zen
 - **文件系统**: Btrfs (zstd 压缩, noatime, 异步 discard)
-- **启动**: systemd-boot (UEFI)
+- **启动**: systemd-boot (UEFI, timeout 1s)
 - **交换**: zram (25%, zstd)
-- **快照**: Snapper (hourly, 自动清理)
+- **快照与自愈**:
+  - Snapper (hourly, 自动清理保留)
+  - Btrfs autoScrub (每月自动静默数据校验)
+- **系统保护 & 维护**:
+  - systemd-oomd 内存压力保护（防重型编译卡死）
+  - nix 存储自动硬链接去重 (`auto-optimise-store`)
+  - fwupd 固件更新支持
+  - udisks2 & gvfs 外部存储自动挂载
+  - Polkit 认证代理与 GNOME Keyring 凭据环 (greetd 自动解锁)
 
 ### 分区布局
 
@@ -105,7 +113,7 @@
 - **umu-launcher** — 非 Steam 游戏启动器
 - **PrismLauncher** — Minecraft 启动器
 
-## 🎵 多媒体
+## 🎵 多媒体与视听
 
 - **PipeWire** — 音频服务 (PulseAudio + ALSA 兼容)
 - **MPD** — 音乐守护进程，PipeWire 输出
@@ -118,9 +126,27 @@
     - `Ctrl+5/6/7` — VL 档 (720p→1080p)
     - `Ctrl+0` — 清除着色器
   - 弹幕支持 (uosc-danmaku)
-  - yt-dlp 集成 (Zen Browser cookies)
+  - yt-dlp 集成 (Zen Browser cookies 联动)
+- **swayimg** — Wayland 原生极速图片查看器
+  - Lua 声明式定制，无窗体边框、自适应平滑缩放
+  - 支持画廊（Gallery）九宫格矩阵与幻灯片模式 (`g` / `s`)
+  - Vim 快捷键 (`h/j/k/l`、`Space`、`r` 旋转、`i` 元信息 HUD)
+  - `trash-cli` 联动（按 `Delete` 安全移入系统回收站）
+- **Loupe** — GNOME 现代看图工具
 - **OBS Studio** — 录屏/直播 (VA-API + wlrobs)
 - **Spotify** — 通过 Flatpak 安装
+
+## 🌐 浏览器 (Zen Browser)
+
+- **原生视频调用**：集成 `ff2mpv-rust`，网页视频快捷调起 mpv 播放
+- **隐私加固策略**：禁用 Telemetry 遥测、Pocket、体验研究与内置升级
+- **图形与硬解优化**：Wayland 分数缩放、VA-API 硬件解码与 WebRender 全开
+- **多账号环境隔离**：配置 `Personal`、`Dev`、`Media` 专属容器
+- **快捷搜索引擎**：
+  - `@nix` — Nix Packages 搜索
+  - `@opt` — NixOS Options 选项搜索
+  - `@gh` — GitHub 代码搜索
+  - `@b` — 哔哩哔哩视频搜索
 
 ## 💻 开发环境
 
@@ -142,11 +168,11 @@
 
 ### 开发工具
 
-- **Neovim / Neovide** — 主力编辑器 (配合 tree-sitter)
+- **Neovim / Neovide** — 主力编辑器（设为系统全局默认 `$EDITOR` 与 `$VISUAL`）
 - **Helix** — 轻量编辑器 (Everforest Dark 透明主题, 相对行号)
 - **Lazygit** — Git TUI
 - **gh** — GitHub CLI
-- **direnv** — 自动加载项目环境
+- **direnv + nix-direnv** — 瞬时激活项目 Flake 环境，自动创建 GC Root 避免重复下载
 - **clangd** — C/C++ LSP (C17 / C++26 / libc++)
 - **Typora** — Markdown 编辑器
 
@@ -161,16 +187,19 @@
 - **usbmuxd** — iOS 设备连接
 - **打印** — CUPS + Avahi (mDNS)
 
-## 🎨 外观
+## 🎨 外观与体验
 
 - **Shell**: Caelestia (Hyprland AGS Shell)
 - **GTK 主题**: Adwaita Dark
 - **Qt 主题**: Kvantum + qt6ct
 - **图标**: Papirus-Dark
 - **光标**: Bibata-Modern-Classic (24px)
-- **字体**: Maple Mono NF CN (终端) / Source Han Sans / Noto CJK / Cascadia Code
-- **终端透明度**: 0.45
-- **色温**: Gammastep (日间 6500K / 夜间 3500K, GeoClue2 自动)
+- **字体**:
+  - 等宽代码: Maple Mono NF CN (终端斜体 + 7px行高微调) / Cascadia Code
+  - 正文字体: Source Han Sans (思源黑体) / Noto Sans CJK
+  - 彩色表情: Noto Color Emoji (彻底解决终端与网页 Emoji 豆腐块)
+- **终端风格**: Kitty (0.45 半透明、枫叶单宽字体、光标动效、NuShell 专属补全)
+- **夜间护眼**: Gammastep (GeoClue2 定位，日间 6500K / 夜间 3500K 自动平滑过渡)
 
 ## 🚀 使用方法
 
