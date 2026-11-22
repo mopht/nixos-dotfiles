@@ -3,6 +3,8 @@
 {
   imports = [
     ./hardware.nix
+    ./gpu.nix
+    ./storage.nix
     ../../system/core.nix
     ../../system/pkgs.nix
     ../../system/sops.nix

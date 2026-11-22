@@ -13,9 +13,4 @@
       proton-ge-bin
     ];
   };
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
 }
