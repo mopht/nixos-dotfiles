@@ -13,31 +13,33 @@
 | **终端** | Kitty |
 | **编辑器** | Helix / Neovim / Neovide |
 | **浏览器** | Zen Browser |
-| **输入法** | Fcitx5 + Rime (雾凇拼音) |
+| **输入法** | Fcitx5 + Rime (雾凇拼音，profile 由 HM 管理) |
 | **文件管理器** | Nautilus / Superfile (TUI) |
 | **媒体播放器** | mpv (Anime4K) / MPD + rmpc |
 | **登录管理器** | greetd + UWSM |
 | **代理** | Clash Verge Rev |
-| **密钥管理** | sops-nix (Age) |
+| **密钥管理** | sops-nix (Age，目前仅示例密钥) |
 | **主题** | Caelestia Shell / Papirus-Dark / Bibata 光标 |
 
 ## 🖥️ 硬件 & 系统维护
 
-- **CPU**: Intel (支持 KVM 虚拟化)
-- **GPU**: Intel Arc (xe 驱动, `56a1`, VA-API 硬件加速)
+- **CPU**: Intel (VT-x/KVM 可用；未配置 libvirt/qemu)
+- **GPU**: Intel Arc A750 (xe 驱动, `56a1`, VA-API 硬解，含 32 位)
 - **内核**: Linux Zen
 - **文件系统**: Btrfs (zstd 压缩, noatime, 异步 discard)
-- **启动**: systemd-boot (UEFI, timeout 1s)
+- **启动**: systemd-boot (UEFI, timeout 3s, 最多保留 10 个启动项)
 - **交换**: zram (25%, zstd)
 - **快照与自愈**:
-  - Snapper (hourly, 自动清理保留)
-  - Btrfs autoScrub (每月自动静默数据校验)
+  - Snapper (仅 `/home`，hourly，按 5h/7d/2w/2m 保留)
+  - Btrfs autoScrub (每月，覆盖 `/` 和 `/home`；`~/Game`、`~/Music` 的独立 btrfs 暂未纳入)
 - **系统保护 & 维护**:
   - systemd-oomd 内存压力保护（防重型编译卡死）
   - nix 存储自动硬链接去重 (`auto-optimise-store`)
   - fwupd 固件更新支持
   - udisks2 & gvfs 外部存储自动挂载
-  - Polkit 认证代理与 GNOME Keyring 凭据环 (greetd 自动解锁)
+  - Polkit 认证代理 (hyprpolkitagent) 与 GNOME Keyring 凭据环 (greetd 自动解锁)
+  - 剪贴板历史：cliphist (文本 + 图片) + wl-clipboard
+  - Nix 旧代自动 GC：系统侧每周清理 14 天前 (`nix.gc`)，用户侧 `nh clean` 保留 4 天/3 个
 
 ### 分区布局
 
@@ -82,18 +84,25 @@
 └── home/                                  # Home Manager 用户配置
     ├── default.nix                        # Home Manager 入口
     ├── pkgs.nix                           # 用户软件包 + Flatpak + 字体
-    ├── misc.nix                           # KDE Connect + btop + nh + clangd
+    ├── misc.nix                           # KDE Connect + btop + nh + polkit + 剪贴板
     ├── desktop/
     │   ├── caelestia.nix                  # Caelestia Shell + Gammastep
+    │   ├── fcitx5.nix                     # 输入法 profile + rime schema (HM 管理)
+    │   ├── fcitx5/                        # profile / default.custom.yaml 数据文件
     │   └── theme.nix                      # GTK/Qt 主题、光标、暗色模式
     ├── shell/
-    │   └── default.nix                    # Nushell + Kitty + Zoxide + Eza + Starship
+    │   ├── default.nix                    # Nushell + Kitty + Zoxide + Eza + Starship
+    │   └── starship.toml                  # Starship 配置 (仓库内，只读链接)
     └── apps/
         ├── browser.nix                    # Zen Browser (ff2mpv)
         ├── editor.nix                     # Helix + Lazygit
         ├── file-manager.nix               # Superfile
         └── media.nix                      # mpv (Anime4K) + OBS + rmpc
 ```
+
+> **Hyprland 配置不在此仓库**：键位、窗口规则、变量和配色生成在
+> [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfiles)，需要 `git clone` 到 `~/.config/hypr`。
+> `~/.config/hypr/scheme/current.lua` 由 caelestia 换配色时自动生成，不纳入任何仓库。
 
 ## 🔧 Flake Inputs
 
@@ -132,7 +141,7 @@
 - **swayimg** — Wayland 原生极速图片查看器
   - Lua 声明式定制，无窗体边框、自适应平滑缩放
   - 支持画廊（Gallery）九宫格矩阵与幻灯片模式 (`g` / `s`)
-  - Vim 快捷键 (`h/j/k/l`、`Space`、`r` 旋转、`i` 元信息 HUD)
+  - 快捷键：`h`/`l` 上一张/下一张 (Gallery 内 `h/j/k/l` 选择)、`Space` 下一张、`r`/`R` 旋转、`i` 元信息 HUD
   - `trash-cli` 联动（按 `Delete` 安全移入系统回收站）
 - **Loupe** — GNOME 现代看图工具
 - **OBS Studio** — 录屏/直播 (VA-API + wlrobs)
@@ -170,7 +179,7 @@
 
 ### 开发工具
 
-- **Neovim / Neovide** — 主力编辑器（设为系统全局默认 `$EDITOR` 与 `$VISUAL`）
+- **Neovim / Neovide** — 主力编辑器（登录会话默认 `$EDITOR` 与 `$VISUAL`）
 - **Helix** — 轻量编辑器 (Everforest Dark 透明主题, 相对行号)
 - **Lazygit** — Git TUI
 - **gh** — GitHub CLI
@@ -185,17 +194,18 @@
 - **蓝牙** — 启用 (Blueman, xpadneo 手柄支持)
 - **KDE Connect** — 手机联动 (端口 1714-1764)
 - **LocalSend** — 局域网传输 (端口 53317)
-- **Sunshine** — 远程串流
+- **Sunshine** — 远程串流 (按需启动，未设为开机自启)
 - **usbmuxd** — iOS 设备连接
 - **打印** — CUPS + Avahi (mDNS)
 
 ## 🎨 外观与体验
 
-- **Shell**: Caelestia (Hyprland AGS Shell)
-- **GTK 主题**: Adwaita Dark
+- **Shell**: Caelestia (基于 Quickshell 的 Hyprland 桌面 Shell)
+- **GTK 主题**: Adwaita (caelestia 生成 `gtk.css` + dconf `prefer-dark`)
 - **Qt 主题**: qtengine + Darkly（caelestia 生成配色）
 - **图标**: Papirus-Dark
 - **光标**: Bibata-Modern-Classic (24px)
+- **剪贴板**: cliphist 历史 (文本/图片)，wl-clipboard 提供 `wl-copy`/`wl-paste`
 - **字体**:
   - 等宽代码: Maple Mono NF CN (终端斜体 + 7px行高微调) / Cascadia Code
   - 正文字体: Source Han Sans (思源黑体) / Noto Sans CJK
@@ -216,6 +226,9 @@ cd /etc/nixos
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
+> 新机器首次安装时注意：配置里没有声明用户密码 (`hashedPassword`)，
+> 需要在安装环境里先给用户设好（`passwd mopht`），否则首次登录后 `sudo` 不可用。
+
 ### 日常更新
 
 本配置集成了 [nh](https://github.com/viperML/nh) 进行便捷管理：
@@ -227,9 +240,13 @@ nix flake update
 # 构建并切换 (通过 nh)
 nh os switch
 
-# 自动清理旧 generation (保留 4 天内 / 最近 3 个)
-# nh clean 已配置自动运行
+# 自动清理：用户侧 nh clean (保留 4 天内 / 最近 3 个)
+#           系统侧 nix.gc 每周清理 14 天前的 generation
+# 提交前构建校验 (系统 + Home Manager 都会实际构建)
+nix flake check
 ```
+
+> 新增的配置文件需要先 `git add`，否则 flake 看不到它们。
 
 ### 格式化配置文件
 
@@ -239,7 +256,10 @@ nix fmt
 
 ## 🔐 密钥管理
 
-使用 [sops-nix](https://github.com/Mic92/sops-nix) 进行声明式敏感数据管理，密钥文件基于 Age 加密存放在 `secrets/secrets.yaml`，系统运行时自动解密挂载于 `/run/secrets/`。
+使用 [sops-nix](https://github.com/Mic92/sops-nix) 管理敏感数据，密文存放在 `secrets/secrets.yaml`（Age 加密）。
+
+> 目前该文件里只有 `example_key`，还没有声明任何 `sops.secrets`，所以 `/run/secrets/` 不会生成；
+> Age 私钥在仓库外的 `~/.config/sops/age/keys.txt`，换机时需要单独恢复。
 
 ## 📦 Flatpak 应用
 
