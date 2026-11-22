@@ -8,8 +8,12 @@
   documentation.man.cache.enable = false;
 
   nix.package = pkgs.lix;
-  # 去重交给定时任务，构建时不再逐包做硬链接优化
-  nix.optimise.automatic = true;
+  # 去重交给定时任务，构建时不再逐包做硬链接优化。
+  # 默认的 03:45 基本碰不到你在用机器；改成周日晚，错过则由 Persistent 在下次开机补跑。
+  nix.optimise = {
+    automatic = true;
+    dates = [ "Sun *-*-* 20:00:00" ];
+  };
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
