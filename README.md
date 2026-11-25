@@ -1,175 +1,206 @@
 # NixOS 桌面配置
 
-本仓库为一台单机 NixOS 桌面的完整配置。系统级部分由 NixOS 模块声明，用户环境由 Home Manager 声明，两者通过 Nix Flakes 统一组织。Hyprland 的键位与窗口规则不在本仓库，见下文说明。
+NixOS 桌面配置，系统与用户环境分别由 NixOS 模块和 Home Manager 声明，用 Flakes 组织。
+Hyprland 的键位、窗口规则不在此仓库，见「项目结构」。
 
-## 系统概览
+## 概览
 
 | 项目 | 配置 |
 |------|------|
 | 操作系统 | NixOS unstable（26.11） |
 | 包管理器 | Lix（Nix 分支） |
 | 桌面环境 | Hyprland（Wayland） |
-| Shell | Nushell；Fish 提供外部补全；Starship 负责提示符 |
+| Shell | Nushell；Fish 提供补全；Starship 做提示符 |
 | 终端 | Kitty |
 | 编辑器 | Neovim / Neovide / Helix |
 | 浏览器 | Zen Browser |
-| 输入法 | Fcitx5 + Rime（雾凇拼音），profile 由 Home Manager 管理 |
+| 输入法 | Fcitx5 + Rime（雾凇拼音） |
 | 文件管理 | Nautilus / Superfile（TUI） |
 | 媒体播放 | mpv（Anime4K）/ MPD + rmpc |
 | 登录 | greetd + UWSM |
 | 代理 | Clash Verge Rev |
-| 密钥 | sops-nix（Age），当前仅保存用户密码 hash |
-| 主题 | Caelestia Shell / Papirus-Dark / Bibata 光标 |
+| 密钥 | sops-nix（Age），保存用户密码 hash |
+| 主题 | Caelestia Shell / Papirus-Dark / Bibata |
 
-## 硬件与系统维护
+## 硬件与存储
 
-CPU 为 Intel 平台，支持 VT-x/KVM，当前未配置 libvirt 或 QEMU。GPU 为 Intel Arc A750（设备 ID `56a1`），使用 `xe` 驱动，启用 VA-API 硬件解码与 32 位支持。内核使用 `linuxPackages_zen`。
+- CPU：Intel，支持 VT-x/KVM；未配置 libvirt/QEMU
+- GPU：Intel Arc A750（`56a1`），`xe` 驱动，VA-API 硬解，含 32 位
+- 内核：`linuxPackages_zen`
+- 引导：systemd-boot，超时 3s，保留 10 个启动项，禁止编辑内核参数
+- 交换：仅 zram（内存 25%，zstd），`vm.swappiness = 180`
+- 根文件系统：Btrfs，`compress=zstd`、`noatime`、`discard=async`
 
-引导使用 systemd-boot（UEFI），超时 3 秒，保留最近 10 个启动项，并禁用内核参数编辑。交换仅使用 zram（内存的 25%，zstd 压缩），`vm.swappiness` 设为 180，未配置 swap 分区或 swapfile。根文件系统为 Btrfs，挂载选项包含 `compress=zstd`、`noatime` 与 `discard=async`。
-
-快照由 Snapper 以 timeline 模式管理，`/home` 保留 5 小时、7 天、2 周、2 个月，`~/Music` 子卷保留 2 小时、7 天、2 周、2 个月。`~/.cache` 为独立子卷，不参与 `/home` 快照，以避免缓存的高频变化放大快照占用。Btrfs autoScrub 每月执行一次，覆盖 `/`（含 `@home`）、`~/Game` 与 `~/Music`。
-
-系统保护与例行维护如下：
-
-- `systemd-oomd`：在内存压力升高时终止占用较高的进程，避免重型编译使系统失去响应。
-- `nix.optimise`：每周日 20:00 对 Nix store 去重；未启用 `auto-optimise-store`。
-- `fwupd` 与 `smartd`：固件更新与磁盘健康监测。
-- `udisks2` 与 `gvfs`：外部存储自动挂载。
-- `hyprpolkitagent` 与 GNOME Keyring：桌面授权代理与凭据环，greetd 登录时由 PAM 解锁。
-- 剪贴板：`cliphist` 保存文本与图片历史，`wl-clip-persist` 维持剪贴板内容，`wl-clipboard` 提供 `wl-copy`/`wl-paste`。
-- 清理策略：系统代由 `nix.gc` 每周删除 14 天前的项，用户代由 `nh clean` 保留 4 天或最近 3 个。
-- 日志：journald 持久化，`SystemMaxUse` 为 1G，可通过 `journalctl -b -1` 查看上次启动的日志。
-- Nix 设置：`trusted-users` 增加 `mopht`，`substituters` 在 `cache.nixos.org` 之外加入 nix-community 缓存。
-
-### 分区布局
+### 分区
 
 | 挂载点 | 类型 | 说明 |
 |--------|------|------|
 | `/` | Btrfs 子卷 `@` | 系统根目录 |
 | `/home` | Btrfs 子卷 `@home` | 用户目录，参与 Snapper 快照 |
-| `/boot` | VFAT | EFI 启动分区 |
+| `/boot` | VFAT | EFI 分区 |
 | `~/Game` | Btrfs 顶层 | 游戏存储 |
-| `~/Music` | Btrfs 子卷 `music` | 音乐存储，参与 Snapper 快照 |
+| `~/Music` | Btrfs 子卷 `music` | 音乐，参与 Snapper 快照 |
 | `~/.cache` | Btrfs 子卷 `@cache` | 缓存，不参与 `/home` 快照 |
+
+### 快照与校验
+
+- Snapper：`/home` 保留 5h/7d/2w/2m，`~/Music` 保留 2h/7d/2w/2m
+- `~/.cache` 是独立子卷，缓存变化不会被算进 `/home` 快照
+- autoScrub：每月一次，覆盖 `/`（含 `@home`）、`~/Game`、`~/Music`
 
 ## 项目结构
 
 ```
 .
-├── flake.nix                              # Flake 入口，定义 inputs 与 outputs
+├── flake.nix                              # 入口，定义 inputs 与 outputs
 ├── flake.lock
-├── .gitignore                             # 忽略 result / *.hm-bak / .direnv
+├── .gitignore                             # result / *.hm-bak / .direnv
 ├── .sops.yaml                             # sops 加密规则与公钥
 ├── secrets/
-│   └── secrets.yaml                       # Age 加密的密文
+│   └── secrets.yaml                       # Age 密文
 │
 ├── hosts/
 │   └── desktop/
-│       ├── default.nix                    # 主机入口（内核、启动、zram、i2c）
-│       ├── gpu.nix                        # Intel Arc A750（xe 驱动、VA-API、32 位解码）
-│       ├── hardware.nix                   # nixos-generate-config 生成的分区与微码
-│       ├── mounts.nix                     # 手工维护的 ~/Game、~/Music、~/.cache 挂载点
+│       ├── default.nix                    # 主机入口：内核、启动、zram、i2c
+│       ├── gpu.nix                        # Intel Arc A750：xe、VA-API、32 位
+│       ├── hardware.nix                   # nixos-generate-config 生成的分区
+│       ├── mounts.nix                     # 手工维护的 ~/Game、~/Music、~/.cache
 │       └── storage.nix                    # Snapper 与 btrfs autoScrub
 │
-├── system/                                # 系统级模块
+├── system/
 │   ├── core.nix                           # 时区、Lix、Nix 设置、用户
-│   ├── pkgs.nix                           # 系统软件包、Flatpak、nix-ld
-│   ├── sops.nix                           # sops-nix 密钥
+│   ├── pkgs.nix                           # 系统包、Flatpak、nix-ld
+│   ├── sops.nix                           # sops-nix
 │   ├── network.nix                        # 网络、防火墙、打印、代理
 │   ├── desktop/
-│   │   ├── default.nix                    # Hyprland、greetd、XDG Portal、Sunshine
-│   │   └── fcitx5.nix                     # 输入法（Fcitx5 + Rime）
+│   │   ├── default.nix                    # Hyprland、greetd、Portal、Sunshine
+│   │   └── fcitx5.nix                     # Fcitx5 + Rime
 │   └── hardware/
-│       ├── audio.nix                      # PipeWire 与 MPD
-│       ├── bluetooth.nix                  # 蓝牙与 xpadneo
+│       ├── audio.nix                      # PipeWire、MPD
+│       ├── bluetooth.nix                  # 蓝牙、xpadneo
 │       └── gaming.nix                     # Steam、Gamescope、Proton GE
 │
-└── home/                                  # Home Manager 用户配置
+└── home/
     ├── default.nix                        # 入口
-    ├── pkgs.nix                           # 用户软件包、Flatpak、字体
+    ├── pkgs.nix                           # 用户包、Flatpak、字体
     ├── misc.nix                           # KDE Connect、btop、nh、polkit、剪贴板
     ├── desktop/
-    │   ├── caelestia.nix                  # Caelestia Shell 与 Gammastep
+    │   ├── caelestia.nix                  # Caelestia Shell、Gammastep
     │   ├── fcitx5.nix                     # 输入法 profile 与 rime 配置
     │   ├── fcitx5/                        # profile、default.custom.yaml
-    │   └── theme.nix                      # GTK/Qt 主题、光标、暗色模式
+    │   └── theme.nix                      # GTK/Qt 主题、光标、暗色
     ├── shell/
     │   ├── default.nix                    # Nushell、Kitty、Zoxide、Eza、Starship
-    │   └── starship.toml                  # Starship 配置，以只读链接引入
+    │   └── starship.toml
     └── apps/
-        ├── browser.nix                    # Zen Browser 与 ff2mpv
-        ├── editor.nix                     # Helix 与 Lazygit
+        ├── browser.nix                    # Zen Browser、ff2mpv
+        ├── editor.nix                     # Helix、Lazygit
         ├── file-manager.nix               # Superfile
-        └── media.nix                      # mpv（Anime4K）、OBS、rmpc
+        └── media.nix                      # mpv、OBS、rmpc
 ```
 
-Hyprland 的键位、窗口规则、变量与配色生成位于 [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfiles)，需克隆到 `~/.config/hypr`。`~/.config/hypr/scheme/current.lua` 在 caelestia 更换配色时自动生成，不纳入任何仓库。
+Hyprland 配置在 [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfiles)，需 clone 到 `~/.config/hypr`。
+`~/.config/hypr/scheme/current.lua` 由 caelestia 换配色时生成，不入库。
 
 ## Flake 输入
 
 | Input | 说明 |
 |-------|------|
 | [nixpkgs](https://github.com/NixOS/nixpkgs)（unstable） | 软件包源 |
-| [home-manager](https://github.com/nix-community/home-manager) | 声明式用户环境 |
-| [nix-flatpak](https://github.com/gmodena/nix-flatpak) | 声明式 Flatpak 管理 |
-| [moonbit-overlay](https://github.com/moonbit-community/moonbit-overlay) | MoonBit 工具链 overlay |
+| [home-manager](https://github.com/nix-community/home-manager) | 用户环境 |
+| [nix-flatpak](https://github.com/gmodena/nix-flatpak) | 声明式 Flatpak |
+| [moonbit-overlay](https://github.com/moonbit-community/moonbit-overlay) | MoonBit 工具链 |
 | [caelestia-shell](https://github.com/caelestia-dots/shell) | Hyprland 桌面 Shell |
-| [zen-browser](https://github.com/0xc000022070/zen-browser-flake) | Zen Browser（Firefox 分支） |
-| [sops-nix](https://github.com/Mic92/sops-nix) | Secrets 管理（Age / sops） |
+| [zen-browser](https://github.com/0xc000022070/zen-browser-flake) | Zen Browser |
+| [sops-nix](https://github.com/Mic92/sops-nix) | Secrets（Age/sops） |
 
-除 `nix-flatpak` 外，其余输入均声明 `nixpkgs.follows = "nixpkgs"`，因此共用同一 nixpkgs 版本；`caelestia-shell` 的传递依赖沿用其自身 lock。
+除 `nix-flatpak` 外，其余输入都 `follows` 本仓库的 nixpkgs。
 
-## 游戏
+## 系统维护
 
-Steam 启用 Remote Play 与 Gamescope session，`extraCompatPackages` 加入 `proton-ge-bin`。Gamescope 允许 `capSysNice`；GameMode 提供 `gamemoderun`，并启用 Steam 手柄与 VR 设备的 udev 规则。`umu-launcher` 用于非 Steam 游戏，`PrismLauncher` 用于 Minecraft。
+- `systemd-oomd`：内存压力高时终止进程
+- `nix.optimise`：每周日 20:00 去重 store
+- `fwupd`、`smartd`：固件更新、磁盘健康
+- `udisks2`、`gvfs`：外置存储自动挂载
+- polkit 代理 + GNOME Keyring：greetd 登录时由 PAM 解锁
+- 剪贴板：cliphist（文本/图片）、wl-clip-persist、wl-clipboard
+- 清理：`nix.gc` 每周删 14 天前的系统代；`nh clean` 保留 4 天/3 个用户代
+- 日志：journald 持久化，上限 1G，`journalctl -b -1` 可查上次启动
+- Nix：`trusted-users` 加 `mopht`，`substituters` 加 nix-community 缓存
 
-## 多媒体与视听
+## 桌面环境
 
-音频由 PipeWire 提供，同时启用 PulseAudio 与 ALSA 兼容层。MPD 以 PipeWire 作为输出，客户端为 `rmpc`（TUI）与 `go-musicfox`（网易云音乐 TUI）。
+- Hyprland + UWSM，greetd 以 `mopht` 自动登录；注销后会立即重新登录
+- Caelestia Shell（Quickshell），配色由 caelestia 生成
+- 输入法：Fcitx5 + Rime 雾凇拼音，profile 由 Home Manager 管理
+- 主题：adw-gtk3-dark、qtengine + Darkly、Papirus-Dark、Bibata 24px
+- 字体：Maple Mono NF CN / Cascadia Code，Source Han Sans / Noto Sans CJK，Noto Color Emoji；`fontconfig.defaultFonts` 固定中文/等宽/emoji 回退顺序
+- 终端：Kitty，背景 0.45，行高 +7px，默认 Nushell
+- 夜间：Gammastep 手动坐标，日 6500K / 夜 3500K
+- 默认程序：`xdg.mimeApps`
 
-mpv 使用 Vulkan 与 Wayland 输出，VA-API 硬件解码；Anime4K 着色器分 L 与 VL 两档，各含 Balanced、Sharp、Denoise 三种组合，绑定 `Ctrl+1/2/3`（L 档）、`Ctrl+5/6/7`（VL 档）与 `Ctrl+0`（清除）。弹幕由 `uosc-danmaku` 提供，`yt-dlp` 复用 Zen Browser 的 cookies。
+## 应用
 
-`swayimg` 为 Wayland 图片查看器，通过 Lua 配置：默认无边框、自适应缩放，支持画廊（`g`）与幻灯片（`s`）模式；`h`/`l` 切换图片，画廊内 `h`/`j`/`k`/`l` 选择，`Space` 下一张，`r`/`R` 旋转，`i` 显示元信息，`Delete` 经 `trash-cli` 移入回收站。
+### 浏览器
 
-其余：`Loupe`（GNOME 图片查看器）、`EasyEffects`（麦克风降噪与耳机 EQ）、`OBS Studio`（VA-API 与 wlrobs 录屏）、`Nautilus`（配合 file-roller 与 ffmpegthumbnailer）、Spotify（Flatpak）。
+- Zen Browser：`ff2mpv-rust` 可以把网页视频交由mpv播放
+- 策略：禁遥测、Pocket、体验研究、内置更新
+- 图形：Wayland 分数缩放、VA-API、WebRender
+- container：Personal / Dev / Media
+- 搜索关键字：`@nix`、`@opt`、`@gh`、`@b`
 
-## 浏览器（Zen Browser）
+### 多媒体
 
-通过 `ff2mpv-rust` 将网页视频交给 mpv 播放。策略项禁用遥测、Pocket、体验研究与内置更新。图形相关设置启用 Wayland 分数缩放、VA-API 硬解与 WebRender。使用 container 标签隔离 Personal、Dev、Media 三类浏览环境。搜索关键字为 `@nix`（Nix Packages）、`@opt`（NixOS Options）、`@gh`（GitHub code search）与 `@b`（哔哩哔哩）。
+- 音频：PipeWire，含 PulseAudio/ALSA 兼容
+- MPD：PipeWire 输出，客户端 rmpc、go-musicfox
+- mpv：Vulkan + Wayland + VA-API
+  - Anime4K：L 档 `Ctrl+1/2/3`，VL 档 `Ctrl+5/6/7`，`Ctrl+0` 清除
+  - 弹幕 uosc-danmaku；yt-dlp 复用 Zen 的 cookies
+- swayimg：Lua 配置，画廊 `g`、幻灯片 `s`，`h`/`l` 切图，`Delete` 进回收站
+- Loupe、EasyEffects、OBS（VA-API + wlrobs）、Nautilus（file-roller、ffmpegthumbnailer）
+- Spotify：Flatpak
 
-## 开发环境
+### 游戏
+
+- Steam：Remote Play、Gamescope session
+- Proton GE（`extraCompatPackages`）
+- Gamescope `capSysNice`，GameMode
+- Steam 手柄/VR 的 udev 规则
+- umu-launcher、PrismLauncher
+
+### 开发
 
 | 语言 | 工具 |
 |------|------|
 | Rust | rustc, cargo, rust-analyzer |
-| Haskell | GHC, cabal-install, haskell-language-server, cabal2nix |
+| Haskell | GHC, cabal-install, HLS, cabal2nix |
 | C/C++ | GCC, clang-tools, libc++, CMake, GDB |
-| JavaScript/TypeScript | Node.js, Bun, esbuild, typescript-language-server |
+| JS/TS | Node.js, Bun, esbuild, typescript-language-server |
 | Nix | nixd, nixfmt |
-| MoonBit | moonbit-bin（via overlay） |
+| MoonBit | moonbit-bin（overlay） |
 | Koka | koka, tree-sitter-koka |
 | Idris 2 | idris2, idris2Lsp |
 | Scheme | MIT/GNU Scheme, Guile, scheme-langserver, guile-lsp-server |
 | Lua | lua-language-server |
 | Python | python3（pillow, pillow-heif, rawpy, pyvips, pyzmq, python-pptx） |
 
-工具方面，Neovim/Neovide 为默认编辑器（`$EDITOR`/`$VISUAL`）；Helix 使用 Everforest Dark 透明主题与相对行号；Lazygit 为 Git TUI；`gh` 为 GitHub CLI；`direnv` 与 `nix-direnv` 在进入目录时激活项目 Flake 环境并创建 GC root；`clangd` 配置为 C17 与 C++26（libc++）；Typora 用于 Markdown 编辑。
+- 默认编辑器：Neovim/Neovide（`$EDITOR`/`$VISUAL`）
+- Helix：Everforest Dark，相对行号
+- Lazygit、gh、Typora
+- direnv + nix-direnv，进目录激活 Flake 环境并建 GC root
+- clangd：C17 / C++26（libc++）
 
-## 网络与连接
+## 网络
 
-网络由 NetworkManager 管理，代理为 Clash Verge Rev，启用 TUN 与 Service 模式。蓝牙启用，图形客户端为 Blueman，并通过 xpadneo 支持 Xbox 手柄。KDE Connect 使用 1714–1764 端口，LocalSend 使用 53317 端口，两者已在防火墙放行。Sunshine 用于远程串流，按需启动，未设为开机自启。`usbmuxd` 用于 iOS 设备连接。打印使用 CUPS 与 Avahi（mDNS）。
+- NetworkManager
+- Clash Verge Rev：TUN + Service
+- 蓝牙：Blueman、xpadneo
+- KDE Connect：1714–1764
+- LocalSend：53317（以上端口已在防火墙放行）
+- Sunshine：按需启动，未开机自启
+- usbmuxd、CUPS + Avahi
 
-## 外观与体验
-
-Shell 为 Caelestia（基于 Quickshell）。GTK 主题为 adw-gtk3-dark，dconf 设置 `prefer-dark`；Qt 主题由 qtengine 与 Darkly 提供，配色由 caelestia 生成。图标为 Papirus-Dark，光标为 Bibata-Modern-Classic（24px）。
-
-字体方面，等宽字体为 Maple Mono NF CN 与 Cascadia Code，终端行高在基础值上增加 7px；正文字体为 Source Han Sans 与 Noto Sans CJK；emoji 使用 Noto Color Emoji。`fontconfig.defaultFonts` 固定中文、等宽与 emoji 的回退顺序。
-
-终端为 Kitty，背景不透明度 0.45，Nushell 作为默认 shell。夜间屏幕色温由 Gammastep 调节，使用手动坐标，日间 6500K、夜间 3500K 平滑过渡；默认程序通过 `xdg.mimeApps` 声明，覆盖浏览器、图片、视频、压缩包、磁力链接与目录。
-
-桌面会话由 greetd 以 `mopht` 自动登录并启动 `uwsm start hyprland-uwsm.desktop`；`initial_session` 与 `default_session` 指向同一命令，因此注销后会立即重新登录。
-
-## 使用方法
+## 使用
 
 ### 首次部署
 
@@ -179,27 +210,20 @@ cd /etc/nixos
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-```bash
-sudo btrfs subvolume create /home/mopht/Music/.snapshots
-```
-
 ### 日常更新
 
 ```bash
-# 更新 flake inputs
 nix flake update
 
-# 大更新（内核或 nixpkgs）建议先 boot，重启验证后再 switch：
-#   nh os boot     # 仅设为下次启动
-#   nh os switch   # 构建并立即切换
-#   nh os rollback
+# 大更新（内核/nixpkgs）建议先 boot，重启验证后再 switch
 nh os switch
+# nh os boot / nh os rollback
 
-# 提交前求值与构建校验（系统与 Home Manager 均会构建）
+# 提交前求值 + 构建校验
 nix flake check
 ```
 
-新增的配置文件需先 `git add`，否则 flake 无法读取。
+新增文件要 `git add`，否则 flake 看不到。
 
 ### 格式化
 
@@ -209,34 +233,30 @@ nix fmt
 
 ## 密钥管理
 
-使用 [sops-nix](https://github.com/Mic92/sops-nix) 管理敏感数据，密文存放于 `secrets/secrets.yaml`（Age 加密）。
-
-当前仅声明 `mopht-passwd` 一个 secret，用于 `users.users.mopht.hashedPasswordFile`。Age 私钥位于 `/var/lib/sops-nix/key.txt`（属主为 root），不属于任何仓库，换机或重装前需单独备份，否则将无法解密 `secrets/secrets.yaml`。
+- 密文在 `secrets/secrets.yaml`，Age 加密
+- 只声明 `mopht-passwd`，用于 `hashedPasswordFile`；`example_key` 没被引用，可以删
+- age 私钥在 `/var/lib/sops-nix/key.txt`（root），不在仓库，换机前必须单独备份
 
 ## 移植说明
 
-本配置针对单台机器编写，直接在其他机器上执行 `nh os switch` 会失败或产生非预期结果。需要调整的内容如下。
+1. 硬件：`hardware.nix` 的 UUID 换成本机的（`nixos-generate-config --show-hardware-config`）；GPU、挂载点、快照分别在 `gpu.nix`、`mounts.nix`、`storage.nix` 调整。`~/Music` 要是独立子卷，Snapper 才能快照。
+2. 用户名：`mopht` 写死在 `flake.nix`、`home/default.nix`、`system/core.nix`（含 UID）、`system/sops.nix`、`system/hardware/audio.nix`、`hosts/desktop/storage.nix`。
+3. 密钥：`nh os switch` 会卡在 `sops-install-secrets`。删掉 `system/sops.nix` 里的 secret 和 `hashedPasswordFile`（登录后自己 `passwd`）或者把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys`（之后能解密你所有 secret）。
+4. Hyprland 配置要 clone 到 `~/.config/hypr`，否则没键位；`~/.config/caelestia` 由 Home Manager 生成。
+5. 个人项：`xdg.mimeApps`、防火墙端口、`home/apps/*` 的软件列表按需增删。
 
-1. 硬件：`hosts/desktop/hardware.nix` 中的分区 UUID 来自本机，应用 `nixos-generate-config --show-hardware-config` 重新生成后替换。GPU、挂载点与快照配置分别位于 `hosts/desktop/gpu.nix`、`hosts/desktop/mounts.nix` 与 `hosts/desktop/storage.nix`。`~/Music` 需为独立 btrfs 子卷（`subvol=music`），Snapper 才能对其创建快照。
-2. 用户名：`mopht` 在配置中为硬编码，至少需修改 `flake.nix` 中的 `home-manager.users.mopht`、`home/default.nix` 中的 `home.username` 与 `home.homeDirectory`、`system/core.nix` 中的 `users.users.mopht`（含固定 UID）、`system/sops.nix` 中的 age key 路径、`system/hardware/audio.nix` 中的 MPD 路径，以及 `hosts/desktop/storage.nix` 中的 `ALLOW_USERS`。
-3. 密钥：`secrets/secrets.yaml` 使用作者的 age 公钥加密，`nh os switch` 会在 `sops-install-secrets` 阶段失败。可选择删除 `system/sops.nix` 中的 `sops.secrets.mopht-passwd` 与 `hashedPasswordFile`，首次登录后自行设置密码；或将新的 age 公钥加入 `.sops.yaml`，再执行 `sops updatekeys secrets/secrets.yaml`（此后该密钥可解密全部 secret）。即便能够解密，首次创建用户时仍沿用作者的密码 hash，登录后以 `passwd` 修改即可；NixOS 默认 `mutableUsers = true`，重建不会覆盖已修改的密码。
-4. Hyprland 配置不在本仓库，需执行 `git clone https://github.com/mopht/hyprland-dotfiles.git ~/.config/hypr`，否则桌面没有键位绑定；`~/.config/caelestia` 由 Home Manager 生成。
-5. 个人项：`home/misc.nix` 中的 `xdg.mimeApps` 引用了若干第三方应用，缺少对应程序时关联会失效；`system/network.nix` 的防火墙端口与 `home/apps/*` 的软件列表按需增删。
+改完 `nh os switch`。
 
-修改完成后执行 `nh os switch`。
-
-## Flatpak 应用
-
-通过 `nix-flatpak` 声明式管理：
+## Flatpak
 
 | 应用 | 用途 |
 |------|------|
-| Flatseal | Flatpak 权限管理 |
+| Flatseal | 权限管理 |
 | QQ | 即时通讯 |
 | WeChat | 即时通讯 |
-| Spotify | 音乐流媒体 |
+| Spotify | 音乐 |
 
-所有 Flatpak 应用通过全局 override 使用 `Adwaita:dark` GTK 主题。
+所有应用通过全局 override 用 `Adwaita:dark`。
 
 ## 许可
 
