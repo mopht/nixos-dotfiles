@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   system.stateVersion = "26.11";
@@ -6,11 +6,20 @@
 
   documentation.nixos.enable = false;
   documentation.doc.enable = false;
-  documentation.man.cache.enable = false;
+  documentation.man.cache.enable = true;
 
   boot.tmp.useTmpfs = true;
-  boot.tmp.tmpfsSize = "12G";
+  boot.tmp.tmpfsSize = "8G";
+  boot.consoleLogLevel = 3;
+  boot.initrd.verbose = false;
 
+  boot.kernel.sysctl = {
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.core.default_qdisc" = "fq";
+  };
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.settings.warn-dirty = false;
   nix.daemonCPUSchedPolicy = "batch";
   nix.package = pkgs.lix;
   nix.optimise = {

@@ -9,6 +9,9 @@
   security.polkit.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
 
+  boot.loader.systemd-boot.memtest86.enable = true;
+  hardware.enableRedistributableFirmware = true;
+
   systemd.oomd.enable = true;
 
   xdg.portal = {

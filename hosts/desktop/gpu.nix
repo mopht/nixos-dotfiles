@@ -15,6 +15,7 @@
   };
 
   boot.kernelParams = [
+    "quiet"
     "i915.force_probe=!56a1"
     "xe.force_probe=56a1"
   ];
