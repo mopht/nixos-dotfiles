@@ -14,8 +14,7 @@
 
       icu krb5 sqlite libffi expat ncurses libxcrypt-legacy
       SDL2
-    ])
-    ++ (with pkgs.xorg; [
+
       libX11 libXext libXrender libXi libXtst libXrandr libXcursor libXfixes
       libXcomposite libXdamage libXxf86vm libXScrnSaver libSM libICE libxshmfence
     ]);
