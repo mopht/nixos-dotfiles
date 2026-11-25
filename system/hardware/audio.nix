@@ -30,6 +30,6 @@
   };
 
   systemd.services.mpd.environment = {
-    XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.mopht.uid}";
+    XDG_RUNTIME_DIR = "/run/user/%U";
   };
 }

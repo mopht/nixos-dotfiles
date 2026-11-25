@@ -288,7 +288,7 @@ nix fmt
    （NixOS 默认 `mutableUsers = true`，重建不会把密码改回去）。
 4. **Hyprland 配置**不在本仓库：需要 `git clone https://github.com/mopht/hyprland-dotfiles.git ~/.config/hypr`，
    否则桌面没有键位；`~/.config/caelestia` 由 Home Manager 生成。
-5. **个人项**：`home/misc.nix` 的 `xdg.mimeApps` 引用了第三方应用（`Rayburst.desktop` 等），
+5. **个人项**：`home/misc.nix` 的 `xdg.mimeApps` 引用了第三方应用，
    没有对应程序时关联会失效；`system/network.nix` 的防火墙端口、`home/apps/*` 的软件列表按需删减。
 
 改完后 `nh os switch`

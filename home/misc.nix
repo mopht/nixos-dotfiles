@@ -42,15 +42,18 @@
       "application/xhtml+xml" = "zen-beta.desktop";
       "application/x-extension-xhtml" = "zen-beta.desktop";
       "application/x-extension-xht" = "zen-beta.desktop";
+      "application/pdf" = "sioyek.desktop";
+      "text/markdown" = "typora.desktop";
+      "audio/mpeg" = "mpv.desktop";
+      "audio/flac" = "mpv.desktop";
+      "audio/ogg" = "mpv.desktop";
 
       "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
-      "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       "x-scheme-handler/ton" = "org.telegram.desktop.desktop";
+      "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
 
       "x-scheme-handler/clash" = "clash-verge.desktop";
       "x-scheme-handler/clash-verge" = "clash-verge.desktop";
-      "x-scheme-handler/ush" = "scheme-handler-ush.desktop";
-      "x-scheme-handler/rayburst" = "Rayburst.desktop";
 
       "inode/directory" = "org.gnome.Nautilus.desktop";
 

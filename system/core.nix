@@ -9,6 +9,7 @@
   documentation.man.cache.enable = false;
 
   boot.tmp.useTmpfs = true;
+  boot.tmp.tmpfsSize = "4G";
 
   nix.package = pkgs.lix;
   nix.optimise = {
@@ -34,9 +35,12 @@
 
   users.users.mopht = {
     isNormalUser = true;
+    shell = pkgs.nushell;
     extraGroups = [
       "wheel"
       "networkmanager"
+      "video"
+      "render"
       "i2c"
       "uinput"
     ];

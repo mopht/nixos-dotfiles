@@ -61,6 +61,7 @@
     fsType = "btrfs";
     options = [
       "compress=zstd:1"
+      "nofail"
       "noatime"
       "discard=async"
     ];
@@ -71,6 +72,7 @@
     fsType = "btrfs";
     options = [
       "compress=zstd"
+      "nofail"
       "noatime"
       "discard=async"
     ];

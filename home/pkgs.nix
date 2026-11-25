@@ -4,6 +4,7 @@
   imports = [ inputs.nix-flatpak.homeManagerModules.nix-flatpak ];
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    qt6Packages.fcitx5-configtool
     qtengine
     darkly
     qbittorrent
@@ -14,6 +15,7 @@
     onlyoffice-desktopeditors
     fastfetch
     yt-dlp
+    gobject-introspection
 
     antigravity-cli
     typora
@@ -107,8 +109,7 @@
     ))
   ];
 
-  home.sessionVariables.NIX_LDFLAGS = "-L${pkgs.llvmPackages.libcxx}/lib";
-
+  services.flatpak.uninstallUnmanaged = true;
   services.flatpak.packages = [
     "com.github.tchx84.Flatseal"
     "com.qq.QQ"

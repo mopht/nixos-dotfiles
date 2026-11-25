@@ -18,10 +18,9 @@
 
   services.gammastep = {
     enable = true;
-    provider = "geoclue2";
-    temperature = {
-      day = 6500;
-      night = 3500;
-    };
+    provider = "manual";
+    latitude = 22.79;
+    longitude = 115.36;
+    temperature = { day = 6500; night = 3500; };
   };
 }
