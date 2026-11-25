@@ -1,0 +1,9 @@
+# nix build 产物
+result
+result-*
+
+# Home Manager 覆盖旧文件时留下的备份
+*.hm-bak
+
+# direnv
+.direnv/

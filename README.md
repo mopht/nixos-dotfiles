@@ -18,7 +18,7 @@
 | **媒体播放器** | mpv (Anime4K) / MPD + rmpc |
 | **登录管理器** | greetd + UWSM |
 | **代理** | Clash Verge Rev |
-| **密钥管理** | sops-nix (Age，目前仅示例密钥) |
+| **密钥管理** | sops-nix (Age，用户密码 hash) |
 | **主题** | Caelestia Shell / Papirus-Dark / Bibata 光标 |
 
 ## 🖥️ 硬件 & 系统维护
@@ -30,8 +30,8 @@
 - **启动**: systemd-boot (UEFI, timeout 3s, 最多保留 10 个启动项, 禁止编辑内核参数)
 - **交换**: zram (25%, zstd, `vm.swappiness=180`)
 - **快照与自愈**:
-  - Snapper (仅 `/home`，hourly，按 5h/7d/2w/2m 保留)
-  - Btrfs autoScrub (每月，覆盖 `/`、`/home`、`~/Game`、`~/Music`)
+  - Snapper (`/home`：5h/7d/2w/2m；`~/Music` 独立子卷：2h/7d/2w/2m)
+  - Btrfs autoScrub (每月，覆盖 `/`（含 `@home`）、`~/Game`、`~/Music`)
 - **系统保护 & 维护**:
   - systemd-oomd 内存压力保护（防重型编译卡死）
   - nix 存储去重改为定时任务 (`nix.optimise.automatic`)
@@ -49,8 +49,8 @@
 | `/` | Btrfs `@` | 系统根目录 |
 | `/home` | Btrfs `@home` | 用户目录 (Snapper 快照) |
 | `/boot` | VFAT | EFI 启动分区 |
-| `~/Game` | Btrfs | 游戏存储 |
-| `~/Music` | Btrfs | 音乐存储 |
+| `~/Game` | Btrfs (顶层) | 游戏存储 |
+| `~/Music` | Btrfs 子卷 `music` | 音乐存储（Snapper 快照） |
 
 ## 📁 项目结构
 
@@ -58,15 +58,21 @@
 .
 ├── flake.nix                              # Flake 入口，定义 inputs 和 outputs
 ├── flake.lock
+├── .gitignore                             # 忽略 result / *.hm-bak / .direnv
 ├── .sops.yaml                             # sops 加密规则与公钥配置
+├── .github/workflows/check.yml            # CI：nix flake check --no-build
 ├── secrets/                               # 加密密钥文件目录
 │   └── secrets.yaml
+│
+├── scripts/
+│   └── migrate-music-subvol.sh            # 把 ~/Music 迁到 btrfs 子卷（一次性）
 │
 ├── hosts/
 │   └── desktop/
 │       ├── default.nix                    # 主机入口 (内核、启动、zram、i2c)
 │       ├── gpu.nix                        # Intel Arc A750 (xe 驱动、VA-API、32 位硬解)
 │       ├── hardware.nix                   # nixos-generate-config 生成的分区/微码
+│       ├── mounts.nix                     # 手工维护的 ~/Game、~/Music 挂载点
 │       └── storage.nix                    # Snapper 快照 + btrfs autoScrub
 │
 ├── system/                                # 系统级模块
@@ -215,7 +221,7 @@
   - 正文字体: Source Han Sans (思源黑体) / Noto Sans CJK
   - 彩色表情: Noto Color Emoji (彻底解决终端与网页 Emoji 豆腐块)
 - **终端风格**: Kitty (0.45 半透明、枫叶单宽字体、光标动效、NuShell 专属补全)
-- **夜间护眼**: Gammastep (GeoClue2 定位，日间 6500K / 夜间 3500K 自动平滑过渡)
+- **夜间护眼**: Gammastep (手动坐标，日间 6500K / 夜间 3500K 自动平滑过渡；`services.geoclue2` 虽启用但目前未使用)
 - **默认程序**: `xdg.mimeApps` 声明 (浏览器/图片/视频/压缩包/磁力/目录)
 - **字体回退**: `fontconfig.defaultFonts` 固定中文/等宽/emoji 顺序
 
@@ -230,6 +236,18 @@ cd /etc/nixos
 
 # 构建并切换
 sudo nixos-rebuild switch --flake .#nixos
+```
+
+### 已有机器：把 `~/Music` 迁到 btrfs 子卷（一次性）
+
+`~/Music` 原来挂在 btrfs 顶层 subvolume（`subvolid=5`），而 btrfs 不能对顶层做快照，
+所以 Snapper 的 `music` 配置从来没生效过。`hosts/desktop/mounts.nix` 已改为 `subvol=music`，
+数据迁移用脚本完成（该分区空间不足以整份复制，脚本用 rsync 边搬边删）：
+
+```bash
+sudo ./scripts/migrate-music-subvol.sh --dry-run   # 先看计划
+sudo ./scripts/migrate-music-subvol.sh             # 迁移 + 自动 rebuild
+snapper -c music list                              # 之后应能看到 timeline 快照
 ```
 
 ### 日常更新
@@ -253,6 +271,7 @@ nix flake check
 ```
 
 > 新增的配置文件需要先 `git add`，否则 flake 看不到它们。
+> 推送到 GitHub 后 CI 会跑 `nix flake check --no-build`（只求值，不实际构建）。
 
 ### 格式化配置文件
 
@@ -264,23 +283,27 @@ nix fmt
 
 使用 [sops-nix](https://github.com/Mic92/sops-nix) 管理敏感数据，密文存放在 `secrets/secrets.yaml`（Age 加密）。
 
-> 目前只声明了 `mopht-password` 一个 secret，用于 `users.users.mopht.hashedPasswordFile`；
-> Age 私钥在仓库外的 `~/.config/sops/age/keys.txt`，换机时需要单独恢复。
+> 目前只声明了 `mopht-passwd` 一个 secret，用于 `users.users.mopht.hashedPasswordFile`
+> （`secrets/secrets.yaml` 里还有一个残留的 `example_key`，没有引用，可以删掉）；
+> Age 私钥在仓库外的 `/var/lib/sops-nix/key.txt`（root 所有），**换机/重装前必须单独备份**，
+> 丢了就解不开 `secrets/secrets.yaml`。
 
 ## 🔁 给其他人用 / 二次开发
 
 这套配置是围绕作者这台机器写的，直接拿到别的机器上 `nh os switch` 会失败或不合预期。要改的地方：
 
 1. **硬件**：`hosts/desktop/hardware.nix` 里的分区 UUID 只属于这台机器，用
-   `nixos-generate-config --show-hardware-config` 重新生成后替换；GPU 和快照配置在
-   `hosts/desktop/gpu.nix`、`hosts/desktop/storage.nix`，按实际硬件调整。
+   `nixos-generate-config --show-hardware-config` 重新生成后替换；GPU、挂载点和快照配置分别在
+   `hosts/desktop/gpu.nix`、`hosts/desktop/mounts.nix`、`hosts/desktop/storage.nix`，按实际硬件调整。
+   `~/Music` 需要是独立 btrfs 子卷（`subvol=music`）Snapper 才能快照，可参考
+   `scripts/migrate-music-subvol.sh`。
 2. **用户名**：`mopht` 是硬编码的，至少改：
    `flake.nix` 的 `home-manager.users.mopht`、`home/default.nix` 的 `home.username`/`homeDirectory`、
    `system/core.nix` 的 `users.users.mopht`、`system/sops.nix` 的 age key 路径、
    `system/hardware/audio.nix` 的 MPD 路径、`hosts/desktop/storage.nix` 的 `ALLOW_USERS`。
 3. **密钥 (sops)**：`secrets/secrets.yaml` 是用作者的 age 公钥加密的，`nh os switch`
    会卡在 `sops-install-secrets` ：
-   - **删掉** `system/sops.nix` 里的 `sops.secrets.mopht-password` 和 `hashedPasswordFile`，
+   - **删掉** `system/sops.nix` 里的 `sops.secrets.mopht-passwd` 和 `hashedPasswordFile`，
      首次登录后自己 `passwd`；
    - 或把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys secrets/secrets.yaml`
      （注意这样对方能解开你的**所有** secret）。

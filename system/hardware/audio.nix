@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   services.power-profiles-daemon.enable = true;
@@ -29,7 +29,8 @@
     };
   };
 
-  systemd.services.mpd.environment = {
-    XDG_RUNTIME_DIR = "/run/user/%U";
-  };
+  # 注意：systemd 的 %U 在系统服务里固定展开成 0（运行 manager 的用户），
+  # 不受 User= 影响，所以这里必须写实际 UID。
+  systemd.services.mpd.environment.XDG_RUNTIME_DIR =
+    "/run/user/${toString config.users.users.mopht.uid}";
 }

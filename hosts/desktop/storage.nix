@@ -4,9 +4,10 @@
   services.btrfs.autoScrub = {
     enable = true;
     interval = "monthly";
+    # "/" 和 "/home" 在同一个文件系统上（btrfs @ / @home），
+    # scrub "/" 已经覆盖整个设备，再列 /home 会白扫一遍。
     fileSystems = [
       "/"
-      "/home"
       "/home/mopht/Game"
       "/home/mopht/Music"
     ];
@@ -27,6 +28,8 @@
         TIMELINE_LIMIT_MONTHLY = 2;
       };
 
+      # 需要 /home/mopht/Music 是真正的 btrfs 子卷（subvol=music）才会生效，
+      # 见 hosts/desktop/mounts.nix 和 scripts/migrate-music-subvol.sh。
       music = {
         SUBVOLUME = "/home/mopht/Music";
         ALLOW_USERS = [ "mopht" ];

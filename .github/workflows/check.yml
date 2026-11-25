@@ -1,0 +1,20 @@
+name: flake-check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: cachix/install-nix-action@v32
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      # 只求值不构建：完整构建（系统 + Home Manager）太重，交给本机 nh os build
+      - name: Evaluate flake outputs
+        run: nix flake check --no-build -L

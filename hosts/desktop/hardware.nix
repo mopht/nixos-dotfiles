@@ -56,27 +56,8 @@
     ];
   };
 
-  fileSystems."/home/mopht/Game" = {
-    device = "/dev/disk/by-uuid/e4e3d91e-3d73-407d-9561-f3d2b578ebc8";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd:1"
-      "nofail"
-      "noatime"
-      "discard=async"
-    ];
-  };
-
-  fileSystems."/home/mopht/Music" = {
-    device = "/dev/disk/by-uuid/80ff9653-538b-4cd0-ad8e-e638bb883ad0";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "nofail"
-      "noatime"
-      "discard=async"
-    ];
-  };
+  # ~/Game 和 ~/Music 的挂载移到 ./mounts.nix 手工维护，
+  # 避免重新生成本文件时被覆盖。
 
   swapDevices = [ ];
 

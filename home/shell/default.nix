@@ -76,7 +76,7 @@
       confirm_os_window_close = 0;
       background_opacity = 0.45;
       enable_audio_bell = false;
-      font_family = "Maple Mono NF CN Italic";
+      font_family = "Maple Mono NF CN";
       font_size = 17.0;
       shell = "nu";
       window_margin_width = 21.75;

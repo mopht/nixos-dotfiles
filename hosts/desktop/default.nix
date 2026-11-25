@@ -4,6 +4,7 @@
   imports = [
     ./hardware.nix
     ./gpu.nix
+    ./mounts.nix
     ./storage.nix
     ../../system/core.nix
     ../../system/pkgs.nix
@@ -27,7 +28,9 @@
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.systemd-boot.editor = false;
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelModules = [ "i2c-dev" ];
+
+  # i2c-dev 模块 + i2c 组 + udev 规则（ddcutil 调显示器亮度用）
+  hardware.i2c.enable = true;
 
   boot.kernel.sysctl."vm.swappiness" = 180;
 
@@ -35,10 +38,6 @@
   services.gvfs.enable = true;
   services.fwupd.enable = true;
   services.smartd.enable = true;
-
-  services.udev.extraRules = ''
-    KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
-  '';
 
   console = {
     font = "Lat2-Terminus16";
