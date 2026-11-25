@@ -159,7 +159,7 @@ in
       displayarea = 1;
       outline = 1;
 
-      blacklist_path = "${./filter.txt}";
+      blacklist_path = "/run/secrets/danmaku-filter";
     };
 
     scriptOpts.ytdl_hook.all_formats = false;

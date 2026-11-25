@@ -19,7 +19,7 @@ Hyprland 的键位、窗口规则不在此仓库，见「项目结构」。
 | 媒体播放 | mpv（Anime4K）/ MPD + rmpc |
 | 登录 | greetd + UWSM |
 | 代理 | Clash Verge Rev |
-| 密钥 | sops-nix（Age），保存用户密码 hash |
+| 密钥 | sops-nix（Age），密码 hash 与弹幕过滤表 |
 | 主题 | Caelestia Shell / Papirus-Dark / Bibata |
 
 ## 硬件与存储
@@ -155,7 +155,7 @@ Hyprland 配置在 [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfile
 - MPD：PipeWire 输出，客户端 rmpc、go-musicfox
 - mpv：Vulkan + Wayland + VA-API
   - Anime4K：L 档 `Ctrl+1/2/3`，VL 档 `Ctrl+5/6/7`，`Ctrl+0` 清除
-  - 弹幕 uosc-danmaku；yt-dlp 复用 Zen 的 cookies
+  - 弹幕 uosc-danmaku，过滤表来自 sops（`/run/secrets/danmaku-filter`）；yt-dlp 复用 Zen 的 cookies
 - swayimg：Lua 配置，画廊 `g`、幻灯片 `s`，`h`/`l` 切图，`Delete` 进回收站
 - Loupe、EasyEffects、OBS（VA-API + wlrobs）、Nautilus（file-roller、ffmpegthumbnailer）
 - Spotify：Flatpak
@@ -233,15 +233,17 @@ nix fmt
 
 ## 密钥管理
 
-- 密文在 `secrets/secrets.yaml`，Age 加密
-- 只声明 `mopht-passwd`，用于 `hashedPasswordFile`；`example_key` 没被引用，可以删
-- age 私钥在 `/var/lib/sops-nix/key.txt`（root），不在仓库，换机前必须单独备份
+- 密文在 `secrets/secrets.yaml`，Age 加密，recipients 为 `mopht_age` 与 `mopht_ssh`
+- `mopht-passwd`：`hashedPasswordFile`，`neededForUsers`
+- `danmaku-filter`：mpv 弹幕过滤表，owner 为 `mopht`，路径 `/run/secrets/danmaku-filter`
+- 编辑：`sops secrets/secrets.yaml`（默认读 `~/.config/sops/age/keys.txt`）
+- sops-nix 开机时用 `/var/lib/sops-nix/key.txt` 解密；两个 key 都是 recipient，换机前都要备份
 
 ## 移植说明
 
 1. 硬件：`hardware.nix` 的 UUID 换成本机的（`nixos-generate-config --show-hardware-config`）；GPU、挂载点、快照分别在 `gpu.nix`、`mounts.nix`、`storage.nix` 调整。`~/Music` 要是独立子卷，Snapper 才能快照。
 2. 用户名：`mopht` 写死在 `flake.nix`、`home/default.nix`、`system/core.nix`（含 UID）、`system/sops.nix`、`system/hardware/audio.nix`、`hosts/desktop/storage.nix`。
-3. 密钥：`nh os switch` 会卡在 `sops-install-secrets`。删掉 `system/sops.nix` 里的 secret 和 `hashedPasswordFile`（登录后自己 `passwd`）或者把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys`（之后能解密你所有 secret）。
+3. 密钥：`nh os switch` 会卡在 `sops-install-secrets`。删掉 `system/sops.nix` 里的两个 secret 和 `hashedPasswordFile`（登录后自己 `passwd`，mpv 的 `blacklist_path` 相应去掉），或者把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys`（之后能解密你所有 secret）。
 4. Hyprland 配置要 clone 到 `~/.config/hypr`，否则没键位；`~/.config/caelestia` 由 Home Manager 生成。
 5. 个人项：`xdg.mimeApps`、防火墙端口、`home/apps/*` 的软件列表按需增删。
 

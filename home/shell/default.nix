@@ -90,7 +90,9 @@
 
   programs.git = {
     enable = true;
-    userName = "mopht";
-    userEmail = "mopht@proton.me";
+    settings.user = {
+      name = "mopht";
+      email = "mopht@proton.me";
+    };
   };
 }

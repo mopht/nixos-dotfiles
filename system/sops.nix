@@ -7,6 +7,11 @@
     age.keyFile = "/var/lib/sops-nix/key.txt";
 
     secrets.mopht-passwd.neededForUsers = true;
+
+    secrets.danmaku-filter = {
+      owner = "mopht";
+      mode = "0400";
+    };
   };
 
   users.users.mopht.hashedPasswordFile = config.sops.secrets.mopht-passwd.path;
