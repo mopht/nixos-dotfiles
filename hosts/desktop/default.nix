@@ -29,7 +29,6 @@
   boot.loader.systemd-boot.editor = false;
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # i2c-dev 模块 + i2c 组 + udev 规则（ddcutil 调显示器亮度用）
   hardware.i2c.enable = true;
 
   boot.kernel.sysctl."vm.swappiness" = 180;

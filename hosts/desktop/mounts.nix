@@ -1,5 +1,5 @@
 # 手工维护的额外挂载点。
-# 放在这里而不是 hardware.nix：那个文件由 nixos-generate-config 生成，
+# 放在这里而不是 hardware.nix
 # 重新生成时手工添加的 fileSystems 会被覆盖掉。
 { ... }:
 
@@ -15,8 +15,6 @@
     ];
   };
 
-  # btrfs 不能对顶层 subvolume（subvolid=5）做快照，而 snapper 的 music
-  # 配置需要的是一个真正的子卷，所以这里挂 subvol=music。
   fileSystems."/home/mopht/Music" = {
     device = "/dev/disk/by-uuid/80ff9653-538b-4cd0-ad8e-e638bb883ad0";
     fsType = "btrfs";
@@ -29,12 +27,11 @@
     ];
   };
 
-  # ~/.cache 单独一个子卷：这样 /home 的 hourly 快照不会把缓存
-  # （浏览器、缩略图等，6G+ 且每小时都在变）一起快照，省空间也省 IO。
+  # ~/.cache 单独一个子卷：这样 /home 的 hourly 快照不会把缓存一起快照。
   # 子卷名 @cache，和 @ / @home 的命名保持一致。
   #
-  # ⚠️ 首次切换前先建子卷（见 README「~/.cache 子卷」）：
-  #    sudo btrfs subvolume create <@home 所在 fs 的挂载点>/@cache
+  # 首次切换前先建子卷（见 README「~/.cache 子卷」）：
+  # sudo btrfs subvolume create <@home 所在 fs 的挂载点>/@cache
   fileSystems."/home/mopht/.cache" = {
     device = "/dev/disk/by-uuid/bdaa131f-07d1-419c-b593-4783d11e0b43";
     fsType = "btrfs";

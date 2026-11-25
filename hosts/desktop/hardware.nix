@@ -56,9 +56,6 @@
     ];
   };
 
-  # ~/Game 和 ~/Music 的挂载移到 ./mounts.nix 手工维护，
-  # 避免重新生成本文件时被覆盖。
-
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

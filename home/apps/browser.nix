@@ -131,7 +131,6 @@
             definedAliases = [ "@b" ];
           };
 
-          # 隐藏不需要的默认内置引擎
           "Bing".metaData.hidden = true;
           "eBay".metaData.hidden = true;
         };

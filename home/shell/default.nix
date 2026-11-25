@@ -87,4 +87,10 @@
       "modify_font cell_height" = "+7px";
     };
   };
+
+  programs.git = {
+    enable = true;
+    userName = "mopht";
+    userEmail = "mopht@proton.me";
+  };
 }

@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   environment.sessionVariables.QS_ICON_THEME = "Papirus-Dark";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
   programs.hyprland.enable = true;
   programs.hyprland.withUWSM = true;
   programs.dconf.enable = true;
@@ -21,6 +22,7 @@
     };
   };
 
+  services.upower.enable = true;
   services.gnome.gnome-keyring.enable = true;
   services.sunshine = {
     enable = true;
