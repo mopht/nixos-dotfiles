@@ -17,9 +17,6 @@
     yt-dlp
     gobject-introspection
 
-    # hyprland-dotfiles 的 keybinds 里直接调 `qs -c caelestia kill` 重启 shell，
-    # 不装这个包那两个快捷键（CTRL+SUPER+[ALT+]SHIFT+R）会报 command not found。
-    # 版本必须与 caelestia-shell 用的 quickshell 一致（当前都是 0.3.2）。
     quickshell
 
     antigravity-cli
@@ -80,8 +77,6 @@
     ripgrep
     jq
     fzf
-    # caelestia shell 的 QML 直接调用 notify-send（截图已复制、头像已更换等提示），
-    # 不在 PATH 里时这些通知会静默丢失。
     libnotify
     xz
     fd

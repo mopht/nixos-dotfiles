@@ -1,28 +1,70 @@
 { pkgs, ... }:
 
 {
+  programs.appimage.enable = true;
   programs.nix-ld.enable = true;
-  programs.nix-ld.libraries =
-    (with pkgs; [
-      libxcb libdrm libgbm libglvnd vulkan-loader libxkbcommon wayland
+  programs.nix-ld.libraries = (
+    with pkgs;
+    [
+      libxcb
+      libdrm
+      libgbm
+      libglvnd
+      vulkan-loader
+      libxkbcommon
+      wayland
 
-      glib gtk3 gdk-pixbuf pango cairo harfbuzz freetype fontconfig
-      dbus at-spi2-core at-spi2-atk libcap
+      glib
+      gtk3
+      gdk-pixbuf
+      pango
+      cairo
+      harfbuzz
+      freetype
+      fontconfig
+      dbus
+      at-spi2-core
+      at-spi2-atk
+      libcap
 
-      nspr nss cups
-      alsa-lib libpulseaudio
+      nspr
+      nss
+      cups
+      alsa-lib
+      libpulseaudio
 
-      icu krb5 sqlite libffi expat ncurses libxcrypt-legacy
+      icu
+      krb5
+      sqlite
+      libffi
+      expat
+      ncurses
+      libxcrypt-legacy
       SDL2
 
-      libX11 libXext libXrender libXi libXtst libXrandr libXcursor libXfixes
-      libXcomposite libXdamage libXxf86vm libXScrnSaver libSM libICE libxshmfence
-    ]);
+      libX11
+      libXext
+      libXrender
+      libXi
+      libXtst
+      libXrandr
+      libXcursor
+      libXfixes
+      libXcomposite
+      libXdamage
+      libXxf86vm
+      libXScrnSaver
+      libSM
+      libICE
+      libxshmfence
+    ]
+  );
 
   services.flatpak.enable = true;
   environment.systemPackages = with pkgs; [
     papirus-icon-theme
     material-symbols
+    greetd
     glaze
     aubio
     pipewire

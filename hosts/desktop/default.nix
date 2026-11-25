@@ -22,9 +22,13 @@
     algorithm = "zstd";
   };
 
+  boot.kernel.sysctl = {
+    "vm.page-cluster" = 0;
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 3;
+  boot.loader.timeout = 1;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.systemd-boot.editor = false;
   boot.kernelPackages = pkgs.linuxPackages_zen;

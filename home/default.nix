@@ -18,7 +18,7 @@
 
   home.username = "mopht";
   home.homeDirectory = "/home/mopht";
-  home.stateVersion = "26.05";
+  home.stateVersion = "26.11";
 
   manual.manpages.enable = false;
 }
