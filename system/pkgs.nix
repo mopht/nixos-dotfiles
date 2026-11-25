@@ -9,7 +9,7 @@
       glib gtk3 gdk-pixbuf pango cairo harfbuzz freetype fontconfig
       dbus at-spi2-core at-spi2-atk libcap
 
-      nspr nss cups            # Electron / Chromium 三件套
+      nspr nss cups
       alsa-lib libpulseaudio
 
       icu krb5 sqlite libffi expat ncurses libxcrypt-legacy
