@@ -9,7 +9,7 @@
   documentation.man.cache.enable = false;
 
   boot.tmp.useTmpfs = true;
-  boot.tmp.tmpfsSize = "4G";
+  boot.tmp.tmpfsSize = "12G";
 
   nix.package = pkgs.lix;
   nix.optimise = {
