@@ -64,9 +64,6 @@
 ├── secrets/                               # 加密密钥文件目录
 │   └── secrets.yaml
 │
-├── scripts/
-│   └── migrate-music-subvol.sh            # 把 ~/Music 迁到 btrfs 子卷（一次性）
-│
 ├── hosts/
 │   └── desktop/
 │       ├── default.nix                    # 主机入口 (内核、启动、zram、i2c)
@@ -238,17 +235,15 @@ cd /etc/nixos
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-### 已有机器：把 `~/Music` 迁到 btrfs 子卷（一次性）
+### 关于 `~/Music` 的快照（2026-11-25 已迁移）
 
 `~/Music` 原来挂在 btrfs 顶层 subvolume（`subvolid=5`），而 btrfs 不能对顶层做快照，
-所以 Snapper 的 `music` 配置从来没生效过。`hosts/desktop/mounts.nix` 已改为 `subvol=music`，
-数据迁移用脚本完成（该分区空间不足以整份复制，脚本用 rsync 边搬边删）：
+Snapper 的 `music` 配置因此一直没生效。现在已迁移到独立子卷 `music`（`mounts.nix` 里
+`subvol=music`），迁移时因为分区空间不足以整份复制，是用 `rsync --remove-source-files`
+边搬边删完成的。
 
-```bash
-sudo ./scripts/migrate-music-subvol.sh --dry-run   # 先看计划
-sudo ./scripts/migrate-music-subvol.sh             # 迁移 + 自动 rebuild
-snapper -c music list                              # 之后应能看到 timeline 快照
-```
+换机/重装时如果要复刻：先 `btrfs subvolume create` 出 `music` 子卷，把数据搬进去，
+再改用 `subvol=music` 挂载（`.snapshots` 目录由 Snapper 首次运行快照时自动创建）。
 
 ### 日常更新
 
@@ -295,8 +290,7 @@ nix fmt
 1. **硬件**：`hosts/desktop/hardware.nix` 里的分区 UUID 只属于这台机器，用
    `nixos-generate-config --show-hardware-config` 重新生成后替换；GPU、挂载点和快照配置分别在
    `hosts/desktop/gpu.nix`、`hosts/desktop/mounts.nix`、`hosts/desktop/storage.nix`，按实际硬件调整。
-   `~/Music` 需要是独立 btrfs 子卷（`subvol=music`）Snapper 才能快照，可参考
-   `scripts/migrate-music-subvol.sh`。
+   `~/Music` 需要是独立 btrfs 子卷（`subvol=music`）Snapper 才能快照。
 2. **用户名**：`mopht` 是硬编码的，至少改：
    `flake.nix` 的 `home-manager.users.mopht`、`home/default.nix` 的 `home.username`/`homeDirectory`、
    `system/core.nix` 的 `users.users.mopht`、`system/sops.nix` 的 age key 路径、

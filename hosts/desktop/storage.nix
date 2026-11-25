@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   services.btrfs.autoScrub = {
@@ -40,6 +40,22 @@
         TIMELINE_LIMIT_WEEKLY = 2;
         TIMELINE_LIMIT_MONTHLY = 2;
       };
+    };
+  };
+
+  # Snapper 要求每个 SUBVOLUME 下有 .snapshots 子卷（NixOS 模块不会自动创建），
+  # /home 那个是手工建过的，music 是后加的子卷，这里补一个一次性单元。
+  systemd.services.snapper-music-snapshots-dir = {
+    description = "Create .snapshots subvolume for ~/Music";
+    wantedBy = [ "multi-user.target" ];
+    requires = [ "home-mopht-Music.mount" ];
+    after = [ "home-mopht-Music.mount" ];
+    before = [ "snapper-timeline.service" ];
+    unitConfig.ConditionPathExists = "!/home/mopht/Music/.snapshots";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.btrfs-progs}/bin/btrfs subvolume create /home/mopht/Music/.snapshots";
     };
   };
 }
