@@ -30,7 +30,7 @@
 - **启动**: systemd-boot (UEFI, timeout 3s, 最多保留 10 个启动项, 禁止编辑内核参数)
 - **交换**: zram (25%, zstd, `vm.swappiness=180`)
 - **快照与自愈**:
-  - Snapper (`/home`：5h/7d/2w/2m；`~/Music` 独立子卷：2h/7d/2w/2m)
+  - Snapper (`/home`：5h/7d/2w/2m；`~/Music` 独立子卷：2h/7d/2w/2m；`~/.cache` 是独立子卷，不进 `/home` 快照)
   - Btrfs autoScrub (每月，覆盖 `/`（含 `@home`）、`~/Game`、`~/Music`)
 - **系统保护 & 维护**:
   - systemd-oomd 内存压力保护（防重型编译卡死）
@@ -51,6 +51,7 @@
 | `/boot` | VFAT | EFI 启动分区 |
 | `~/Game` | Btrfs (顶层) | 游戏存储 |
 | `~/Music` | Btrfs 子卷 `music` | 音乐存储（Snapper 快照） |
+| `~/.cache` | Btrfs 子卷 `@cache` | 缓存，不参与 `/home` 快照 |
 
 ## 📁 项目结构
 
@@ -60,7 +61,6 @@
 ├── flake.lock
 ├── .gitignore                             # 忽略 result / *.hm-bak / .direnv
 ├── .sops.yaml                             # sops 加密规则与公钥配置
-├── .github/workflows/check.yml            # CI：nix flake check --no-build
 ├── secrets/                               # 加密密钥文件目录
 │   └── secrets.yaml
 │
@@ -243,7 +243,40 @@ Snapper 的 `music` 配置因此一直没生效。现在已迁移到独立子卷
 边搬边删完成的。
 
 换机/重装时如果要复刻：先 `btrfs subvolume create` 出 `music` 子卷，把数据搬进去，
-再改用 `subvol=music` 挂载（`.snapshots` 目录由 Snapper 首次运行快照时自动创建）。
+再改用 `subvol=music` 挂载，并一次性建好 Snapper 需要的 `.snapshots` 子卷
+（NixOS 模块不会自动创建它）：
+
+```bash
+sudo btrfs subvolume create /home/mopht/Music/.snapshots
+```
+
+### `~/.cache` 独立子卷（一次性）
+
+为了让 `/home` 的 hourly 快照不把 6G+ 缓存一起快照，`~/.cache` 挂在 `@cache` 子卷上。
+首次启用前需要先建子卷（子卷根默认 root:root，由 tmpfiles 规则改成 `mopht`）：
+
+```bash
+# 1) 在 @home 所在的文件系统上建 @cache 子卷
+sudo mkdir -p /mnt/bt
+sudo mount -o subvolid=5 /dev/disk/by-uuid/bdaa131f-07d1-419c-b593-4783d11e0b43 /mnt/bt
+sudo btrfs subvolume create /mnt/bt/@cache
+sudo umount /mnt/bt && sudo rmdir /mnt/bt
+
+# 2) 旧缓存挪开（同一子卷内 rename，瞬时完成）
+mv /home/mopht/.cache /home/mopht/.cache-old
+
+# 3) 应用配置：~/.cache 会挂上空的新子卷
+sudo nixos-rebuild switch --flake /etc/nixos#nixos
+
+# 4) 首次挂载后子卷根还是 root:root（tmpfiles 要等下次开机才会改），先手动修一次
+sudo chown mopht:users /home/mopht/.cache
+sudo chmod 700 /home/mopht/.cache
+
+# 5) 确认没问题后删掉旧缓存
+rm -rf /home/mopht/.cache-old
+```
+
+> 缓存目录是随时可以重建的；如果应用出现异常，把旧目录移回来即可。
 
 ### 日常更新
 
@@ -266,7 +299,6 @@ nix flake check
 ```
 
 > 新增的配置文件需要先 `git add`，否则 flake 看不到它们。
-> 推送到 GitHub 后 CI 会跑 `nix flake check --no-build`（只求值，不实际构建）。
 
 ### 格式化配置文件
 

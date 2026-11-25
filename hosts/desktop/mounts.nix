@@ -17,10 +17,6 @@
 
   # btrfs 不能对顶层 subvolume（subvolid=5）做快照，而 snapper 的 music
   # 配置需要的是一个真正的子卷，所以这里挂 subvol=music。
-  #
-  # ⚠️ 首次切换前先跑：sudo ./scripts/migrate-music-subvol.sh
-  # 该脚本会把顶层里的数据搬进 music 子卷并自动 rebuild。
-  # 如果先 rebuild 了也没关系（nofail，系统照常启动），补跑脚本即可。
   fileSystems."/home/mopht/Music" = {
     device = "/dev/disk/by-uuid/80ff9653-538b-4cd0-ad8e-e638bb883ad0";
     fsType = "btrfs";
@@ -32,4 +28,26 @@
       "discard=async"
     ];
   };
+
+  # ~/.cache 单独一个子卷：这样 /home 的 hourly 快照不会把缓存
+  # （浏览器、缩略图等，6G+ 且每小时都在变）一起快照，省空间也省 IO。
+  # 子卷名 @cache，和 @ / @home 的命名保持一致。
+  #
+  # ⚠️ 首次切换前先建子卷（见 README「~/.cache 子卷」）：
+  #    sudo btrfs subvolume create <@home 所在 fs 的挂载点>/@cache
+  fileSystems."/home/mopht/.cache" = {
+    device = "/dev/disk/by-uuid/bdaa131f-07d1-419c-b593-4783d11e0b43";
+    fsType = "btrfs";
+    options = [
+      "subvol=@cache"
+      "compress=zstd"
+      "nofail"
+      "noatime"
+      "discard=async"
+    ];
+  };
+
+  # btrfs subvolume create 建出来的根目录是 root:root，挂到 ~/.cache 后
+  # 用户会写不进去，这里统一改成 mopht。挂载失败时（nofail）也能兜底建出目录。
+  systemd.tmpfiles.rules = [ "d /home/mopht/.cache 0700 mopht users -" ];
 }
