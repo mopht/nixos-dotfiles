@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-flatpak.url = "github:gmodena/nix-flatpak/";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     moonbit-overlay = {
       url = "github:moonbit-community/moonbit-overlay";
@@ -36,6 +40,7 @@
     inputs@{
       self,
       nixpkgs,
+      nix-index-database,
       home-manager,
       moonbit-overlay,
       nix-flatpak,
@@ -55,12 +60,19 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/desktop
+
           sops-nix.nixosModules.sops
+
+          nix-index-database.nixosModules.nix-index
+          {
+            programs.nix-index-database.comma.enable = true;
+          }
 
           nix-flatpak.nixosModules.nix-flatpak
           {
             nixpkgs.overlays = [ moonbit-overlay.overlays.default ];
           }
+
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
