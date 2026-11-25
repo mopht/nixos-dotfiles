@@ -11,7 +11,6 @@
   boot.tmp.useTmpfs = true;
   boot.tmp.tmpfsSize = "8G";
   boot.consoleLogLevel = 3;
-  boot.initrd.verbose = false;
 
   boot.kernel.sysctl = {
     "net.ipv4.tcp_congestion_control" = "bbr";
