@@ -22,7 +22,6 @@
   };
 
   services.gnome.gnome-keyring.enable = true;
-  services.geoclue2.enable = true;
   services.sunshine = {
     enable = true;
     autoStart = false;
