@@ -24,7 +24,7 @@
   networking.firewall = rec {
     enable = true;
 
-    allowedTCPPorts = [ 53317 ];
+    allowedTCPPorts = [ 53317 25565 ];
     allowedUDPPorts = allowedTCPPorts;
 
     allowedTCPPortRanges = [

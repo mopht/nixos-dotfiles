@@ -64,7 +64,6 @@
   environment.systemPackages = with pkgs; [
     papirus-icon-theme
     material-symbols
-    greetd
     glaze
     aubio
     pipewire

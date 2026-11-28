@@ -27,7 +27,7 @@ Hyprland 的键位、窗口规则不在此仓库，见「项目结构」。
 - CPU：Intel，支持 VT-x/KVM；未配置 libvirt/QEMU
 - GPU：Intel Arc A750（`56a1`），`xe` 驱动，VA-API 硬解，含 32 位
 - 内核：`linuxPackages_zen`
-- 引导：systemd-boot，超时 3s，保留 10 个启动项，禁止编辑内核参数
+- 引导：systemd-boot，超时 1s，保留 10 个启动项，禁止编辑内核参数
 - 交换：仅 zram（内存 25%，zstd），`vm.swappiness = 180`
 - 根文件系统：Btrfs，`compress=zstd`、`noatime`、`discard=async`
 

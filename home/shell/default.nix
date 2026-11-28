@@ -43,24 +43,24 @@
       if ($"($env.HOME)/.local/state/caelestia/sequences.txt" | path exists) {
         open --raw ~/.local/state/caelestia/sequences.txt | print -n
       }
-      let commands_completed_by_fish = [nu git niri tailscale]
-
-      let fish_completer = {|place|
-          let spans = $place.command
-          fish --command $"complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'"
-          | from tsv --flexible --noheaders --no-infer
-          | rename value description
-          | update value {|row|
-            let value = $row.value
-            let need_quote = ['\' ',' '[' ']' '(' ')' ' ' '\t' "'" '"' "`"] | any {$in in $value}
-            if ($need_quote and ($value | path exists)) {
-              let expanded_path = if ($value starts-with ~) {$value | path expand --no-symlink} else {$value}
-              $'"($expanded_path | str replace --all "\"" "\\\"")"'
-            } else {$value}
-          }
-      }
-
-      $env.config.completions.external.completer = $fish_completer
+      # let commands_completed_by_fish = [nu git niri tailscale]
+      #
+      # let fish_completer = {|place|
+      #     let spans = $place.command
+      #     fish --command $"complete '--do-complete=($spans | str replace --all "'" "\\'" | str join ' ')'"
+      #     | from tsv --flexible --noheaders --no-infer
+      #     | rename value description
+      #     | update value {|row|
+      #       let value = $row.value
+      #       let need_quote = ['\' ',' '[' ']' '(' ')' ' ' '\t' "'" '"' "`"] | any {$in in $value}
+      #       if ($need_quote and ($value | path exists)) {
+      #         let expanded_path = if ($value starts-with ~) {$value | path expand --no-symlink} else {$value}
+      #         $'"($expanded_path | str replace --all "\"" "\\\"")"'
+      #       } else {$value}
+      #     }
+      # }
+      #
+      # $env.config.completions.external.completer = $fish_completer
     '';
   };
 

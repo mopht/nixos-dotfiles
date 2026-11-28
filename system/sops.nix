@@ -16,6 +16,7 @@
 
   users.users.mopht.hashedPasswordFile = config.sops.secrets.mopht-passwd.path;
 
+  environment.shells = [ pkgs.nushell pkgs.fish ];
   environment.systemPackages = with pkgs; [
     sops
     age

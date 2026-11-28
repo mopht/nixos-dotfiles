@@ -1,9 +1,21 @@
-{ ... }:
+{ config, ... }:
 
 {
   services.kdeconnect = {
     enable = true;
     indicator = true;
+  };
+  services.mpd = {
+    enable = true;
+    musicDirectory = "/home/mopht/Music/file";
+    playlistDirectory = "/home/mopht/Music/playlists";
+    dataDir = "${config.xdg.stateHome}/mpd";
+    extraConfig = ''
+      audio_output {
+        type "pipewire"
+        name "PipeWire"
+      }
+    '';
   };
 
   programs.btop.enable = true;
