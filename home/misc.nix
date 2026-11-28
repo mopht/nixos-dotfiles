@@ -24,7 +24,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";
-    flake = "/etc/nixos";
+    flake = "${config.home.homeDirectory}/nixos-config";
   };
 
   services.hyprpolkitagent.enable = true;

@@ -33,6 +33,10 @@
   boot.loader.systemd-boot.editor = false;
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
+  system.etc.overlay.enable = true;
+  system.etc.overlay.mutable = false;
+  services.userborn.enable = true;
+
   hardware.i2c.enable = true;
 
   boot.kernel.sysctl."vm.swappiness" = 180;
