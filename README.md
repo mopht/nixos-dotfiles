@@ -84,7 +84,7 @@ sudo btrfs subvolume create <@home 所在 fs 的挂载点>/@cache
 │   ├── core.nix                           # 时区、Lix、Nix 设置、tmpfs /tmp、用户与组
 │   ├── pkgs.nix                           # 系统包、Flatpak、nix-ld、AppImage
 │   ├── sops.nix                           # sops-nix
-│   ├── network.nix                        # 网络、防火墙、打印、Avahi、代理
+│   ├── network.nix                        # 网络（iwd/resolved/keyfile 路径）、防火墙、打印、Avahi、代理
 │   ├── desktop/
 │   │   ├── default.nix                    # Hyprland、greetd、Portal、Sunshine、upower
 │   │   └── fcitx5.nix                     # Fcitx5 + Rime
@@ -135,7 +135,8 @@ Hyprland 配置在 [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfile
 ## 系统维护
 
 - `systemd-oomd`：内存压力高时终止进程
-- `/etc` 用 overlay 并设为只读（`system.etc.overlay.mutable = false`），配合 `services.userborn` 在开机时按声明写用户/组
+- `/etc` 用 overlay 且设为只读（`system.etc.overlay.mutable = false`），配合 `services.userborn` 在开机时按声明写用户/组；用户密码文件落在 `/var/lib/nixos`
+- 只读 `/etc` 的两个连带项：NetworkManager 的连接改存 `/var/lib/NetworkManager/system-connections`
 - `nix.optimise`：每周日 20:00 去重 store
 - `fwupd`、`smartd`：固件更新、磁盘健康
 - `udisks2`、`gvfs`：外置存储自动挂载
@@ -229,8 +230,9 @@ Hyprland 配置在 [hyprland-dotfiles](https://github.com/mopht/hyprland-dotfile
 
 ## 网络
 
-- NetworkManager
-- Clash Verge Rev：TUN + Service
+- NetworkManager，Wi-Fi 后端为 iwd（实验性，`wifi.backend = "iwd"`）
+- iwd 自己跑 netconfig；DNS 交给 systemd-resolved（iwd 用 `NameResolvingService = "systemd"`）
+- NM 的 keyfile 连接目录改到 `/var/lib/NetworkManager/system-connections`，绕开只读 `/etc`
 - 蓝牙：Blueman、xpadneo
 - KDE Connect：1714–1764
 - LocalSend：53317
@@ -281,7 +283,7 @@ nix fmt
 ## 移植说明
 
 1. 硬件：`hardware.nix` 的 UUID 换成本机的（`nixos-generate-config --show-hardware-config`）；GPU、挂载点、快照分别在 `gpu.nix`、`mounts.nix`、`storage.nix` 调整。`~/Music` 要是独立子卷，Snapper 才能快照；`~/.cache` 子卷要手工建（见上文「`~/.cache` 子卷」）。
-2. 用户名：`mopht` 写死在 `flake.nix`、`home/default.nix`、`home/misc.nix`（MPD 路径）、`home/shell/default.nix`（git 身份）、`system/core.nix`（含 UID）、`system/sops.nix`、`system/desktop/default.nix`（greetd）、`hosts/desktop/mounts.nix`、`hosts/desktop/storage.nix`。
+2. 用户名：在 `flake.nix` 顶部的 `let username` 定义一次，通过 `specialArgs` / `extraSpecialArgs` 传给所有 NixOS 与 Home Manager 模块，目录路径都由它派生。仍与用户名绑定的只剩：sops 密文里的 `mopht-passwd` 键名、git 邮箱、`.sops.yaml` 的 age key 名。
 3. 密钥：`nh os switch` 会卡在 `sops-install-secrets`。删掉 `system/sops.nix` 里的两个 secret 和 `hashedPasswordFile`（登录后自己 `passwd`，mpv 的 `blacklist_path` 相应去掉），或者把自己的 age 公钥加进 `.sops.yaml` 再 `sops updatekeys`（之后能解密你所有 secret）。
 4. Hyprland 配置要 clone 到 `~/.config/hypr`，否则没键位；`~/.config/caelestia` 由 Home Manager 生成。
 5. 个人项：`xdg.mimeApps`、防火墙端口、`home/apps/*` 的软件列表按需增删。

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   environment.sessionVariables.QS_ICON_THEME = "Papirus-Dark";
@@ -38,7 +38,7 @@
     settings = {
       initial_session = {
         command = "uwsm start hyprland-uwsm.desktop";
-        user = "mopht";
+        user = username;
       };
       default_session = {
         command = "${pkgs.greetd}/bin/agreety --cmd 'uwsm start hyprland-uwsm.desktop'";

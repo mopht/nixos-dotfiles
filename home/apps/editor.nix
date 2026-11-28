@@ -3,6 +3,10 @@
 {
   programs.lazygit.enable = true;
 
+  systemd.user.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

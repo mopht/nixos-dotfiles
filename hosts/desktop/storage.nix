@@ -1,4 +1,4 @@
-{ ... }:
+{ username, ... }:
 
 {
   services.btrfs.autoScrub = {
@@ -6,8 +6,8 @@
     interval = "monthly";
     fileSystems = [
       "/"
-      "/home/mopht/Game"
-      "/home/mopht/Music"
+      "/home/${username}/Game"
+      "/home/${username}/Music"
     ];
   };
 
@@ -17,7 +17,7 @@
     configs = {
       home = {
         SUBVOLUME = "/home";
-        ALLOW_USERS = [ "mopht" ];
+        ALLOW_USERS = [ username ];
         TIMELINE_CREATE = true;
         TIMELINE_CLEANUP = true;
         TIMELINE_LIMIT_HOURLY = 5;
@@ -27,8 +27,8 @@
       };
 
       music = {
-        SUBVOLUME = "/home/mopht/Music";
-        ALLOW_USERS = [ "mopht" ];
+        SUBVOLUME = "/home/${username}/Music";
+        ALLOW_USERS = [ username ];
         TIMELINE_CREATE = true;
         TIMELINE_CLEANUP = true;
         TIMELINE_LIMIT_HOURLY = 2;

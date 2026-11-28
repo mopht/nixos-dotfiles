@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  username,
+  ...
+}:
 
 {
   system.stateVersion = "26.11";
@@ -31,7 +36,7 @@
       "flakes"
     ];
 
-    trusted-users = [ "mopht" ];
+    trusted-users = [ username ];
 
     substituters = [ "https://nix-community.cachix.org" ];
     trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
@@ -49,7 +54,7 @@
     SystemMaxUse = "1G";
   };
 
-  users.users.mopht = {
+  users.users.${username} = {
     isNormalUser = true;
     uid = 1000;
     shell = pkgs.nushell;

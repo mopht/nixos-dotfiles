@@ -7,8 +7,8 @@
   };
   services.mpd = {
     enable = true;
-    musicDirectory = "/home/mopht/Music/file";
-    playlistDirectory = "/home/mopht/Music/playlists";
+    musicDirectory = "${config.home.homeDirectory}/Music/file";
+    playlistDirectory = "${config.home.homeDirectory}/Music/playlists";
     dataDir = "${config.xdg.stateHome}/mpd";
     extraConfig = ''
       audio_output {

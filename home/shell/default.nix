@@ -1,4 +1,4 @@
-{ ... }:
+{ username, ... }:
 
 {
   programs.fish.enable = true;
@@ -73,7 +73,7 @@
   programs.git = {
     enable = true;
     settings.user = {
-      name = "mopht";
+      name = username;
       email = "mopht@proton.me";
     };
   };

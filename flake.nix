@@ -47,17 +47,21 @@
       sops-nix,
       ...
     }:
+    let
+      # 用户名只在这里定义一次，经 specialArgs / extraSpecialArgs 传给所有模块
+      username = "mopht";
+    in
     {
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
 
       checks.x86_64-linux = {
         nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
         home-manager =
-          self.nixosConfigurations.nixos.config.home-manager.users.mopht.home.activationPackage;
+          self.nixosConfigurations.nixos.config.home-manager.users.${username}.home.activationPackage;
       };
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs username; };
         modules = [
           ./hosts/desktop
 
@@ -78,9 +82,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-bak";
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs username; };
 
-            home-manager.users.mopht = import ./home/default.nix;
+            home-manager.users.${username} = import ./home/default.nix;
           }
         ];
       };

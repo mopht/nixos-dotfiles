@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, username, ... }:
 
 {
   imports = [
@@ -16,8 +16,8 @@
     ./misc.nix
   ];
 
-  home.username = "mopht";
-  home.homeDirectory = "/home/mopht";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.11";
 
   manual.manpages.enable = false;
